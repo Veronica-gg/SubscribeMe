@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
-import BottomBar from "./BottomBar";
+import BottomBar from "./src/components/BottomBar";
 
 export default function App() {
   return (

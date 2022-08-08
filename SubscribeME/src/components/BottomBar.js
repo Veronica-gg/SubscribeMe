@@ -6,56 +6,10 @@ import { Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import HomeScreen from "./HomeScreen";
-import ProfileScreen from "./ProfileScreen";
-import SubsListScreen from "./SubsListScreen";
-import StatsScreen from "./StatsScreen";
-
-// const Home = () => <Text>Home</Text>;
-
-// const SubList = () => <Text>List</Text>;
-
-// const Stats = () => <Text>Statistics</Text>;
-
-// const Profile = () => <Text>Profile</Text>;
-
-// const BottomBar = () => {
-//   const [index, setIndex] = React.useState(0);
-//   const [routes] = React.useState([
-//     {
-//       key: "music",
-//       title: "Favorites",
-//       focusedIcon: "heart",
-//       unfocusedIcon: "heart-outline",
-//     },
-//     { key: "albums", title: "Albums", focusedIcon: "album" },
-//     { key: "recents", title: "Recents", focusedIcon: "history" },
-//     { key: "profile", title: "Profile", focusedIcon: "history" },
-//     {
-//       key: "notifications",
-//       title: "Notifications",
-//       focusedIcon: "bell",
-//       unfocusedIcon: "bell-outline",
-//     },
-//   ]);
-
-//   const renderScene = BottomNavigation.SceneMap({
-//     music: Home,
-//     albums: SubList,
-//     recents: Stats,
-//     profile: Profile,
-//   });
-
-//   return (
-//     <BottomNavigation
-//       navigationState={{ index, routes }}
-//       onIndexChange={setIndex}
-//       renderScene={renderScene}
-//     />
-//   );
-// };
-
-// export default BottomBar;
+import HomeScreen from "../screens/HomeScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+import SubsListScreen from "../screens/SubsListScreen";
+import StatsScreen from "../screens/StatsScreen";
 
 const Tab = createBottomTabNavigator();
 
