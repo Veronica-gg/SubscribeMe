@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
+import {createUserWithEmailAndPassword} from "firebase/auth";
 import {
   StyleSheet,
   Text,
@@ -9,10 +10,18 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
+import { auth } from "../../firebase";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const handleSignup = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+    .then(userCredentials => {
+      const user = userCredentials.user;
+    })
+    .catch(error => alert(error.message))
+  }
 
   return (
     <View style={styles.container}>
@@ -23,8 +32,9 @@ export default function Login() {
         <TextInput
           style={styles.TextInput}
           placeholder="Email"
+          value={email}
           placeholderTextColor="#003f5c"
-          onChangeText={(email) => setEmail(email)}
+          onChangeText={(text) => setEmail(text)}
         />
       </View>
 
@@ -32,9 +42,10 @@ export default function Login() {
         <TextInput
           style={styles.TextInput}
           placeholder="Password"
+          value={password}
           placeholderTextColor="#003f5c"
           secureTextEntry={true}
-          onChangeText={(password) => setPassword(password)}
+          onChangeText={(text) => setPassword(text)}
         />
       </View>
 
@@ -44,6 +55,11 @@ export default function Login() {
 
       <TouchableOpacity style={styles.loginBtn}>
         <Text style={styles.loginText}>LOGIN</Text>
+      </TouchableOpacity>
+      <TouchableOpacity 
+        onPress={handleSignup}
+        style={styles.loginBtn}>
+        <Text style={styles.loginText}>REGISTER</Text>
       </TouchableOpacity>
     </View>
   );
