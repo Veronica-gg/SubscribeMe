@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import {createUserWithEmailAndPassword} from "firebase/auth";
+import {createUserWithEmailAndPassword, sendEmailVerification} from "firebase/auth";
 import {
   StyleSheet,
   Text,
@@ -19,6 +19,14 @@ export default function Login() {
     createUserWithEmailAndPassword(auth, email, password)
     .then(userCredentials => {
       const user = userCredentials.user;
+      if (user != null) {
+        sendEmailVerification(auth.currentUser)
+        .then(() => {
+          // TODO - Email verification sent!
+          // ...
+        })
+        .catch(error => alert(error.message));
+      }
     })
     .catch(error => alert(error.message))
   }
