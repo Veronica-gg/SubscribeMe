@@ -23,7 +23,10 @@ export default function Login({ navigation }) {
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
-          placeholder="Email"
+          autoCapitalize="none"
+          autoCorrect={false}
+          autoComplete="email"
+          placeholder="E-mail"
           value={email}
           placeholderTextColor="#003f5c"
           onChangeText={(text) => setEmail(text)}
