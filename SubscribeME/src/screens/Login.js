@@ -8,6 +8,8 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback
 } from "react-native";
 import {signInWithEmailAndPassword} from "firebase/auth";
 import { auth } from "../../firebase";
@@ -30,55 +32,58 @@ export default function Login({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
-      {/* <Image style={styles.image} source={require("./assets/log2.png")} /> */}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        {/* <Image style={styles.image} source={require("./assets/log2.png")} /> */}
 
-      <StatusBar style="auto" />
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          autoCapitalize="none"
-          autoCorrect={false}
-          autoComplete="email"
-          placeholder="E-mail"
-          value={email}
-          placeholderTextColor="#003f5c"
-          onChangeText={(text) => setEmail(text)}
-        />
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Password"
-          value={password}
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          onChangeText={(text) => setPassword(text)}
-        />
-      </View>
+        <StatusBar style="auto" />
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.TextInput}
+            autoCapitalize="none"
+            multiline={false}
+            autoCorrect={false}
+            autoComplete="email"
+            placeholder="E-mail"
+            value={email}
+            placeholderTextColor="#003f5c"
+            onChangeText={(text) => setEmail(text)}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Password"
+            value={password}
+            placeholderTextColor="#003f5c"
+            secureTextEntry={true}
+            onChangeText={(text) => setPassword(text)}
+          />
+        </View>
 
-      <TouchableOpacity>
-        <Text style={styles.forgot_button}>Forgot Password?</Text>
-      </TouchableOpacity>
+        <TouchableOpacity>
+          <Text style={styles.forgot_button}>Forgot Password?</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.loginBtn}
-        onPress={handleLogin}
-      >
-        <Text style={styles.loginText}>LOGIN</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity>
-        <Text
-          style={styles.forgot_button}
-          onPress={() => {
-            navigation.navigate("Registration");
-          }}
+        <TouchableOpacity
+          style={styles.loginBtn}
+          onPress={handleLogin}
         >
-          Don't have an account? Register
-        </Text>
-      </TouchableOpacity>
-    </View>
+          <Text style={styles.loginText}>LOGIN</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <Text
+            style={styles.forgot_button}
+            onPress={() => {
+              navigation.navigate("Registration");
+            }}
+          >
+            Don't have an account? Register
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -108,8 +113,9 @@ const styles = StyleSheet.create({
   TextInput: {
     height: 50,
     width: "100%",
-    padding: 10,
-    marginLeft: 20,
+    padding: "4%",
+    marginLeft: "5%",
+    marginRight: "5%",
     alignItems: "center",
     textAlign: "center",
   },

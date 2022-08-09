@@ -37,64 +37,67 @@ export default function Register({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      {/* <Image style={styles.image} source={require("./assets/log2.png")} /> */}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        {/* <Image style={styles.image} source={require("./assets/log2.png")} /> */}
 
-      <StatusBar style="auto" />
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Name"
-          // value={email}
-          placeholderTextColor="#003f5c"
-          // onChangeText={(text) => setEmail(text)}
-        />
+        <StatusBar style="auto" />
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Name"
+            // value={email}
+            placeholderTextColor="#003f5c"
+            // onChangeText={(text) => setEmail(text)}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.TextInput}
+            autoCapitalize="none"
+            multiline={false}
+            autoCorrect={false}
+            autoComplete="email"
+            placeholder="E-mail"
+            value={email}
+            placeholderTextColor="#003f5c"
+            onChangeText={(text) => setEmail(text)}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Password"
+            value={password}
+            placeholderTextColor="#003f5c"
+            secureTextEntry={true}
+            onChangeText={(text) => setPassword(text)}
+          />
+        </View>
+
+        {/* <TouchableOpacity>
+          <Text style={styles.forgot_button}>Forgot Password?</Text>
+        </TouchableOpacity> */}
+
+        {/* <TouchableOpacity style={styles.loginBtn}>
+          <Text style={styles.loginText}>LOGIN</Text>
+        </TouchableOpacity> */}
+        <TouchableOpacity onPress={handleSignup} style={styles.loginBtn}>
+          <Text style={styles.loginText}>REGISTER</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity>
+          <Text
+            style={styles.forgot_button}
+            onPress={() => {
+              navigation.navigate("Login");
+            }}
+          >
+            Already have an account? Login
+          </Text>
+        </TouchableOpacity>
       </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          autoCapitalize="none"
-          autoCorrect={false}
-          autoComplete="email"
-          placeholder="E-mail"
-          value={email}
-          placeholderTextColor="#003f5c"
-          onChangeText={(text) => setEmail(text)}
-        />
-      </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Password"
-          value={password}
-          placeholderTextColor="#003f5c"
-          secureTextEntry={true}
-          onChangeText={(text) => setPassword(text)}
-        />
-      </View>
-
-      {/* <TouchableOpacity>
-        <Text style={styles.forgot_button}>Forgot Password?</Text>
-      </TouchableOpacity> */}
-
-      {/* <TouchableOpacity style={styles.loginBtn}>
-        <Text style={styles.loginText}>LOGIN</Text>
-      </TouchableOpacity> */}
-      <TouchableOpacity onPress={handleSignup} style={styles.loginBtn}>
-        <Text style={styles.loginText}>REGISTER</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity>
-        <Text
-          style={styles.forgot_button}
-          onPress={() => {
-            navigation.navigate("Login");
-          }}
-        >
-          Already have an account? Login
-        </Text>
-      </TouchableOpacity>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -124,8 +127,9 @@ const styles = StyleSheet.create({
   TextInput: {
     height: 50,
     width: "100%",
-    padding: 10,
-    marginLeft: 20,
+    padding: "4%",
+    marginLeft: "5%",
+    marginRight: "5%",
     alignItems: "center",
     textAlign: "center",
   },
