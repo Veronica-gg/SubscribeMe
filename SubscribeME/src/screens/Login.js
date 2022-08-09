@@ -9,11 +9,25 @@ import {
   Button,
   TouchableOpacity,
 } from "react-native";
+import {signInWithEmailAndPassword} from "firebase/auth";
 import { auth } from "../../firebase";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
+  const handleLogin = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredentials) => {
+          const user = userCredentials.user;
+          if (user){
+            setLoggedIn(true);
+            alert("Logged in!");
+            //navigation.replace("Home");
+          }
+        }
+      ).catch((error) => alert(error.message));
+  }
 
   return (
     <View style={styles.container}>
@@ -49,9 +63,7 @@ export default function Login({ navigation }) {
 
       <TouchableOpacity
         style={styles.loginBtn}
-        onPress={() => {
-          navigation.replace("Home");
-        }}
+        onPress={handleLogin}
       >
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
