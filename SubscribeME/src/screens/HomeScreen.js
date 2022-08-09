@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
+import BottomBar from "../components/BottomBar";
 import Login from "./Login";
 
 export default function HomeScreen() {
@@ -7,13 +8,14 @@ export default function HomeScreen() {
     <View
       style={{
         flex: 1,
+        backgroundColor: "#FFF9F3",
         justifyContent: "center",
         alignItems: "center",
       }}
     >
-      {/* <Text>Home Screen Home Screen Home Screen Home</Text> */}
       <StatusBar style="auto" />
-      <Login />
+      {/* <Login /> */}
+      {/* <BottomBar /> */}
     </View>
   );
 }

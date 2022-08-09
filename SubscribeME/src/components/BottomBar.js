@@ -2,7 +2,7 @@
 // import { BottomNavigation, Text } from "react-native-paper";
 
 import * as React from "react";
-import { Text, View } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -15,9 +15,12 @@ const Tab = createBottomTabNavigator();
 
 const BottomBar = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer style={styles.container}>
       <Tab.Navigator
         screenOptions={({ route }) => ({
+          tabBarStyle: {
+            backgroundColor: "#FFF9F3",
+          },
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
             if (route.name === "Home") {
@@ -31,17 +34,59 @@ const BottomBar = () => {
             }
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: "mediumblue",
+          tabBarActiveTintColor: "#3E3384",
           tabBarInactiveTintColor: "gray",
         })}
       >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Subs List" component={SubsListScreen} />
-        <Tab.Screen name="Statistics" component={StatsScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            // title: "HOME",
+            headerStyle: {
+              backgroundColor: "#FFF9F3",
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Subs List"
+          component={SubsListScreen}
+          options={{
+            // title: "SUBSCRIPTION LIST",
+            headerStyle: {
+              backgroundColor: "#FFF9F3",
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Statistics"
+          component={StatsScreen}
+          options={{
+            // title: "STATISTICS",
+            headerStyle: {
+              backgroundColor: "#FFF9F3",
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{
+            // title: "PROFILE",
+            headerStyle: {
+              backgroundColor: "#FFF9F3",
+            },
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#FFF9F3",
+  },
+});
 
 export default BottomBar;

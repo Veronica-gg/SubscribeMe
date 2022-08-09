@@ -1,6 +1,13 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import BottomBar from "./src/components/BottomBar";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Login from "./src/screens/Login";
+import Register from "./src/screens/Register";
+import HomeScreen from "./src/screens/HomeScreen";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
@@ -8,7 +15,41 @@ export default function App() {
       <View>
         <Text>Open up App.js to start working on your app! SubsTr</Text>
         <StatusBar style="auto" />
-        <BottomBar />
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{
+                title: "Welcome",
+                headerStyle: {
+                  backgroundColor: "#FFF9F3",
+                },
+              }}
+            />
+            <Stack.Screen
+              name="Registration"
+              component={Register}
+              options={{
+                // title: "PROFILE",
+                headerStyle: {
+                  backgroundColor: "#FFF9F3",
+                },
+              }}
+            />
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{
+                title: "Home",
+                headerStyle: {
+                  backgroundColor: "#FFF9F3",
+                },
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+        {/* <BottomBar /> */}
       </View>
     </SafeAreaView>
   );
@@ -17,8 +58,14 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF9F3",
     alignItems: "center",
     justifyContent: "center",
   },
 });
+
+// "#3E3384" cosmic cobalt (dark blue) - 62, 51, 132
+// "#3098FF" dodger blue - 48, 152, 255
+// "#FF9428" deep saffron (orange) - 255, 148, 40
+// "#CA4D57" brick red - 202, 77, 87
+// "#FFF9F3" seashell - 255, 249, 243

@@ -1,6 +1,10 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
+import {
   StyleSheet,
   Text,
   View,
@@ -8,18 +12,44 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { auth } from "../../firebase";
 
-export default function Login({ navigation }) {
+export default function Register({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const handleSignup = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        if (user != null) {
+          sendEmailVerification(auth.currentUser)
+            .then(() => {
+              // TODO - Email verification sent!
+              // ...
+            })
+            .catch((error) => alert(error.message));
+        }
+      })
+      .catch((error) => alert(error.message));
+  };
 
   return (
     <View style={styles.container}>
       {/* <Image style={styles.image} source={require("./assets/log2.png")} /> */}
 
       <StatusBar style="auto" />
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.TextInput}
+          placeholder="Name"
+          // value={email}
+          placeholderTextColor="#003f5c"
+          // onChangeText={(text) => setEmail(text)}
+        />
+      </View>
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
@@ -40,27 +70,25 @@ export default function Login({ navigation }) {
         />
       </View>
 
-      <TouchableOpacity>
+      {/* <TouchableOpacity>
         <Text style={styles.forgot_button}>Forgot Password?</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
-      <TouchableOpacity
-        style={styles.loginBtn}
-        onPress={() => {
-          navigation.replace("Home");
-        }}
-      >
+      {/* <TouchableOpacity style={styles.loginBtn}>
         <Text style={styles.loginText}>LOGIN</Text>
+      </TouchableOpacity> */}
+      <TouchableOpacity onPress={handleSignup} style={styles.loginBtn}>
+        <Text style={styles.loginText}>REGISTER</Text>
       </TouchableOpacity>
 
       <TouchableOpacity>
         <Text
           style={styles.forgot_button}
           onPress={() => {
-            navigation.navigate("Registration");
+            navigation.navigate("Login");
           }}
         >
-          Don't have an account? Register
+          Already have an account? Login
         </Text>
       </TouchableOpacity>
     </View>
@@ -113,8 +141,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 40,
-    marginBottom: 20,
     backgroundColor: "#3E3384",
+    marginBottom: 20,
   },
 
   loginText: {
