@@ -2,18 +2,16 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
   StyleSheet,
-  Text,
   View,
   Image,
   TextInput,
-  Button,
-  TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 import SubmitButton from "../components/SubmitButton";
+import LineButton from "../components/LineButton";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
@@ -65,22 +63,16 @@ export default function Login({ navigation }) {
           />
         </View>
 
-        <TouchableOpacity>
-          <Text style={styles.forgot_button}>Forgot Password?</Text>
-        </TouchableOpacity>
+        <LineButton textID="Forgot Password?" />
 
         <SubmitButton textID="LOGIN" onPressID={handleLogin}></SubmitButton>
 
-        <TouchableOpacity>
-          <Text
-            style={styles.forgot_button}
-            onPress={() => {
-              navigation.navigate("Registration");
-            }}
-          >
-            Don't have an account? Register
-          </Text>
-        </TouchableOpacity>
+        <LineButton
+          onPressID={() => {
+            navigation.navigate("Registration");
+          }}
+          textID="Don't have an account? Register"
+        />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -120,12 +112,5 @@ const styles = StyleSheet.create({
     marginRight: "5%",
     alignItems: "center",
     textAlign: "center",
-  },
-
-  forgot_button: {
-    height: 30,
-    marginBottom: 30,
-    color: "#FF9428",
-    textDecorationLine: "underline",
   },
 });

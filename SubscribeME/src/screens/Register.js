@@ -17,6 +17,7 @@ import {
 } from "react-native";
 import { auth } from "../../firebase";
 import SubmitButton from "../components/SubmitButton";
+import LineButton from "../components/LineButton";
 
 export default function Register({ navigation }) {
   const [email, setEmail] = useState("");
@@ -81,16 +82,12 @@ export default function Register({ navigation }) {
 
         <SubmitButton textID="REGISTER" onPressID={handleSignup}></SubmitButton>
 
-        <TouchableOpacity>
-          <Text
-            style={styles.forgot_button}
-            onPress={() => {
-              navigation.navigate("Login");
-            }}
-          >
-            Already have an account? Login
-          </Text>
-        </TouchableOpacity>
+        <LineButton
+          textID="Already have an account? Login"
+          onPressID={() => {
+            navigation.navigate("Login");
+          }}
+        />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -129,12 +126,5 @@ const styles = StyleSheet.create({
     marginRight: "5%",
     alignItems: "center",
     textAlign: "center",
-  },
-
-  forgot_button: {
-    height: 30,
-    marginBottom: 30,
-    color: "#FF9428",
-    textDecorationLine: "underline",
   },
 });
