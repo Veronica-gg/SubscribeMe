@@ -16,6 +16,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { auth } from "../../firebase";
+import SubmitButton from "../components/SubmitButton";
 
 export default function Register({ navigation }) {
   const [email, setEmail] = useState("");
@@ -39,7 +40,10 @@ export default function Register({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        {/* <Image style={styles.image} source={require("./assets/log2.png")} /> */}
+        <Image
+          style={styles.image}
+          source={require("../../assets/subscription-model.png")}
+        />
 
         <StatusBar style="auto" />
         <View style={styles.inputView}>
@@ -75,16 +79,7 @@ export default function Register({ navigation }) {
           />
         </View>
 
-        {/* <TouchableOpacity>
-          <Text style={styles.forgot_button}>Forgot Password?</Text>
-        </TouchableOpacity> */}
-
-        {/* <TouchableOpacity style={styles.loginBtn}>
-          <Text style={styles.loginText}>LOGIN</Text>
-        </TouchableOpacity> */}
-        <TouchableOpacity onPress={handleSignup} style={styles.loginBtn}>
-          <Text style={styles.loginText}>REGISTER</Text>
-        </TouchableOpacity>
+        <SubmitButton textID="REGISTER" onPressID={handleSignup}></SubmitButton>
 
         <TouchableOpacity>
           <Text
@@ -112,6 +107,8 @@ const styles = StyleSheet.create({
 
   image: {
     marginBottom: 40,
+    width: 100,
+    height: 100,
   },
 
   inputView: {
@@ -137,22 +134,7 @@ const styles = StyleSheet.create({
   forgot_button: {
     height: 30,
     marginBottom: 30,
-    color: "#3098FF",
+    color: "#FF9428",
     textDecorationLine: "underline",
-  },
-
-  loginBtn: {
-    width: "80%",
-    borderRadius: 25,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 40,
-    backgroundColor: "#3E3384",
-    marginBottom: 20,
-  },
-
-  loginText: {
-    color: "#FFF9F3",
   },
 });

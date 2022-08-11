@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./src/screens/Login";
 import Register from "./src/screens/Register";
 import HomeScreen from "./src/screens/HomeScreen";
+import Root from "./src/screens/Root";
 
 const Stack = createNativeStackNavigator();
 
@@ -38,10 +39,11 @@ export default function App() {
               }}
             />
             <Stack.Screen
-              name="Home"
-              component={HomeScreen}
+              name="Root"
+              component={Root}
               options={{
-                title: "Home",
+                title: "Root",
+                headerShown: false,
                 headerStyle: {
                   backgroundColor: "#FFF9F3",
                 },

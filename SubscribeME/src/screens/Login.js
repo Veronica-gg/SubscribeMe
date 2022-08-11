@@ -9,10 +9,11 @@ import {
   Button,
   TouchableOpacity,
   Keyboard,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from "react-native";
-import {signInWithEmailAndPassword} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
+import SubmitButton from "../components/SubmitButton";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
@@ -21,20 +22,23 @@ export default function Login({ navigation }) {
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
-          const user = userCredentials.user;
-          if (user){
-            setLoggedIn(true);
-            alert("Logged in!");
-            //navigation.replace("Home");
-          }
+        const user = userCredentials.user;
+        if (user) {
+          setLoggedIn(true);
+          alert("Logged in!");
+          navigation.replace("Root");
         }
-      ).catch((error) => alert(error.message));
-  }
+      })
+      .catch((error) => alert(error.message));
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        {/* <Image style={styles.image} source={require("./assets/log2.png")} /> */}
+        <Image
+          style={styles.image}
+          source={require("../../assets/subscription-model.png")}
+        />
 
         <StatusBar style="auto" />
         <View style={styles.inputView}>
@@ -65,12 +69,7 @@ export default function Login({ navigation }) {
           <Text style={styles.forgot_button}>Forgot Password?</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.loginBtn}
-          onPress={handleLogin}
-        >
-          <Text style={styles.loginText}>LOGIN</Text>
-        </TouchableOpacity>
+        <SubmitButton textID="LOGIN" onPressID={handleLogin}></SubmitButton>
 
         <TouchableOpacity>
           <Text
@@ -98,6 +97,9 @@ const styles = StyleSheet.create({
 
   image: {
     marginBottom: 40,
+    width: 100,
+    height: 100,
+    // resizeMode: "contain",
   },
 
   inputView: {
@@ -123,22 +125,7 @@ const styles = StyleSheet.create({
   forgot_button: {
     height: 30,
     marginBottom: 30,
-    color: "#3098FF",
+    color: "#FF9428",
     textDecorationLine: "underline",
-  },
-
-  loginBtn: {
-    width: "80%",
-    borderRadius: 25,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 40,
-    marginBottom: 20,
-    backgroundColor: "#3E3384",
-  },
-
-  loginText: {
-    color: "#FFF9F3",
   },
 });
