@@ -99,7 +99,9 @@ export default function PasswordStrengthBar({ password }) {
           { display: password.length > 0 ? "flex" : "none" },
         ]}
       >
-        <Text display={"displaySmall"}>{message}</Text>
+        <Text display={"displaySmall"} style={{ color: "#003f5c" }}>
+          {message}
+        </Text>
       </View>
     </View>
   );
@@ -117,6 +119,8 @@ const styles = StyleSheet.create({
   containerText: {
     flex: 1,
     flexDirection: "col",
+    alignItems: "center",
+    justifyContent: "center",
   },
   bar: {
     margin: "1%",
@@ -124,5 +128,6 @@ const styles = StyleSheet.create({
   },
   barElement: {
     height: 8,
+    borderRadius: 20,
   },
 });
