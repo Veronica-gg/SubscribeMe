@@ -14,11 +14,13 @@ import {
   Button,
   TouchableOpacity,
   Keyboard,
+  KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from "react-native";
 import { auth } from "../../firebase";
 import SubmitButton from "../components/SubmitButton";
 import LineButton from "../components/LineButton";
+import PasswordStrengthBar from "../components/PasswordStrengthBar";
 
 export default function Register({ navigation }) {
   const [email, setEmail] = useState("");
@@ -40,16 +42,13 @@ export default function Register({ navigation }) {
       })
       .catch((error) => alert(error.message));
   };
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
         <Image
           style={styles.image}
           source={require("../../assets/subscription-model.png")}
         />
-
-        <StatusBar style="auto" />
         <View style={styles.inputView}>
           <TextInput
             style={styles.TextInput}
@@ -66,6 +65,7 @@ export default function Register({ navigation }) {
             multiline={false}
             autoCorrect={false}
             autoComplete="email"
+            keyboardType="email-address"
             placeholder="E-mail"
             value={email}
             placeholderTextColor="#003f5c"
@@ -82,20 +82,21 @@ export default function Register({ navigation }) {
             onChangeText={(text) => setPassword(text)}
           />
         </View>
-
+        <View style={styles.PasswordStrengthBar}>
+          <PasswordStrengthBar password={password} />
+        </View>
         <SubmitButton
           textID="REGISTER"
           onPressID={handleSignup}
           iconID="account-plus"
         ></SubmitButton>
-
         <LineButton
           textID="Already have an account? Login"
           onPressID={() => {
             navigation.navigate("Login");
           }}
         />
-      </View>
+      </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 }
@@ -133,5 +134,10 @@ const styles = StyleSheet.create({
     marginRight: "5%",
     alignItems: "center",
     textAlign: "center",
+  },
+
+  PasswordStrengthBar: {
+    height: "7%",
+    width: "70%",
   },
 });

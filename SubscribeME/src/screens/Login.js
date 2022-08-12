@@ -44,6 +44,7 @@ export default function Login({ navigation }) {
             multiline={false}
             autoCorrect={false}
             autoComplete="email"
+            keyboardType="email-address"
             placeholder="E-mail"
             value={email}
             placeholderTextColor="#003f5c"
