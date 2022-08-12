@@ -16,13 +16,11 @@ import LineButton from "../components/LineButton";
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
         if (user) {
-          setLoggedIn(true);
           alert("Logged in!");
           navigation.replace("Root");
         }
@@ -56,6 +54,7 @@ export default function Login({ navigation }) {
           <TextInput
             style={styles.TextInput}
             placeholder="Password"
+            multiline={false}
             value={password}
             placeholderTextColor="#003f5c"
             secureTextEntry={true}
@@ -66,7 +65,6 @@ export default function Login({ navigation }) {
         <LineButton textID="Forgot Password?" />
 
         <SubmitButton textID="LOGIN" onPressID={handleLogin}></SubmitButton>
-
         <LineButton
           onPressID={() => {
             navigation.navigate("Registration");
@@ -100,7 +98,6 @@ const styles = StyleSheet.create({
     width: "70%",
     height: 45,
     marginBottom: 20,
-
     alignItems: "center",
   },
 

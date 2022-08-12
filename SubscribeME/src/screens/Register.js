@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  updateProfile,
 } from "firebase/auth";
 import {
   StyleSheet,
@@ -22,10 +23,12 @@ import LineButton from "../components/LineButton";
 export default function Register({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const handleSignup = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
+        updateProfile(user, { displayName: name }).catch();
         if (user != null) {
           sendEmailVerification(auth.currentUser)
             .then(() => {
@@ -51,9 +54,9 @@ export default function Register({ navigation }) {
           <TextInput
             style={styles.TextInput}
             placeholder="Name"
-            // value={email}
+            value={name}
             placeholderTextColor="#003f5c"
-            // onChangeText={(text) => setEmail(text)}
+            onChangeText={(text) => setName(text)}
           />
         </View>
         <View style={styles.inputView}>

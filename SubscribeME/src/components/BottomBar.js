@@ -3,7 +3,6 @@
 
 import * as React from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import HomeScreen from "../screens/HomeScreen";
@@ -15,9 +14,8 @@ const Tab = createBottomTabNavigator();
 
 const BottomBar = () => {
   return (
-    // <NavigationContainer style={styles.container}>
     <Tab.Navigator
-      // style={styles.container}
+      style={styles.container}
       screenOptions={({ route }) => ({
         tabBarStyle: {
           backgroundColor: "#FFF9F3",
@@ -80,7 +78,6 @@ const BottomBar = () => {
         }}
       />
     </Tab.Navigator>
-    /* </NavigationContainer> */
   );
 };
 

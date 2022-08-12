@@ -2,11 +2,11 @@ import * as React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
 import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
   Image,
   TextInput,
   Button,
@@ -19,13 +19,9 @@ import BottomBar from "../components/BottomBar";
 
 export default function Root() {
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Text>Open up App.js to start working on your app! SubsTr</Text>
-        <StatusBar style="auto" />
-        <BottomBar />
-      </View>
-    </SafeAreaView>
+    //<SafeAreaView style={styles.container}>
+    <BottomBar />
+    //</SafeAreaView>
   );
 }
 
@@ -34,6 +30,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFF9F3",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
   },
 });

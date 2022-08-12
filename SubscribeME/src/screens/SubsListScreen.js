@@ -1,10 +1,10 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import Register from "./Register";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SubsListScreen() {
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
         justifyContent: "center",
@@ -14,6 +14,6 @@ export default function SubsListScreen() {
     >
       <StatusBar style="auto" />
       {/* <Register /> */}
-    </View>
+    </SafeAreaView>
   );
 }

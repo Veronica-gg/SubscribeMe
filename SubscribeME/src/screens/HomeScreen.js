@@ -1,17 +1,19 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { Button } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
         backgroundColor: "#FFF9F3",
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: "top",
+        alignItems: "left",
       }}
     >
-      <StatusBar style="auto" />
-    </View>
+      {/* <StatusBar style="auto" /> */}
+      {/* <Login /> */}
+      {/* <BottomBar /> */}
+    </SafeAreaView>
   );
 }

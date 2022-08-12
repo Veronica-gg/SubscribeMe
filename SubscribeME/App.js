@@ -1,11 +1,9 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
-import BottomBar from "./src/components/BottomBar";
+import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./src/screens/Login";
 import Register from "./src/screens/Register";
-import HomeScreen from "./src/screens/HomeScreen";
 import Root from "./src/screens/Root";
 import LoadingScreen from "./src/screens/LoadingScreen";
 
@@ -13,59 +11,55 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Text>Open up App.js to start working on your app! SubsTr</Text>
-        <StatusBar style="auto" />
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen
-              name="Loading"
-              component={LoadingScreen}
-              options={{
-                title: "Loading",
-                headerShown: false,
-                headerStyle: {
-                  backgroundColor: "#FFF9F3",
-                },
-              }}
-            />
-            <Stack.Screen
-              name="Login"
-              component={Login}
-              options={{
-                title: "Welcome",
-                headerStyle: {
-                  backgroundColor: "#FFF9F3",
-                },
-              }}
-            />
-            <Stack.Screen
-              name="Registration"
-              component={Register}
-              options={{
-                // title: "PROFILE",
-                headerStyle: {
-                  backgroundColor: "#FFF9F3",
-                },
-              }}
-            />
-            <Stack.Screen
-              name="Root"
-              component={Root}
-              options={{
-                title: "Root",
-                headerShown: false,
-                headerStyle: {
-                  backgroundColor: "#FFF9F3",
-                },
-              }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-        {/* <BottomBar /> */}
-      </View>
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator defaultScreenOptions={"Login"}>
+          <Stack.Screen
+            name="Loading"
+            component={LoadingScreen}
+            options={{
+              title: "Loading",
+              headerShown: false,
+              headerStyle: {
+                backgroundColor: "#FFF9F3",
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{
+              title: "Welcome",
+              headerStyle: {
+                backgroundColor: "#FFF9F3",
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Registration"
+            component={Register}
+            options={{
+              // title: "PROFILE",
+              headerStyle: {
+                backgroundColor: "#FFF9F3",
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Root"
+            component={Root}
+            options={{
+              title: "Root",
+              headerShown: false,
+              headerStyle: {
+                backgroundColor: "#FFF9F3",
+              },
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+      {/* <BottomBar /> */}
+    </SafeAreaProvider>
   );
 }
 

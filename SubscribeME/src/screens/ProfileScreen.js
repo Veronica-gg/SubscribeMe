@@ -1,9 +1,18 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { auth } from "../../firebase";
+
+function logout() {
+  auth
+    .signOut()
+    .then(alert("Signed out!"))
+    .catch((error) => alert(error));
+}
 
 export default function ProfileScreen() {
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
         justifyContent: "center",
@@ -13,6 +22,6 @@ export default function ProfileScreen() {
     >
       <Text>Profile Screen</Text>
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
