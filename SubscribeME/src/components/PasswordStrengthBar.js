@@ -32,7 +32,7 @@ function StrengthColor(strength, bar) {
 function Message(strength) {
   switch (strength) {
     case -1:
-      return "Your password must be at least 6 characters long";
+      return "Too short! At least 6 characters";
     case 0:
       return "Very weak password";
     case 1:

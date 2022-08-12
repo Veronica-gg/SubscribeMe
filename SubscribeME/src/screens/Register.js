@@ -1,21 +1,20 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   updateProfile,
 } from "firebase/auth";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import {
   StyleSheet,
-  Text,
   View,
   Image,
   TextInput,
-  Button,
-  TouchableOpacity,
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  TouchableOpacity,
+  Platform,
 } from "react-native";
 import { auth } from "../../firebase";
 import SubmitButton from "../components/SubmitButton";
@@ -26,6 +25,7 @@ export default function Register({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const handleSignup = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
@@ -44,7 +44,7 @@ export default function Register({ navigation }) {
   };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
         <Image
           style={styles.image}
           source={require("../../assets/subscription-model.png")}
@@ -53,6 +53,8 @@ export default function Register({ navigation }) {
           <TextInput
             style={styles.TextInput}
             placeholder="Name"
+            multiline={false}
+            autoCorrect={false}
             value={name}
             placeholderTextColor="#003f5c"
             onChangeText={(text) => setName(text)}
@@ -78,9 +80,29 @@ export default function Register({ navigation }) {
             placeholder="Password"
             value={password}
             placeholderTextColor="#003f5c"
-            secureTextEntry={true}
+            secureTextEntry={!showPassword}
+            keyboardType={
+              Platform.OS === "ios" ? "ascii-capable" : "visible-password"
+            }
             onChangeText={(text) => setPassword(text)}
           />
+          <TouchableOpacity
+            style={{
+              height: 50,
+              position: "absolute",
+              right: "5%",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={() => {
+              showPassword ? setShowPassword(false) : setShowPassword(true);
+            }}
+          >
+            <Ionicons
+              name={showPassword ? "eye-off-outline" : "eye-outline"}
+              size={22}
+            ></Ionicons>
+          </TouchableOpacity>
         </View>
         <View style={styles.PasswordStrengthBar}>
           <PasswordStrengthBar password={password} />
