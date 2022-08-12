@@ -7,6 +7,7 @@ import Login from "./src/screens/Login";
 import Register from "./src/screens/Register";
 import HomeScreen from "./src/screens/HomeScreen";
 import Root from "./src/screens/Root";
+import LoadingScreen from "./src/screens/LoadingScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,17 @@ export default function App() {
         <StatusBar style="auto" />
         <NavigationContainer>
           <Stack.Navigator>
+            <Stack.Screen
+              name="Loading"
+              component={LoadingScreen}
+              options={{
+                title: "Loading",
+                headerShown: false,
+                headerStyle: {
+                  backgroundColor: "#FFF9F3",
+                },
+              }}
+            />
             <Stack.Screen
               name="Login"
               component={Login}
