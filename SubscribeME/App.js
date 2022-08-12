@@ -13,7 +13,7 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <Stack.Navigator defaultScreenOptions={"Login"}>
+        <Stack.Navigator>
           <Stack.Screen
             name="Loading"
             component={LoadingScreen}

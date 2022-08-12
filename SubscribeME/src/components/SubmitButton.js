@@ -1,11 +1,19 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Button, Icon } from "react-native-paper";
 
 export default function SubmitButton(props) {
   return (
-    <TouchableOpacity style={styles.submitBtn} onPress={props.onPressID}>
-      <Text style={styles.submitText}>{props.textID}</Text>
-    </TouchableOpacity>
+    <Button
+      style={styles.submitBtn}
+      mode="contained"
+      onPress={props.onPressID}
+      icon={props.iconID}
+      textColor="#FFF9F3"
+      contentStyle={{ height: "100%" }}
+    >
+      {props.textID}
+    </Button>
   );
 }
 
@@ -14,14 +22,9 @@ const styles = StyleSheet.create({
     width: "80%",
     borderRadius: 25,
     height: 50,
-    alignItems: "center",
     justifyContent: "center",
     marginTop: 40,
     marginBottom: 20,
     backgroundColor: "#3E3384",
-  },
-
-  submitText: {
-    color: "#FFF9F3",
   },
 });

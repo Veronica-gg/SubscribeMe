@@ -83,7 +83,11 @@ export default function Register({ navigation }) {
           />
         </View>
 
-        <SubmitButton textID="REGISTER" onPressID={handleSignup}></SubmitButton>
+        <SubmitButton
+          textID="REGISTER"
+          onPressID={handleSignup}
+          iconID="account-plus"
+        ></SubmitButton>
 
         <LineButton
           textID="Already have an account? Login"

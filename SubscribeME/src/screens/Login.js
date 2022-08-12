@@ -64,7 +64,11 @@ export default function Login({ navigation }) {
 
         <LineButton textID="Forgot Password?" />
 
-        <SubmitButton textID="LOGIN" onPressID={handleLogin}></SubmitButton>
+        <SubmitButton
+          textID="LOGIN"
+          onPressID={handleLogin}
+          iconID="login"
+        ></SubmitButton>
         <LineButton
           onPressID={() => {
             navigation.navigate("Registration");
