@@ -43,14 +43,14 @@ export default function Login({ navigation }) {
             autoCorrect={false}
             autoComplete="email"
             keyboardType="email-address"
-            placeholder="E-mail"
+            originalPlaceholder="E-mail"
             value={email}
             onChangeText={(text) => setEmail(text)}
           />
         </View>
         <View style={styles.inputView}>
           <TextInput
-            placeholder="Password"
+            originalPlaceholder="Password"
             value={password}
             isPassword
             onChangeText={(text) => setPassword(text)}
