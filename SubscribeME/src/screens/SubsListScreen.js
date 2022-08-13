@@ -1,5 +1,4 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SubsItem from "../components/SubsItem";
 
@@ -9,7 +8,7 @@ export default function SubsListScreen() {
       style={{
         flex: 1,
         justifyContent: "top",
-        backgroundColor: "#FFF9F3",
+        //backgroundColor: "#FFF9F3",
         alignItems: "center",
       }}
     >

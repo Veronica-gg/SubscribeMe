@@ -1,18 +1,43 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Appearance } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  DefaultTheme as NavigationDefault,
+  DarkTheme as NavigationDark,
+  NavigationContainer,
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./src/screens/Login";
 import Register from "./src/screens/Register";
 import Root from "./src/screens/Root";
 import LoadingScreen from "./src/screens/LoadingScreen";
+import {
+  DefaultTheme as PaperDefault,
+  DarkTheme as PaperDark,
+  Provider as PaperProvider,
+} from "react-native-paper";
+import merge from "deepmerge";
 
 const Stack = createNativeStackNavigator();
+const CombinedDefaultTheme = merge(PaperDefault, NavigationDefault);
+const CombinedDarkTheme = merge(PaperDark, NavigationDark);
 
-export default function App() {
+const theme = {
+  ...CombinedDefaultTheme,
+  roundness: 12,
+  colors: {
+    ...CombinedDefaultTheme.colors,
+    primary: "#3E3384",
+    secondary: "#CA4D57",
+    background: "#FFF9F3",
+    accent: "#AF9408",
+    border: "#FFFFFF",
+  },
+};
+
+function App() {
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
+      <NavigationContainer theme={theme}>
         <Stack.Navigator>
           <Stack.Screen
             name="Loading"
@@ -21,7 +46,7 @@ export default function App() {
               title: "Loading",
               headerShown: false,
               headerStyle: {
-                backgroundColor: "#FFF9F3",
+                //backgroundColor: "#FFF9F3",
               },
             }}
           />
@@ -31,7 +56,7 @@ export default function App() {
             options={{
               title: "Welcome",
               headerStyle: {
-                backgroundColor: "#FFF9F3",
+                //backgroundColor: "#FFF9F3",
               },
             }}
           />
@@ -41,7 +66,7 @@ export default function App() {
             options={{
               // title: "PROFILE",
               headerStyle: {
-                backgroundColor: "#FFF9F3",
+                //backgroundColor: "#FFF9F3",
               },
             }}
           />
@@ -52,7 +77,7 @@ export default function App() {
               title: "Root",
               headerShown: false,
               headerStyle: {
-                backgroundColor: "#FFF9F3",
+                //backgroundColor: "#FFF9F3",
               },
             }}
           />
@@ -63,10 +88,19 @@ export default function App() {
   );
 }
 
+export default function AppWithProviders() {
+  const isDarkModeOn = Appearance.getColorScheme() != "light";
+  return (
+    <PaperProvider theme={theme}>
+      <App />
+    </PaperProvider>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF9F3",
+    //backgroundColor: "#FFF9F3",
     alignItems: "center",
     justifyContent: "center",
   },

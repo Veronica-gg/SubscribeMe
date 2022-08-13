@@ -1,5 +1,6 @@
 import { View, StyleSheet } from "react-native";
 import { ProgressBar, Text } from "react-native-paper";
+import { useTheme } from "react-native-paper";
 import zxcvbn from "zxcvbn";
 
 const minLength = 6;
@@ -49,6 +50,7 @@ function Message(strength) {
 export default function PasswordStrengthBar({ password }) {
   const score = PasswordScore(password);
   const message = Message(score);
+  const { colors } = useTheme();
   return (
     <View style={styles.root}>
       <View
@@ -99,7 +101,7 @@ export default function PasswordStrengthBar({ password }) {
           { display: password.length > 0 ? "flex" : "none" },
         ]}
       >
-        <Text display={"displaySmall"} style={{ color: "#003f5c" }}>
+        <Text display={"displaySmall"} style={{ color: colors.secondary }}>
           {message}
         </Text>
       </View>
