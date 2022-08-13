@@ -6,7 +6,7 @@ const minLength = 6;
 const disabledColor = "#CCCCCC";
 
 function PasswordScore(password) {
-  return password.length > minLength ? zxcvbn(password).score : -1;
+  return password.length >= minLength ? zxcvbn(password).score : -1;
 }
 
 function StrengthColor(strength, bar) {

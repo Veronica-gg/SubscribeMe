@@ -4,28 +4,24 @@ import {
   sendEmailVerification,
   updateProfile,
 } from "firebase/auth";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import {
   StyleSheet,
   View,
   Image,
-  TextInput,
   Keyboard,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
-  TouchableOpacity,
-  Platform,
 } from "react-native";
 import { auth } from "../../firebase";
 import SubmitButton from "../components/SubmitButton";
 import LineButton from "../components/LineButton";
 import PasswordStrengthBar from "../components/PasswordStrengthBar";
+import TextInput from "../components/StyledTextInput";
 
 export default function Register({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
   const handleSignup = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
@@ -51,60 +47,36 @@ export default function Register({ navigation }) {
         />
         <View style={styles.inputView}>
           <TextInput
-            style={styles.TextInput}
-            placeholder="Name"
-            multiline={false}
-            autoCorrect={false}
+            originalPlaceholder="Name"
             value={name}
-            placeholderTextColor="#003f5c"
             onChangeText={(text) => setName(text)}
           />
         </View>
         <View style={styles.inputView}>
           <TextInput
-            style={styles.TextInput}
             autoCapitalize="none"
-            multiline={false}
             autoCorrect={false}
             autoComplete="email"
             keyboardType="email-address"
-            placeholder="E-mail"
+            originalPlaceholder="E-mail"
             value={email}
-            placeholderTextColor="#003f5c"
             onChangeText={(text) => setEmail(text)}
           />
         </View>
         <View style={styles.inputView}>
           <TextInput
-            style={styles.TextInput}
-            placeholder="Password"
+            originalPlaceholder="Password"
             value={password}
-            placeholderTextColor="#003f5c"
-            secureTextEntry={!showPassword}
-            keyboardType={
-              Platform.OS === "ios" ? "ascii-capable" : "visible-password"
-            }
+            isPassword
             onChangeText={(text) => setPassword(text)}
           />
-          <TouchableOpacity
-            style={{
-              height: 50,
-              position: "absolute",
-              right: "5%",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            onPress={() => {
-              showPassword ? setShowPassword(false) : setShowPassword(true);
-            }}
-          >
-            <Ionicons
-              name={showPassword ? "eye-off-outline" : "eye-outline"}
-              size={22}
-            ></Ionicons>
-          </TouchableOpacity>
         </View>
-        <View style={styles.PasswordStrengthBar}>
+        <View
+          style={[
+            password.length > 0 ? { height: "7%" } : { height: 0 },
+            styles.PasswordStrengthBar,
+          ]}
+        >
           <PasswordStrengthBar password={password} />
         </View>
         <SubmitButton
@@ -139,27 +111,13 @@ const styles = StyleSheet.create({
   },
 
   inputView: {
-    backgroundColor: "rgba(48, 152, 255, 0.3)",
-    borderRadius: 30,
     width: "70%",
-    height: 45,
+    height: 52,
     marginBottom: 20,
-
     alignItems: "center",
-  },
-
-  TextInput: {
-    height: 50,
-    width: "100%",
-    padding: "4%",
-    marginLeft: "5%",
-    marginRight: "5%",
-    alignItems: "center",
-    textAlign: "center",
   },
 
   PasswordStrengthBar: {
-    height: "7%",
     width: "70%",
   },
 });

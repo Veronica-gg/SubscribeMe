@@ -4,7 +4,6 @@ import {
   StyleSheet,
   View,
   Image,
-  TextInput,
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
@@ -12,6 +11,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 import SubmitButton from "../components/SubmitButton";
 import LineButton from "../components/LineButton";
+import TextInput from "../components/StyledTextInput";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
@@ -39,26 +39,20 @@ export default function Login({ navigation }) {
         <StatusBar style="auto" />
         <View style={styles.inputView}>
           <TextInput
-            style={styles.TextInput}
             autoCapitalize="none"
-            multiline={false}
             autoCorrect={false}
             autoComplete="email"
             keyboardType="email-address"
             placeholder="E-mail"
             value={email}
-            placeholderTextColor="#003f5c"
             onChangeText={(text) => setEmail(text)}
           />
         </View>
         <View style={styles.inputView}>
           <TextInput
-            style={styles.TextInput}
             placeholder="Password"
-            multiline={false}
             value={password}
-            placeholderTextColor="#003f5c"
-            secureTextEntry={true}
+            isPassword
             onChangeText={(text) => setPassword(text)}
           />
         </View>
@@ -98,21 +92,9 @@ const styles = StyleSheet.create({
   },
 
   inputView: {
-    backgroundColor: "rgba(48, 152, 255, 0.3)",
-    borderRadius: 30,
     width: "70%",
-    height: 45,
+    height: 52,
     marginBottom: 20,
     alignItems: "center",
-  },
-
-  TextInput: {
-    height: 50,
-    width: "100%",
-    padding: "4%",
-    marginLeft: "5%",
-    marginRight: "5%",
-    alignItems: "center",
-    textAlign: "center",
   },
 });
