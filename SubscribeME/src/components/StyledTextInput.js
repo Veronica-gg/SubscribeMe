@@ -9,8 +9,8 @@ const TextInput = (props) => {
   return (
     <PaperTextInput
       dense
-      placeholderTextColor="#003f5c"
       placeholder={focus ? null : props.originalPlaceholder}
+      //placeholderTextColor="#003f5c"
       label={focus ? props.originalPlaceholder : null}
       keyboardType={
         isPassword

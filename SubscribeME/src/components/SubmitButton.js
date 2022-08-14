@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import { Button, Icon } from "react-native-paper";
+import { StyleSheet } from "react-native";
+import { Button } from "react-native-paper";
 
 export default function SubmitButton(props) {
   return (
@@ -9,7 +9,7 @@ export default function SubmitButton(props) {
       mode="contained"
       onPress={props.onPressID}
       icon={props.iconID}
-      textColor="#FFF9F3"
+      //textColor="#FFF9F3"
       contentStyle={{ height: "100%" }}
     >
       {props.textID}
@@ -25,6 +25,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 40,
     marginBottom: 20,
-    backgroundColor: "#3E3384",
+    //backgroundColor: "#3E3384",
   },
 });

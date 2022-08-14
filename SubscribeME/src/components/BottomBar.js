@@ -2,7 +2,7 @@
 // import { BottomNavigation, Text } from "react-native-paper";
 
 import * as React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import HomeScreen from "../screens/HomeScreen";
@@ -18,7 +18,7 @@ const BottomBar = () => {
       style={styles.container}
       screenOptions={({ route }) => ({
         tabBarStyle: {
-          backgroundColor: "#FFF9F3",
+          //backgroundColor: "#FFF9F3",
         },
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -43,7 +43,7 @@ const BottomBar = () => {
         options={{
           // title: "HOME",
           headerStyle: {
-            backgroundColor: "#FFF9F3",
+            //backgroundColor: "#FFF9F3",
           },
         }}
       />
@@ -53,7 +53,7 @@ const BottomBar = () => {
         options={{
           // title: "SUBSCRIPTION LIST",
           headerStyle: {
-            backgroundColor: "#FFF9F3",
+            //backgroundColor: "#FFF9F3",
           },
         }}
       />
@@ -63,7 +63,7 @@ const BottomBar = () => {
         options={{
           // title: "STATISTICS",
           headerStyle: {
-            backgroundColor: "#FFF9F3",
+            //backgroundColor: "#FFF9F3",
           },
         }}
       />
@@ -73,7 +73,7 @@ const BottomBar = () => {
         options={{
           // title: "PROFILE",
           headerStyle: {
-            backgroundColor: "#FFF9F3",
+            //backgroundColor: "#FFF9F3",
           },
         }}
       />

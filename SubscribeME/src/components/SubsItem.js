@@ -1,7 +1,7 @@
 import * as React from "react";
 import { List, Surface } from "react-native-paper";
 
-import { View, StyleSheet, Text } from "react-native";
+import { StyleSheet } from "react-native";
 
 // import { Card } from "react-native-shadow-cards";
 
@@ -39,6 +39,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     // borderRadius: 20,
     // marginBottom: 10,
-    backgroundColor: "#FFF9F3",
+    //backgroundColor: "#FFF9F3",
   },
 });

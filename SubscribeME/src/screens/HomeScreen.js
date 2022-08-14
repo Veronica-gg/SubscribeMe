@@ -1,4 +1,3 @@
-import { Button } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
@@ -6,7 +5,7 @@ export default function HomeScreen() {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: "#FFF9F3",
+        //backgroundColor: "#FFF9F3",
         justifyContent: "top",
         alignItems: "left",
       }}
