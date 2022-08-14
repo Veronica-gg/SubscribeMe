@@ -12,7 +12,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from "react-native";
-import { auth } from "../../firebase";
+import { auth } from "../utils/firebase";
 import SubmitButton from "../components/SubmitButton";
 import LineButton from "../components/LineButton";
 import PasswordStrengthBar from "../components/PasswordStrengthBar";

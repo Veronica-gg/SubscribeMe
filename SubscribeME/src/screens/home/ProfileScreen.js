@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { auth } from "../../firebase";
-import SubmitButton from "../components/SubmitButton";
+import { auth } from "../../utils/firebase";
+import SubmitButton from "../../components/SubmitButton";
 
 function logout() {
   auth

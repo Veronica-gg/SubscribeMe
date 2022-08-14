@@ -1,17 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image } from "react-native";
 import LoadingIndicator from "../components/LoadingIndicator";
-import { auth } from "../../firebase";
 
 export default function LoadingScreen({ navigation }) {
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      navigation.replace("Root");
-    } else {
-      navigation.replace("Login");
-    }
-  });
-
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Text, View, StyleSheet } from "react-native";
-import DescriptionScreen from "../screens/DescriptionScreen";
+import DescriptionScreen from "../screens/home/subs/DescriptionScreen";
 
 const DescriptionStack = createNativeStackNavigator();
 

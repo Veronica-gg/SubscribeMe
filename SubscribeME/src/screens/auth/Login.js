@@ -8,10 +8,10 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
-import SubmitButton from "../components/SubmitButton";
-import LineButton from "../components/LineButton";
-import TextInput from "../components/StyledTextInput";
+import { auth } from "../../utils/firebase";
+import SubmitButton from "../../components/SubmitButton";
+import LineButton from "../../components/LineButton";
+import TextInput from "../../components/StyledTextInput";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");

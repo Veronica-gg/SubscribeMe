@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SubsItem from "../components/SubsItem";
 import { useNavigation } from "@react-navigation/native";
@@ -10,11 +9,9 @@ export default function SubsListScreen() {
       style={{
         flex: 1,
         justifyContent: "top",
-        //backgroundColor: "#FFF9F3",
         alignItems: "center",
       }}
     >
-      <StatusBar style="auto" />
       <SubsItem
         tit="NETFLIX"
         des="Family plan"
