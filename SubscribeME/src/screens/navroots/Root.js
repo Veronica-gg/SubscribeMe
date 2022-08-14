@@ -1,7 +1,4 @@
 import * as React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Icon from "react-native-vector-icons/Ionicons";
-import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   StyleSheet,
@@ -15,14 +12,10 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 
-import BottomBar from "../components/BottomBar";
+import BottomBar from "../../components/BottomBar";
 
 export default function Root() {
-  return (
-    //<SafeAreaView style={styles.container}>
-    <BottomBar />
-    //</SafeAreaView>
-  );
+  return <BottomBar />;
 }
 
 const styles = StyleSheet.create({

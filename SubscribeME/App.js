@@ -4,8 +4,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./src/screens/Login";
 import Register from "./src/screens/Register";
-import Root from "./src/screens/Root";
+import Root from "./src/screens/navroots/Root";
 import LoadingScreen from "./src/screens/LoadingScreen";
+import DescriptionRoot from "./src/screens/navroots/DescriptionRoot";
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +51,17 @@ export default function App() {
             component={Root}
             options={{
               title: "Root",
+              headerShown: false,
+              headerStyle: {
+                backgroundColor: "#FFF9F3",
+              },
+            }}
+          />
+          <Stack.Screen
+            name="DescriptionRoot"
+            component={DescriptionRoot}
+            options={{
+              title: "DescriptionRoot",
               headerShown: false,
               headerStyle: {
                 backgroundColor: "#FFF9F3",

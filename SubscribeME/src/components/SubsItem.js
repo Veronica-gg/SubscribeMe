@@ -14,6 +14,7 @@ export default function SubsItem(props) {
         style={styles.container}
         left={(p) => <List.Icon {...p} icon={props.iconID} />}
         right={(p) => <List.Icon {...p} icon={props.dateID} />}
+        onPress={props.onPressID}
       />
     </Surface>
 
