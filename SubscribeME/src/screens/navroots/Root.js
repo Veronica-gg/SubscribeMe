@@ -3,8 +3,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import HomeScreen from "../home/HomeScreen";
 import ProfileScreen from "../home/ProfileScreen";
-import SubsListScreen from "../SubsListScreen";
-import StatsScreen from "../StatsScreen";
+import SubsListScreen from "../home/SubsListScreen";
+import StatsScreen from "../home/StatsScreen";
 
 const Tab = createBottomTabNavigator();
 

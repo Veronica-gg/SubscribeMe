@@ -13,6 +13,7 @@ function logout() {
 export default function ProfileScreen() {
   return (
     <SafeAreaView
+      edges={["left", "right"]}
       style={{
         flex: 1,
         justifyContent: "center",

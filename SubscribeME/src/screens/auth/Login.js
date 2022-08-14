@@ -33,7 +33,7 @@ export default function Login({ navigation }) {
       <View style={styles.container}>
         <Image
           style={styles.image}
-          source={require("../../assets/subscription-model.png")}
+          source={require("../../../assets/subscription-model.png")}
         />
 
         <StatusBar style="auto" />

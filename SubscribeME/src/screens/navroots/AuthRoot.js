@@ -3,7 +3,7 @@ import { auth } from "../../utils/firebase";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "../auth/Login";
-import Register from "../Register";
+import Register from "../auth/Register";
 import Root from "./Root";
 import LoadingScreen from "../LoadingScreen";
 import DescriptionRoot from "./DescriptionRoot";
@@ -17,13 +17,13 @@ export default function AuthRoot() {
   const [loaded, setLoaded] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
   auth.onAuthStateChanged((user) => {
-    if (!loaded) {
-      setLoaded(true);
-    }
     if (user) {
       setSignedIn(true);
     } else {
       setSignedIn(false);
+    }
+    if (!loaded) {
+      setLoaded(true);
     }
   });
   if (!loaded) {

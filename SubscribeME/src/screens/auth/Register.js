@@ -12,11 +12,11 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from "react-native";
-import { auth } from "../utils/firebase";
-import SubmitButton from "../components/SubmitButton";
-import LineButton from "../components/LineButton";
-import PasswordStrengthBar from "../components/PasswordStrengthBar";
-import TextInput from "../components/StyledTextInput";
+import { auth } from "../../utils/firebase";
+import SubmitButton from "../../components/SubmitButton";
+import LineButton from "../../components/LineButton";
+import PasswordStrengthBar from "../../components/PasswordStrengthBar";
+import TextInput from "../../components/StyledTextInput";
 
 export default function Register({ navigation }) {
   const [email, setEmail] = useState("");
@@ -43,7 +43,7 @@ export default function Register({ navigation }) {
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <Image
           style={styles.image}
-          source={require("../../assets/subscription-model.png")}
+          source={require("../../../assets/subscription-model.png")}
         />
         <View style={styles.inputView}>
           <TextInput

@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function StatsScreen() {
   return (
     <SafeAreaView
+      edges={["left", "right"]}
       style={{
         flex: 1,
         justifyContent: "center",

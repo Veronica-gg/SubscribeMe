@@ -1,11 +1,12 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import SubsItem from "../components/SubsItem";
+import SubsItem from "../../components/SubsItem";
 import { useNavigation } from "@react-navigation/native";
 
 export default function SubsListScreen() {
   const navigation = useNavigation();
   return (
     <SafeAreaView
+      edges={["left", "right"]}
       style={{
         flex: 1,
         justifyContent: "top",
