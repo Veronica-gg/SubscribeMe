@@ -1,5 +1,5 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import SubsItem from "../../components/SubsItem";
+import SubsItem from "../../../components/SubsItem";
 import { useNavigation } from "@react-navigation/native";
 
 export default function SubsListScreen() {
@@ -19,7 +19,7 @@ export default function SubsListScreen() {
         iconID="netflix"
         dateID="numeric-5-circle"
         onPressID={() => {
-          navigation.navigate("DescriptionRoot", { screen: "Description" });
+          navigation.navigate("Description");
         }}
       />
       <SubsItem

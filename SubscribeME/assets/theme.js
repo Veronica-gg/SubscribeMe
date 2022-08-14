@@ -21,6 +21,7 @@ const defaultTheme = {
     primary: "#3E3384",
     secondary: "#CA4D57",
     background: "#FFF9F3",
+    card: "#FFF9F3", // Navigation header and bottom bar bckgnd
     accent: "#AF9408",
     border: "#FFFFFF",
   },

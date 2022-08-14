@@ -1,6 +1,5 @@
 import { View, StyleSheet } from "react-native";
-import { ProgressBar, Text } from "react-native-paper";
-import { useTheme } from "react-native-paper";
+import { ProgressBar, Text, useTheme } from "react-native-paper";
 import zxcvbn from "zxcvbn";
 
 const minLength = 6;

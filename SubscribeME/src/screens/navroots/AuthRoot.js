@@ -4,9 +4,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "../auth/Login";
 import Register from "../auth/Register";
-import Root from "./Root";
+import Root from "./MainRoot";
 import LoadingScreen from "../LoadingScreen";
-import DescriptionRoot from "./DescriptionRoot";
 import { StyleSheet } from "react-native";
 import { defaultTheme, darkTheme } from "../../../assets/theme";
 
@@ -32,24 +31,7 @@ export default function AuthRoot() {
     if (signedIn) {
       return (
         <NavigationContainer theme={theme}>
-          <Stack.Navigator>
-            <Stack.Screen
-              name="Root"
-              component={Root}
-              options={{
-                title: "Root",
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="DescriptionRoot"
-              component={DescriptionRoot}
-              options={{
-                title: "DescriptionRoot",
-                headerShown: false,
-              }}
-            />
-          </Stack.Navigator>
+          <Root />
         </NavigationContainer>
       );
     } else {
