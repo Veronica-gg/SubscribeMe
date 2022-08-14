@@ -1,8 +1,8 @@
 import { View, StyleSheet } from "react-native";
 import { ProgressBar, Text, useTheme } from "react-native-paper";
 import zxcvbn from "zxcvbn";
+import { minLength } from "../utils/utils";
 
-const minLength = 6;
 const disabledColor = "#CCCCCC";
 
 function PasswordScore(password) {

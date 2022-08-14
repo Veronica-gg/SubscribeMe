@@ -17,9 +17,12 @@ import SubmitButton from "../../components/SubmitButton";
 import LineButton from "../../components/LineButton";
 import PasswordStrengthBar from "../../components/PasswordStrengthBar";
 import TextInput from "../../components/StyledTextInput";
+import { HelperText } from "react-native-paper";
+import { validateEmail, correctlyFilledOut } from "../../utils/utils";
 
 export default function Register({ navigation }) {
   const [email, setEmail] = useState("");
+  const [isEmailWrong, setIsEmailWrong] = useState(false);
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const handleSignup = () => {
@@ -52,17 +55,39 @@ export default function Register({ navigation }) {
             onChangeText={(text) => setName(text)}
           />
         </View>
-        <View style={styles.inputView}>
-          <TextInput
-            autoCapitalize="none"
-            autoCorrect={false}
-            autoComplete="email"
-            keyboardType="email-address"
-            originalPlaceholder="E-mail"
-            value={email}
-            onChangeText={(text) => setEmail(text)}
-          />
+        <View
+          style={[
+            styles.inputView,
+            { height: isEmailWrong ? 72 : 52, width: "100%" },
+          ]}
+        >
+          <View style={[styles.inputView, { marginBottom: 0 }]}>
+            <TextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="email"
+              keyboardType="email-address"
+              originalPlaceholder="E-mail"
+              value={email}
+              error={isEmailWrong}
+              onChangeText={(text) => {
+                setEmail(text);
+                if (isEmailWrong) {
+                  setIsEmailWrong(!validateEmail(email));
+                }
+              }}
+              onBlur={() => {
+                email.length > 0
+                  ? setIsEmailWrong(!validateEmail(email))
+                  : setIsEmailWrong(false);
+              }}
+            />
+          </View>
+          <HelperText type="error" visible={isEmailWrong}>
+            Wrong e-mail format
+          </HelperText>
         </View>
+
         <View style={styles.inputView}>
           <TextInput
             originalPlaceholder="Password"
@@ -83,6 +108,7 @@ export default function Register({ navigation }) {
           textID="REGISTER"
           onPressID={handleSignup}
           iconID="account-plus"
+          disabled={!correctlyFilledOut(name, email, password) || isEmailWrong}
         ></SubmitButton>
         <LineButton
           textID="Already have an account? Login"

@@ -11,6 +11,7 @@ export default function SubmitButton(props) {
       icon={props.iconID}
       //textColor="#FFF9F3"
       contentStyle={{ height: "100%" }}
+      {...props}
     >
       {props.textID}
     </Button>
