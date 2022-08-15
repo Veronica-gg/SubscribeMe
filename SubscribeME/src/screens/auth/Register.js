@@ -18,12 +18,18 @@ import LineButton from "../../components/LineButton";
 import PasswordStrengthBar from "../../components/PasswordStrengthBar";
 import TextInput from "../../components/StyledTextInput";
 import { HelperText } from "react-native-paper";
-import { validateEmail, correctRegistrationFields } from "../../utils/utils";
+import {
+  validateEmail,
+  correctRegistrationFields,
+  minLength,
+} from "../../utils/utils";
 
 export default function Register({ navigation }) {
   const [email, setEmail] = useState("");
   const [isEmailWrong, setIsEmailWrong] = useState(false);
   const [password, setPassword] = useState("");
+  const [passwordTooShort, setPasswordTooShort] = useState(false);
+  const [showPasswordStrength, setShowPasswordStrength] = useState(false);
   const [name, setName] = useState("");
   const handleSignup = () => {
     createUserWithEmailAndPassword(auth, email, password)
@@ -73,7 +79,7 @@ export default function Register({ navigation }) {
               onChangeText={(text) => {
                 setEmail(text);
                 if (isEmailWrong) {
-                  setIsEmailWrong(!validateEmail(email));
+                  setIsEmailWrong(!validateEmail(text));
                 }
               }}
               onBlur={() => {
@@ -93,16 +99,35 @@ export default function Register({ navigation }) {
             originalPlaceholder="Password"
             value={password}
             isPassword
-            onChangeText={(text) => setPassword(text)}
+            error={passwordTooShort}
+            onChangeText={(text) => {
+              setPassword(text);
+              if (!showPasswordStrength) {
+                setShowPasswordStrength(text.length > 0);
+              }
+              if (passwordTooShort || password.length > text.length) {
+                setPasswordTooShort(text.length < minLength && text.length > 0);
+              }
+            }}
+            onBlur={() => {
+              setPasswordTooShort(
+                password.length < minLength && password.length > 0
+              );
+              setShowPasswordStrength(password.length > 0);
+            }}
           />
         </View>
         <View
           style={[
-            password.length > 0 ? { height: "7%" } : { height: 0 },
+            showPasswordStrength ? { height: "7%" } : { height: 0 },
             styles.PasswordStrengthBar,
           ]}
         >
-          <PasswordStrengthBar password={password} />
+          <PasswordStrengthBar
+            password={password}
+            error={passwordTooShort}
+            show={showPasswordStrength}
+          />
         </View>
         <SubmitButton
           textID="REGISTER"
