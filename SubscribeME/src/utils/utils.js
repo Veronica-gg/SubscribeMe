@@ -6,8 +6,17 @@ function validateEmail(email) {
 
 const minLength = 6;
 
-function correctlyFilledOut(name, email, password) {
+function correctRegistrationFields(name, email, password) {
   return name.length > 0 && email.length > 0 && password.length >= minLength;
 }
 
-export { validateEmail, correctlyFilledOut, minLength };
+function correctLoginFields(email, password) {
+  return email.length > 0 && password.length >= minLength;
+}
+
+export {
+  validateEmail,
+  correctRegistrationFields,
+  minLength,
+  correctLoginFields,
+};

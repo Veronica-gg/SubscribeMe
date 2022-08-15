@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../utils/firebase";
+import { correctLoginFields } from "../../utils/utils";
 import SubmitButton from "../../components/SubmitButton";
 import LineButton from "../../components/LineButton";
 import TextInput from "../../components/StyledTextInput";
@@ -22,7 +23,7 @@ export default function Login({ navigation }) {
         const user = userCredentials.user;
         if (user) {
           alert("Logged in!");
-          navigation.replace("Root");
+          // navigation.replace("Root");
         }
       })
       .catch((error) => alert(error.message));
@@ -63,6 +64,7 @@ export default function Login({ navigation }) {
           textID="LOGIN"
           onPressID={handleLogin}
           iconID="login"
+          disabled={!correctLoginFields(email, password)}
         ></SubmitButton>
         <LineButton
           onPressID={() => {

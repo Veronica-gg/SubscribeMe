@@ -18,7 +18,7 @@ import LineButton from "../../components/LineButton";
 import PasswordStrengthBar from "../../components/PasswordStrengthBar";
 import TextInput from "../../components/StyledTextInput";
 import { HelperText } from "react-native-paper";
-import { validateEmail, correctlyFilledOut } from "../../utils/utils";
+import { validateEmail, correctRegistrationFields } from "../../utils/utils";
 
 export default function Register({ navigation }) {
   const [email, setEmail] = useState("");
@@ -108,7 +108,9 @@ export default function Register({ navigation }) {
           textID="REGISTER"
           onPressID={handleSignup}
           iconID="account-plus"
-          disabled={!correctlyFilledOut(name, email, password) || isEmailWrong}
+          disabled={
+            !correctRegistrationFields(name, email, password) || isEmailWrong
+          }
         ></SubmitButton>
         <LineButton
           textID="Already have an account? Login"
