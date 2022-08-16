@@ -1,9 +1,7 @@
 import * as React from "react";
-import { List, Surface, Text } from "react-native-paper";
+import { List, Paragraph, Surface, Text } from "react-native-paper";
 import { Col, Row, Grid } from "react-native-paper-grid";
 import { StyleSheet } from "react-native";
-
-// import { Card } from "react-native-shadow-cards";
 
 export default function SubsItem(props) {
   return (
@@ -14,24 +12,18 @@ export default function SubsItem(props) {
         style={styles.container}
         left={(p) => <List.Icon {...p} icon={props.iconID} />}
         right={(p) => (
-          // <Col>
-          //   <Row>
-          <List.Icon {...p} icon={props.dateID} />
-          //   </Row>
-          //   <Row>
-          //     <Text>days</Text>
-          //   </Row>
-          // </Col>
+          <Row style={styles.rightCol}>
+            <Col>
+              <Paragraph style={styles.date}>days</Paragraph>
+            </Col>
+            <Col>
+              <List.Icon {...p} icon={props.dateID} style={styles.icon} />
+            </Col>
+          </Row>
         )}
         onPress={props.onPressID}
       />
     </Surface>
-
-    // <View style={styles.container}>
-    //   <Card style={{ padding: 10, margin: 10 }}>
-    //     <Text>Open up App.js to start working on your app!</Text>
-    //   </Card>
-    // </View>
   );
 }
 
@@ -50,5 +42,22 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: 10,
     // backgroundColor: "#FFF9F3",
+  },
+  rightCol: {
+    flex: 1,
+    flexDirection: "row-reverse",
+    margin: 0,
+    // marginRight: "25%",
+    // justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  days: {
+    margin: 0,
+    padding: 0,
+    justifyContent: "center",
+  },
+  icon: {
+    margin: 0,
+    padding: 0,
   },
 });

@@ -2,6 +2,7 @@ import * as React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SubsListScreen from "../main/subs/SubsListScreen";
 import DescriptionScreen from "../main/subs/DescriptionScreen";
+import AddScreen from "../main/subs/AddScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,11 @@ export default function SubsListRoot() {
         name="Description"
         component={DescriptionScreen}
         options={({ route }) => ({ title: route.params.name })}
+      />
+      <Stack.Screen
+        name="Add"
+        component={AddScreen}
+        options={{ title: "Add New Subscription" }}
       />
     </Stack.Navigator>
   );

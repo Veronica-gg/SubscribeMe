@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, Text } from "react-native-paper";
 
 export default function SubmitButton(props) {
   return (
@@ -10,10 +10,11 @@ export default function SubmitButton(props) {
       onPress={props.onPressID}
       icon={props.iconID}
       //textColor="#FFF9F3"
+      labelStyle={{ fontSize: 25 }}
       contentStyle={{ height: "100%" }}
       {...props}
     >
-      {props.textID}
+      <Text style={{ fontSize: 16, color: "#FFF9F3" }}>{props.textID}</Text>
     </Button>
   );
 }
