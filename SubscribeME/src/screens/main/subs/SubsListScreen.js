@@ -19,7 +19,7 @@ export default function SubsListScreen() {
         iconID="netflix"
         dateID="numeric-5-circle"
         onPressID={() => {
-          navigation.navigate("Description");
+          navigation.navigate("Description", { name: "NETFLIX" });
         }}
       />
       <SubsItem
@@ -27,6 +27,9 @@ export default function SubsListScreen() {
         des="Student plan"
         iconID="spotify"
         dateID="numeric-7-circle"
+        onPressID={() => {
+          navigation.navigate("Description", { name: "SPOTIFY" });
+        }}
       />
     </SafeAreaView>
   );

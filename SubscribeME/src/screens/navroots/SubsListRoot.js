@@ -18,7 +18,11 @@ export default function SubsListRoot() {
         component={SubsListScreen}
         options={{ title: "Subscriptions List" }}
       />
-      <Stack.Screen name="Description" component={DescriptionScreen} />
+      <Stack.Screen
+        name="Description"
+        component={DescriptionScreen}
+        options={({ route }) => ({ title: route.params.name })}
+      />
     </Stack.Navigator>
   );
 }
