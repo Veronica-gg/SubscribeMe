@@ -23,7 +23,6 @@ export default function Login({ navigation }) {
         const user = userCredentials.user;
         if (user) {
           alert("Logged in!");
-          // navigation.replace("Root");
         }
       })
       .catch((error) => alert(error.message));

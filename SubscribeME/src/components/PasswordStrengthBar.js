@@ -1,5 +1,5 @@
 import { View, StyleSheet } from "react-native";
-import { ProgressBar, Text, useTheme } from "react-native-paper";
+import { HelperText, ProgressBar } from "react-native-paper";
 import zxcvbn from "zxcvbn";
 import { minLength } from "../utils/utils";
 
@@ -46,18 +46,12 @@ function Message(strength) {
   }
 }
 
-export default function PasswordStrengthBar({ password }) {
+export default function PasswordStrengthBar({ password, error, show }) {
   const score = PasswordScore(password);
   const message = Message(score);
-  const { colors } = useTheme();
   return (
     <View style={styles.root}>
-      <View
-        style={[
-          styles.containerLine,
-          { display: password.length > 0 ? "flex" : "none" },
-        ]}
-      >
+      <View style={[styles.containerLine, { display: show ? "flex" : "none" }]}>
         <View style={styles.bar}>
           <ProgressBar
             progress={score > -1 ? 1 : 0}
@@ -94,15 +88,8 @@ export default function PasswordStrengthBar({ password }) {
           />
         </View>
       </View>
-      <View
-        style={[
-          styles.containerText,
-          { display: password.length > 0 ? "flex" : "none" },
-        ]}
-      >
-        <Text display={"displaySmall"} style={{ color: colors.secondary }}>
-          {message}
-        </Text>
+      <View style={[styles.containerText, { display: show ? "flex" : "none" }]}>
+        <HelperText type={error ? "error" : "info"}>{message}</HelperText>
       </View>
     </View>
   );
