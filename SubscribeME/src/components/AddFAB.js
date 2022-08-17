@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: "#3E3384",
-    width: "45%",
+    width: "55%",
   },
 });
 

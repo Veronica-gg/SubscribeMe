@@ -35,6 +35,7 @@ export default function SubsListScreen() {
       <AddFAB
         iconID="plus-circle-multiple-outline"
         labelID="ADD NEW"
+        margin="16"
         onPressID={() => {
           navigation.navigate("Add");
         }}
