@@ -16,6 +16,9 @@ export default function DescriptionScreen() {
         date="10 August"
         type="family"
         friends="Virginia"
+        card="0000"
+        auto="YES"
+        cat="Movies & TV"
       />
     </SafeAreaView>
   );
