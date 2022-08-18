@@ -9,25 +9,12 @@ exports.getUserSubscription = functions
   .https.onCall((data, context) => {
     let uid = context.auth.uid;
     const subs = asyncGetUserSubs(uid);
-    subs.then((res) => {
-      //res.forEach();
+    return subs.then((res) => {
+      return getSubscriptionsInfo(res).then((queryResult) => {
+        if (queryResult == -1) return { error: "Error while fetching data." };
+        else return queryResult;
+      });
     });
-    // return db
-    //   .collection("users")
-    //   .doc(uid)
-    //   .get()
-    //   .then((doc) => {
-    //     if (!doc.exists) {
-    //       return { message: "NOOO" };
-    //     } else {
-    //       return getSubscription(doc.data().subscription);
-    //     }
-    //     console.log(v);
-    //     //console.log(v.data().name);
-    //   })
-    //   .catch((e) => {
-    //     return { error: e };
-    //   });
   });
 
 async function asyncGetUserSubs(uid) {
@@ -36,17 +23,27 @@ async function asyncGetUserSubs(uid) {
     .doc(uid)
     .get()
     .then((subs) => {
-      if (!subs.exists) {
-        return [];
-      } else {
+      if (subs.exists) {
         return subs.data().subscription;
+      } else {
+        return -1;
       }
     });
 }
 
-async function getSubscriptionInfo(subId) {
-  console.log("here");
-  const subInfo = await sub.get().then((el) => {
-    return el.data().name;
-  });
+async function getSubscriptionsInfo(subs) {
+  let infos = [];
+  for (const sub of subs) {
+    const subInfo = await sub.get();
+    if (subInfo.exists) {
+      infos.push(craftSubscriptionInfoResponse(subInfo.data()));
+    } else {
+      return -1;
+    }
+  }
+  return infos;
+}
+
+function craftSubscriptionInfoResponse(sub) {
+  return { name: sub.name, price: sub.price };
 }

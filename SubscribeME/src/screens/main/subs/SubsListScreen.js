@@ -12,9 +12,11 @@ import {
   where,
 } from "firebase/firestore";
 import { httpsCallable } from "firebase/functions";
+import { useState } from "react";
 
 export default function SubsListScreen() {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState();
   function getSubs() {
     const hw = httpsCallable(
       functions,
