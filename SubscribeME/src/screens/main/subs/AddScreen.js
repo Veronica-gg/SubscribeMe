@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import SingleDropDown from "../../../components/SingleDropDown";
 import MultiDropDown from "../../../components/MultiDropDown";
 import AddFAB from "../../../components/AddFAB";
-import NumberPicker from "../../../components/NumberPicker";
+// import NumberPicker from "../../../components/NumberPicker";
 import DatePick from "../../../components/DatePick";
 import TextInput from "../../../components/StyledTextInput";
 import {
@@ -12,11 +12,14 @@ import {
   StyleSheet,
   Keyboard,
   TouchableWithoutFeedback,
+  ScrollView,
 } from "react-native";
 import { Text } from "react-native-paper";
+import SwitchOnOff from "../../../components/SwitchOnOff";
 
 export default function AddScreen(props) {
   const [cost, setCost] = useState("");
+  const [card, setCard] = useState("");
   const nameList = [
     {
       label: "Netflix",
@@ -89,26 +92,57 @@ export default function AddScreen(props) {
           justifyContent: "top",
           //backgroundColor: "#FFF9F3",
           alignItems: "center",
+          marginTop: 10,
         }}
       >
         <StatusBar style="auto" />
-        <SingleDropDown nameList={nameList} labelID="Name of Subscription" />
-        <SingleDropDown nameList={typeList} labelID="Type of Subscription" />
-        <View style={styles.inputView}>
-          <TextInput
-            autoCapitalize="none"
-            autoCorrect={false}
-            autoComplete="number"
-            keyboardType="numbers-and-punctuation"
-            originalPlaceholder="Cost"
-            value={cost}
-            onChangeText={(text) => setCost(text)}
-          />
-        </View>
-        <MultiDropDown nameList={friendsList} labelID="Friends" />
-        {/* <NumberPicker pickerData={pickerData} /> */}
-        <Text style={styles.text}>Renewal Date:</Text>
-        <DatePick />
+        <ScrollView
+          style={{ flexGrow: 0.89, width: "100%" }}
+          contentContainerStyle={styles.contentContainer}
+          // showsVerticalScrollIndicator={true}
+          // persistentScrollbar={true}
+        >
+          <SingleDropDown nameList={nameList} labelID="Name of Subscription" />
+          <SingleDropDown nameList={typeList} labelID="Type of Subscription" />
+          <View style={styles.inputView}>
+            <TextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="number"
+              keyboardType="numeric"
+              originalPlaceholder="Cost"
+              value={cost}
+              onChangeText={(text) => setCost(text)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              autoComplete="number"
+              keyboardType="numeric"
+              originalPlaceholder="Card's last 4 digits"
+              value={card}
+              onChangeText={(text) => setCard(text)}
+              maxLength={4}
+            />
+          </View>
+          <MultiDropDown nameList={friendsList} labelID="Friends" />
+          {/* <NumberPicker pickerData={pickerData} /> */}
+          <Text style={styles.text}>Renewal Date:</Text>
+          <DatePick />
+          <View
+            style={{
+              marginTop: 20,
+              // flex: 1,
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <Text style={styles.text}>Automatic Payment:</Text>
+            <SwitchOnOff />
+          </View>
+        </ScrollView>
         <AddFAB labelID="SAVE" iconID="content-save-check-outline" />
       </SafeAreaView>
     </TouchableWithoutFeedback>
@@ -116,6 +150,11 @@ export default function AddScreen(props) {
 }
 
 const styles = StyleSheet.create({
+  contentContainer: {
+    justifyContent: "top",
+    //backgroundColor: "#FFF9F3",
+    alignItems: "center",
+  },
   inputView: {
     width: "90%",
     height: 60,
@@ -124,7 +163,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   text: {
+    // flex: 1,
+    // flexDirection: "row",
     fontWeight: "bold",
-    marginTop: 10,
+    marginRight: 10,
   },
 });
