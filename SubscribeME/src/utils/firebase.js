@@ -10,6 +10,8 @@ import {
   MESSAGING_SENDER_ID,
   APP_ID,
 } from "@env";
+import { getFirestore } from "firebase/firestore";
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 
 const firebaseConfig = {
   apiKey: API_KEY,
@@ -21,8 +23,14 @@ const firebaseConfig = {
 };
 
 const app = getApps.length < 1 ? initializeApp(firebaseConfig) : getApp();
+
 const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
 
-export { auth };
+const firestore = getFirestore(app);
+
+const functions = getFunctions(getApp(), "europe-west1");
+connectFunctionsEmulator(functions, "192.168.1.8", 5001);
+
+export { auth, firestore, functions };
