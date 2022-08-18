@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SingleDropDown from "../../../components/SingleDropDown";
 import MultiDropDown from "../../../components/MultiDropDown";
@@ -95,7 +94,6 @@ export default function AddScreen(props) {
           marginTop: 10,
         }}
       >
-        <StatusBar style="auto" />
         <ScrollView
           style={{ flexGrow: 0.89, width: "100%" }}
           contentContainerStyle={styles.contentContainer}

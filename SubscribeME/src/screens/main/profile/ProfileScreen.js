@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { auth } from "../../../utils/firebase";
 import SubmitButton from "../../../components/SubmitButton";
@@ -21,7 +20,6 @@ export default function ProfileScreen() {
         alignItems: "center",
       }}
     >
-      <StatusBar style="auto" />
       <SubmitButton onPressID={logout} textID="LOG OUT" iconID="logout" />
     </SafeAreaView>
   );

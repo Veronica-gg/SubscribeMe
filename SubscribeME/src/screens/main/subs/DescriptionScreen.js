@@ -1,5 +1,3 @@
-import { StatusBar } from "expo-status-bar";
-import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DetailCard from "../../../components/DetailCard";
 
@@ -13,7 +11,6 @@ export default function DescriptionScreen() {
         alignItems: "center",
       }}
     >
-      <StatusBar style="auto" />
       <DetailCard
         price="10"
         date="10 August"

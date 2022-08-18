@@ -1,11 +1,9 @@
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image } from "react-native";
 import LoadingIndicator from "../components/LoadingIndicator";
 
 export default function LoadingScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <StatusBar style="auto" />
       <Image
         style={styles.image}
         source={require("../../assets/subscription-model.png")}

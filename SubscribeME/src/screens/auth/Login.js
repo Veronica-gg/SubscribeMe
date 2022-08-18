@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
   StyleSheet,
@@ -35,8 +34,6 @@ export default function Login({ navigation }) {
           style={styles.image}
           source={require("../../../assets/subscription-model.png")}
         />
-
-        <StatusBar style="auto" />
         <View style={styles.inputView}>
           <TextInput
             autoCapitalize="none"

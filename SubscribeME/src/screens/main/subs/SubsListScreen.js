@@ -2,9 +2,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import SubsItem from "../../../components/SubsItem";
 import { useNavigation } from "@react-navigation/native";
 import AddFAB from "../../../components/AddFAB";
+import "firebase/firestore";
 
 export default function SubsListScreen() {
   const navigation = useNavigation();
+
   return (
     <SafeAreaView
       edges={["left", "right"]}

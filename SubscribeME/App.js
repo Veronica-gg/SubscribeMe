@@ -1,3 +1,4 @@
+import { StatusBar } from "expo-status-bar";
 import { Appearance } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider as PaperProvider } from "react-native-paper";
@@ -7,6 +8,7 @@ import { defaultTheme, darkTheme } from "./assets/theme";
 function App() {
   return (
     <SafeAreaProvider>
+      <StatusBar style="auto" />
       <AuthRoot />
     </SafeAreaProvider>
   );

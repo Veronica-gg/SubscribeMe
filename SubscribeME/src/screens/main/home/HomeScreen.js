@@ -26,9 +26,6 @@ export default function HomeScreen() {
           borderRightWidth: 2,
         }}
       />
-      {/* <StatusBar style="auto" /> */}
-      {/* <Login /> */}
-      {/* <BottomBar /> */}
     </SafeAreaView>
   );
 }
