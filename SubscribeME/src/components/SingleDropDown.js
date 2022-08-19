@@ -4,7 +4,6 @@ import DropDown from "react-native-paper-dropdown";
 
 function SingleDropDown(props) {
   const [showDropDown, setShowDropDown] = useState(false);
-  const [name, setName] = useState(String);
 
   return (
     <SafeAreaView style={styles.safeContainerStyle}>
@@ -14,8 +13,8 @@ function SingleDropDown(props) {
         visible={showDropDown}
         showDropDown={() => setShowDropDown(true)}
         onDismiss={() => setShowDropDown(false)}
-        value={name}
-        setValue={setName}
+        value={props.name}
+        setValue={props.setName}
         list={props.nameList}
       />
     </SafeAreaView>

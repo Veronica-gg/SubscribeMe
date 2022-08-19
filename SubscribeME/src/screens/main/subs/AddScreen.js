@@ -12,7 +12,9 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
 } from "react-native";
-import { FAB, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
+import { functions } from "../../../utils/firebase";
+import { httpsCallable } from "firebase/functions";
 import SwitchOnOff from "../../../components/SwitchOnOff";
 
 export default function AddScreen(props) {
@@ -97,7 +99,7 @@ export default function AddScreen(props) {
       functions,
       "manageSubscription-setNewSubscription"
     );
-    addSub({ name: name, price: cost })
+    addSub({ name: name, price: Number(cost) })
       .then((v) => {
         alert("Subscription added!\n" + v.data);
       })
@@ -122,7 +124,12 @@ export default function AddScreen(props) {
           // showsVerticalScrollIndicator={true}
           // persistentScrollbar={true}
         >
-          <SingleDropDown nameList={nameList} labelID="Name of Subscription" />
+          <SingleDropDown
+            nameList={nameList}
+            labelID="Name of Subscription"
+            name={name}
+            setName={setName}
+          />
           <View style={[show ? { height: "7%" } : { height: 0 }]}>
             <View
               style={[styles.inputView, { display: show ? "flex" : "none" }]}
@@ -148,7 +155,9 @@ export default function AddScreen(props) {
               keyboardType="numeric"
               originalPlaceholder="Cost"
               value={cost}
-              onChangeText={(text) => setCost(text)}
+              onChangeText={(text) => {
+                setCost(text);
+              }}
             />
           </View>
           <View style={styles.inputView}>
@@ -181,7 +190,7 @@ export default function AddScreen(props) {
         <AddFAB
           labelID="SAVE"
           iconID="content-save-check-outline"
-          onPressID={console.log("hola")}
+          onPressID={() => saveSub()}
         />
       </SafeAreaView>
     </TouchableWithoutFeedback>

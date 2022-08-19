@@ -13,7 +13,6 @@ exports.onSubInsert = functions
   .region("europe-west1")
   .firestore.document("/subscriptions/{subId}")
   .onCreate((snap, context) => {
-    console.log(snap.data());
     return snap
       .data()
       .owner.update({

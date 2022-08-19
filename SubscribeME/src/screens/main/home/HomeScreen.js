@@ -1,7 +1,20 @@
-import { View } from "react-native";
+import { Button, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { functions } from "../../../utils/firebase";
+import { httpsCallable } from "firebase/functions";
+import { useState } from "react";
+
 export default function HomeScreen() {
+  function dummy() {
+    const fun = httpsCallable(functions, "subscriptionMgmtTriggers-dummy");
+    fun()
+      .then((v) => {
+        console.log("RUN");
+      })
+      .catch((e) => console.log(e));
+  }
+
   return (
     <SafeAreaView
       edges={["left", "right"]}
@@ -25,7 +38,14 @@ export default function HomeScreen() {
           borderLeftWidth: 2,
           borderRightWidth: 2,
         }}
-      />
+      >
+        <Button
+          title="Dummy"
+          onPress={() => {
+            dummy();
+          }}
+        ></Button>
+      </View>
     </SafeAreaView>
   );
 }

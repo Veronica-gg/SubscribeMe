@@ -4,6 +4,8 @@ admin.initializeApp();
 
 exports.manageSubscription = require("./manageSubscription.js");
 exports.userMgmtTriggers = require("./userMgmtTriggers");
+exports.subscriptionMgmtTriggers = require("./subscriptionMgmtTriggers.js");
+exports.manageUser = require("./manageUser.js");
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions

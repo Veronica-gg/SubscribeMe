@@ -2,16 +2,6 @@ import * as React from "react";
 import { StyleSheet } from "react-native";
 import { FAB } from "react-native-paper";
 
-const AddFAB = (props) => (
-  <FAB
-    {...props}
-    style={styles.fab}
-    label={props.labelID}
-    icon={props.iconID}
-    onPress={props.onPressID}
-  />
-);
-
 const styles = StyleSheet.create({
   fab: {
     position: "absolute",
@@ -23,4 +13,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddFAB;
+export default function AddFAB(props) {
+  return (
+    <FAB
+      {...props}
+      style={styles.fab}
+      label={props.labelID}
+      icon={props.iconID}
+      onPress={props.onPressID}
+    />
+  );
+}
