@@ -12,7 +12,7 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
 } from "react-native";
-import { Text } from "react-native-paper";
+import { FAB, Text } from "react-native-paper";
 import SwitchOnOff from "../../../components/SwitchOnOff";
 
 export default function AddScreen(props) {
@@ -92,6 +92,18 @@ export default function AddScreen(props) {
     },
   ];
 
+  function saveSub() {
+    const addSub = httpsCallable(
+      functions,
+      "manageSubscription-setNewSubscription"
+    );
+    addSub({ name: name, price: cost })
+      .then((v) => {
+        alert("Subscription added!\n" + v.data);
+      })
+      .catch((e) => console.log(e));
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView
@@ -166,7 +178,11 @@ export default function AddScreen(props) {
             <SwitchOnOff />
           </View>
         </ScrollView>
-        <AddFAB labelID="SAVE" iconID="content-save-check-outline" />
+        <AddFAB
+          labelID="SAVE"
+          iconID="content-save-check-outline"
+          onPressID={console.log("hola")}
+        />
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

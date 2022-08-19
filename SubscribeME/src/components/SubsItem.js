@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
   surface: {
     width: "95%",
-    alignItems: "center",
+    alignSelf: "center",
     justifyContent: "center",
     borderRadius: 15,
     marginBottom: 5,

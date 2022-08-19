@@ -4,6 +4,7 @@ import { FAB } from "react-native-paper";
 
 const AddFAB = (props) => (
   <FAB
+    {...props}
     style={styles.fab}
     label={props.labelID}
     icon={props.iconID}

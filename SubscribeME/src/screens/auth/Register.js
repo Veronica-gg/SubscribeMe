@@ -35,7 +35,7 @@ export default function Register({ navigation }) {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        updateProfile(user, { displayName: name }).catch();
+        updateProfile(user, { displayName: name }).catch((e) => alert(e));
         if (user != null) {
           sendEmailVerification(auth.currentUser)
             .then(() => {

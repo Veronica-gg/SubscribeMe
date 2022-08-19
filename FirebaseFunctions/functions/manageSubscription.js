@@ -1,7 +1,6 @@
-const firestore = require("firebase/firestore");
-
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const { FieldValue } = require("firebase/firestore");
 const db = admin.firestore();
 
 exports.getUserSubscription = functions
@@ -24,7 +23,7 @@ async function asyncGetUserSubs(uid) {
     .get()
     .then((subs) => {
       if (subs.exists) {
-        return subs.data().subscription;
+        return subs.data().subscriptions;
       } else {
         return -1;
       }
@@ -36,7 +35,9 @@ async function getSubscriptionsInfo(subs) {
   for (const sub of subs) {
     const subInfo = await sub.get();
     if (subInfo.exists) {
-      infos.push(craftSubscriptionInfoResponse(subInfo.data()));
+      infos.push(
+        craftSubscriptionInfoResponse({ ...subInfo.data(), id: subInfo.id })
+      );
     } else {
       return -1;
     }
@@ -45,5 +46,24 @@ async function getSubscriptionsInfo(subs) {
 }
 
 function craftSubscriptionInfoResponse(sub) {
-  return { name: sub.name, price: sub.price };
+  return { id: sub.id, name: sub.name, price: sub.price };
 }
+
+exports.setNewSubscription = functions
+  .region("europe-west1")
+  .https.onCall((data, context) => {
+    let uid = context.auth.uid;
+    return db
+      .collection("subscriptions")
+      .add({
+        name: data.name,
+        price: data.price,
+        owner: db.collection("users").doc(uid),
+      })
+      .then((ref) => {
+        db.collection("users")
+          .doc(uid)
+          .update({ subscriptions: admin.firestore.FieldValue.arrayUnion(ref) })
+          .catch((e) => console.log(e));
+      });
+  });

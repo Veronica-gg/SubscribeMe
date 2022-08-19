@@ -31,6 +31,6 @@ const auth = initializeAuth(app, {
 const firestore = getFirestore(app);
 
 const functions = getFunctions(getApp(), "europe-west1");
-connectFunctionsEmulator(functions, "192.168.1.8", 5001);
+connectFunctionsEmulator(functions, "192.168.1.4", 5001);
 
 export { auth, firestore, functions };
