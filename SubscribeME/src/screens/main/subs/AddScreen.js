@@ -3,7 +3,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import SingleDropDown from "../../../components/SingleDropDown";
 import MultiDropDown from "../../../components/MultiDropDown";
 import AddFAB from "../../../components/AddFAB";
-// import NumberPicker from "../../../components/NumberPicker";
 import DatePick from "../../../components/DatePick";
 import TextInput from "../../../components/StyledTextInput";
 import {
@@ -17,6 +16,8 @@ import { Text } from "react-native-paper";
 import SwitchOnOff from "../../../components/SwitchOnOff";
 
 export default function AddScreen(props) {
+  const [show, setShow] = useState(false);
+  const [name, setName] = useState("");
   const [cost, setCost] = useState("");
   const [card, setCard] = useState("");
   const nameList = [
@@ -57,14 +58,23 @@ export default function AddScreen(props) {
     },
   ];
 
-  const pickerData = [
-    "item1",
-    "item2",
-    "item3",
-    "item4",
-    "item5",
-    "item6",
-    "item7",
+  const categoryList = [
+    {
+      label: "Movies & TV",
+      value: "movies",
+    },
+    {
+      label: "Music",
+      value: "music",
+    },
+    {
+      label: "Shopping",
+      value: "shopping",
+    },
+    {
+      label: "Tech",
+      value: "tech",
+    },
   ];
 
   const friendsList = [
@@ -101,7 +111,23 @@ export default function AddScreen(props) {
           // persistentScrollbar={true}
         >
           <SingleDropDown nameList={nameList} labelID="Name of Subscription" />
+          <View style={[show ? { height: "7%" } : { height: 0 }]}>
+            <View
+              style={[styles.inputView, { display: show ? "flex" : "none" }]}
+            >
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                autoComplete="name"
+                keyboardType="default"
+                originalPlaceholder="Name of Subscription"
+                value={name}
+                onChangeText={(text) => setName(text)}
+              />
+            </View>
+          </View>
           <SingleDropDown nameList={typeList} labelID="Type of Subscription" />
+          <SingleDropDown nameList={categoryList} labelID="Category" />
           <View style={styles.inputView}>
             <TextInput
               autoCapitalize="none"
@@ -126,7 +152,6 @@ export default function AddScreen(props) {
             />
           </View>
           <MultiDropDown nameList={friendsList} labelID="Friends" />
-          {/* <NumberPicker pickerData={pickerData} /> */}
           <Text style={styles.text}>Renewal Date:</Text>
           <DatePick />
           <View
