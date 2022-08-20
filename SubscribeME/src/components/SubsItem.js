@@ -1,7 +1,6 @@
 import * as React from "react";
 import { List, Paragraph, Surface, Text } from "react-native-paper";
-import { Col, Row, Grid } from "react-native-paper-grid";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 export default function SubsItem(props) {
   return (
@@ -12,14 +11,10 @@ export default function SubsItem(props) {
         style={styles.container}
         left={(p) => <List.Icon {...p} icon={props.iconID} />}
         right={(p) => (
-          <Row style={styles.rightCol}>
-            <Col>
-              <Paragraph style={styles.date}>days</Paragraph>
-            </Col>
-            <Col>
-              <List.Icon {...p} icon={props.dateID} style={styles.icon} />
-            </Col>
-          </Row>
+          <View>
+            <List.Icon {...p} icon={props.dateID} style={styles.icon} />
+            <Paragraph style={styles.date}>days</Paragraph>
+          </View>
         )}
         onPress={props.onPressID}
       />
@@ -43,17 +38,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     // backgroundColor: "#FFF9F3",
   },
-  rightCol: {
-    flex: 1,
-    flexDirection: "row-reverse",
-    margin: 0,
-    // marginRight: "25%",
-    // justifyContent: "flex-end",
-    alignItems: "center",
-  },
   days: {
-    margin: 0,
-    padding: 0,
     justifyContent: "center",
   },
   icon: {

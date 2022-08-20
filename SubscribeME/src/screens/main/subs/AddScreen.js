@@ -20,6 +20,13 @@ export default function AddScreen(props) {
   const [name, setName] = useState("");
   const [cost, setCost] = useState("");
   const [card, setCard] = useState("");
+  const categoryList = [
+    { label: "Movies & TV", value: "movies" },
+    { label: "Music", value: "music" },
+    { label: "Shopping", value: "shopping" },
+    { label: "Tech", value: "tech" },
+    { label: "Other", value: "other" },
+  ];
   const nameList = [
     {
       label: "Netflix",
@@ -55,25 +62,6 @@ export default function AddScreen(props) {
     {
       label: "Other",
       value: "other",
-    },
-  ];
-
-  const categoryList = [
-    {
-      label: "Movies & TV",
-      value: "movies",
-    },
-    {
-      label: "Music",
-      value: "music",
-    },
-    {
-      label: "Shopping",
-      value: "shopping",
-    },
-    {
-      label: "Tech",
-      value: "tech",
     },
   ];
 
