@@ -7,64 +7,56 @@ import { httpsCallable } from "firebase/functions";
 import { useEffect, useState } from "react";
 import React from "react";
 import LoadingIndicator from "../../../components/LoadingIndicator";
-import { ScrollView, RefreshControl, FlatList, View } from "react-native";
-import { Button } from "react-native-paper";
+import { RefreshControl, FlatList, Alert } from "react-native";
 
 export default function SubsListScreen() {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [tryAgain, setTryAgain] = useState(false);
   const [subs, setSubs] = useState([]);
+
+  const onRefresh = React.useCallback(() => {
+    console.log(loading);
+    if (!loading) {
+      setRefreshing(true);
+      getSubs().then(() => setRefreshing(false));
+    }
+  }, []);
 
   function getSubs() {
     const subs = httpsCallable(
       functions,
       "manageSubscription-getUserSubscription"
     );
-    subs()
+    return subs()
       .then((v) => {
         setSubs(v.data);
         console.log(v.data);
-        setLoading(false);
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        Alert.alert("Error", "Could not fetch data. Check your connection.", [
+          {
+            text: "Try Again",
+            onPress: () => setTryAgain(!tryAgain),
+            style: "cancel",
+          },
+          { text: "Dismiss" },
+        ]);
+      });
   }
   useEffect(() => {
     let isMounted = true;
-    if (isMounted) getSubs();
+    if (isMounted) {
+      setLoading(true);
+      getSubs().then(() => {
+        setLoading(false);
+      });
+    }
     return () => {
       isMounted = false;
     };
-  }, []);
-
-  const wait = (timeout) => {
-    return new Promise((resolve) => setTimeout(resolve, timeout));
-  };
-
-  const onRefresh = React.useCallback(() => {
-    setLoading(true);
-    wait(2000).then(() => setLoading(false));
-  }, []);
-
-  function SubsListContent(props) {
-    return (
-      <FlatList
-        contentContainerStyle={{
-          width: "100%",
-          flex: 1,
-        }}
-        style={{
-          flexGrow: 1,
-          width: "100%",
-          alignContent: "center",
-        }}
-        data={subs}
-        renderItem={renderItem}
-        refreshControl={
-          <RefreshControl refreshing={props.loading} onRefresh={getSubs} />
-        }
-      />
-    );
-  }
+  }, [tryAgain]);
 
   function renderItem({ item }) {
     return (
@@ -90,7 +82,28 @@ export default function SubsListScreen() {
         alignItems: "center",
       }}
     >
-      <SubsListContent loading={loading} />
+      {loading && (
+        <LoadingIndicator
+          size="large"
+          style={{ position: "absolute", bottom: "50%" }}
+        />
+      )}
+      <FlatList
+        contentContainerStyle={{
+          width: "100%",
+          flex: 1,
+        }}
+        style={{
+          flexGrow: 1,
+          width: "100%",
+          alignContent: "center",
+        }}
+        data={subs}
+        renderItem={renderItem}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
       <AddFAB
         iconID="plus-circle-multiple-outline"
         labelID="ADD NEW"
