@@ -17,11 +17,9 @@ export default function SubsListScreen() {
   const [subs, setSubs] = useState([]);
 
   const onRefresh = React.useCallback(() => {
-    console.log(loading);
-    if (!loading) {
-      setRefreshing(true);
-      getSubs().then(() => setRefreshing(false));
-    }
+    setRefreshing(true);
+    setLoading(false);
+    getSubs().then(() => setRefreshing(false));
   }, []);
 
   function getSubs() {
@@ -49,9 +47,11 @@ export default function SubsListScreen() {
     let isMounted = true;
     if (isMounted) {
       setLoading(true);
-      getSubs().then(() => {
-        setLoading(false);
-      });
+      getSubs()
+        .then(() => {
+          setLoading(false);
+        })
+        .catch((e) => console.log(e));
     }
     return () => {
       isMounted = false;
@@ -89,9 +89,10 @@ export default function SubsListScreen() {
         />
       )}
       <FlatList
+        fadingEdgeLength={"5%"}
         contentContainerStyle={{
           width: "100%",
-          flex: 1,
+          flexGrow: 1,
         }}
         style={{
           flexGrow: 1,
@@ -105,11 +106,15 @@ export default function SubsListScreen() {
         }
       />
       <AddFAB
+        style={{ position: "relative" }}
         iconID="plus-circle-multiple-outline"
         labelID="ADD NEW"
         margin="16"
         onPressID={() => {
-          navigation.navigate("Add");
+          navigation.navigate("Add", {
+            tryAgain: tryAgain,
+            setTryAgain: setTryAgain,
+          });
         }}
       />
     </SafeAreaView>

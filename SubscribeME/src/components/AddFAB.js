@@ -17,7 +17,7 @@ export default function AddFAB(props) {
   return (
     <FAB
       {...props}
-      style={styles.fab}
+      style={[styles.fab, { ...props.style }]}
       label={props.labelID}
       icon={props.iconID}
       onPress={props.onPressID}

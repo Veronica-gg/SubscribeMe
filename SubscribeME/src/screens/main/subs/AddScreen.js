@@ -11,13 +11,16 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ScrollView,
+  Alert,
 } from "react-native";
 import { Text } from "react-native-paper";
 import { functions } from "../../../utils/firebase";
 import { httpsCallable } from "firebase/functions";
 import SwitchOnOff from "../../../components/SwitchOnOff";
+import { useNavigation } from "@react-navigation/native";
 
 export default function AddScreen(props) {
+  const navigation = useNavigation();
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
   const [cost, setCost] = useState("");
@@ -89,7 +92,16 @@ export default function AddScreen(props) {
     );
     addSub({ name: name, price: Number(cost) })
       .then((v) => {
-        alert("Subscription added!\n" + v.data);
+        Alert.alert("Subscription added", "", [
+          {
+            text: "OK",
+            onPress: () => {
+              navigation.goBack();
+              props.route.params.setTryAgain(!props.route.params.tryAgain);
+            },
+            style: "cancel",
+          },
+        ]);
       })
       .catch((e) => console.log(e));
   }

@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { initializeAuth } from "firebase/auth";
+import { initializeAuth, connectAuthEmulator } from "firebase/auth";
 import { getReactNativePersistence } from "firebase/auth/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
@@ -10,7 +10,7 @@ import {
   MESSAGING_SENDER_ID,
   APP_ID,
 } from "@env";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 
 const firebaseConfig = {
@@ -27,8 +27,10 @@ const app = getApps.length < 1 ? initializeApp(firebaseConfig) : getApp();
 const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
+connectAuthEmulator(auth, "http://192.168.1.4:9099");
 
 const firestore = getFirestore(app);
+connectFirestoreEmulator(firestore, "192.168.1.4", 8080);
 
 const functions = getFunctions(getApp(), "europe-west1");
 connectFunctionsEmulator(functions, "192.168.1.4", 5001);

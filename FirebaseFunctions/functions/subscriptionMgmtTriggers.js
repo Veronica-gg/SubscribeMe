@@ -37,3 +37,32 @@ exports.dummy = functions
       db.collection("users").doc("YuIk32uY28OLnwSXXQALVyIjK4D2")
     );
   });
+
+exports.deleteSubscription = functions
+  .region("europe-west1")
+  .https.onCall((data, context) => {
+    const uid = context.auth.uid;
+    const subToDelete = db.collection("subscriptions").doc(data.subscription);
+    return subToDelete
+      .get()
+      .then((res) => {
+        if (res.exists && this.checkSubOwnership(uid, res.data().owner.id))
+          subToDelete
+            .delete()
+            .then(() => {
+              return { message: "subDeleted" };
+            })
+            .catch(() => {
+              return { message: "error" };
+            });
+        else return { message: "error" };
+      })
+      .catch(() => {
+        return { message: "error" };
+      });
+  });
+
+exports.checkSubOwnership = function checkSubOwnership(uid, sub) {
+  if (uid === null || sub === null) return false;
+  return uid === sub;
+};

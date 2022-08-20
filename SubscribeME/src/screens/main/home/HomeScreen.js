@@ -1,16 +1,19 @@
 import { Button, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { functions } from "../../../utils/firebase";
+import { auth, functions } from "../../../utils/firebase";
 import { httpsCallable } from "firebase/functions";
 import { useState } from "react";
 
 export default function HomeScreen() {
   function dummy() {
-    const fun = httpsCallable(functions, "subscriptionMgmtTriggers-dummy");
-    fun()
+    const fun = httpsCallable(
+      functions,
+      "subscriptionMgmtTriggers-deleteSubscription"
+    );
+    fun({ subscription: "3LAsIkNo3ht5GH8woG6p" })
       .then((v) => {
-        console.log("RUN");
+        console.log(v);
       })
       .catch((e) => console.log(e));
   }
