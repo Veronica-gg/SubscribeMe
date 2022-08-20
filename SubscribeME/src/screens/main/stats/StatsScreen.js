@@ -46,7 +46,7 @@ export default function StatsScreen() {
     {
       name: "Other",
       total: 4000,
-      color: "#FFF",
+      color: "#FFDAB5",
       legendFontColor: "#7F7F7F",
       legendFontSize: 15,
     },
@@ -70,15 +70,14 @@ export default function StatsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  legend: {
-    marginHorizontal: 50,
-  },
-  legendItem: {
-    flexDirection: "row",
-    marginHorizontal: 10,
-  },
-  legendItemValue: {
-    marginHorizontal: 10,
-  },
-});
+// const styles = StyleSheet.create({
+//   legend: {
+//     marginHorizontal: 50,
+//   },
+//   legendItem: {
+//     flexDirection: "row",
+//   },
+//   legendItemValue: {
+//     marginHorizontal: 10,
+//   },
+// });

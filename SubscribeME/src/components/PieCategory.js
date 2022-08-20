@@ -59,13 +59,15 @@ const PieCategory = ({ data, accessor, absolute }) => {
 
 const styles = StyleSheet.create({
   legend: {
-    marginHorizontal: 10,
+    marginHorizontal: 20,
   },
   legendItem: {
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   legendItemValue: {
-    marginHorizontal: 10,
+    marginHorizontal: 20,
   },
 });
 
