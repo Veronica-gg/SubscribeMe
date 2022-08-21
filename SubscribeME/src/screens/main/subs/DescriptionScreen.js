@@ -1,7 +1,7 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import DetailCard from "../../../components/DetailCard";
 
-export default function DescriptionScreen() {
+export default function DescriptionScreen(props) {
   return (
     <SafeAreaView
       style={{
@@ -12,13 +12,13 @@ export default function DescriptionScreen() {
       }}
     >
       <DetailCard
-        price="10"
-        date="10 August"
-        type="family"
-        friends="Virginia"
-        auto="YES"
-        cat="Music"
-        card="0000"
+        price={props.route.params.price}
+        date="PLACEHOLDER"
+        type="PLACEHOLDER"
+        friends="PLACEHOLDER"
+        card="PLACEHOLDER"
+        auto="PLACEHOLDER"
+        cat="PLACEHOLDER"
       />
     </SafeAreaView>
   );

@@ -12,7 +12,8 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from "react-native";
-import { auth } from "../../utils/firebase";
+import { auth, functions } from "../../utils/firebase";
+import { httpsCallable } from "firebase/functions";
 import SubmitButton from "../../components/SubmitButton";
 import LineButton from "../../components/LineButton";
 import PasswordStrengthBar from "../../components/PasswordStrengthBar";
@@ -31,21 +32,32 @@ export default function Register({ navigation }) {
   const [passwordTooShort, setPasswordTooShort] = useState(false);
   const [showPasswordStrength, setShowPasswordStrength] = useState(false);
   const [name, setName] = useState("");
+
+  function setRemoteName(userName) {
+    const fun = httpsCallable(functions, "manageUser-setName");
+    fun({ name: userName })
+      .then((v) => {
+        console.log("Name set: " + userName); //TODO -- set maximum length of name
+      })
+      .catch((e) => console.log(e));
+  }
+
   const handleSignup = () => {
+    const userName = name;
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        updateProfile(user, { displayName: name }).catch();
+        updateProfile(user, { displayName: userName }).catch((e) =>
+          console.log(e)
+        );
+        setRemoteName(userName);
         if (user != null) {
           sendEmailVerification(auth.currentUser)
-            .then(() => {
-              // TODO - Email verification sent!
-              // ...
-            })
-            .catch((error) => alert(error.message));
+            .then(() => {})
+            .catch((error) => console.log(error.message));
         }
       })
-      .catch((error) => alert(error.message));
+      .catch((error) => console.log(error.message));
   };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

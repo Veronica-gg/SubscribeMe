@@ -7,5 +7,22 @@
       "firebase-debug.log",
       "firebase-debug.*.log"
     ]
+  },
+  "emulators": {
+    "functions": {
+      "host": "0.0.0.0",
+      "port": 5001
+    },
+    "auth": {
+      "host": "0.0.0.0",
+      "port": 9099
+    },
+    "firestore": {
+      "host": "0.0.0.0",
+      "port": 8080
+    },
+    "ui": {
+      "enabled": true
+    }
   }
 }

@@ -11,11 +11,16 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ScrollView,
+  Alert,
 } from "react-native";
 import { Text } from "react-native-paper";
+import { functions } from "../../../utils/firebase";
+import { httpsCallable } from "firebase/functions";
 import SwitchOnOff from "../../../components/SwitchOnOff";
+import { useNavigation } from "@react-navigation/native";
 
 export default function AddScreen(props) {
+  const navigation = useNavigation();
   const [show, setShow] = useState(false);
   const [name, setName] = useState("");
   const [cost, setCost] = useState("");
@@ -80,6 +85,26 @@ export default function AddScreen(props) {
     },
   ];
 
+  function saveSub() {
+    const addSub = httpsCallable(
+      functions,
+      "manageSubscription-setNewSubscription"
+    );
+    addSub({ name: name, price: Number(cost) })
+      .then((v) => {
+        Alert.alert("Subscription added", "", [
+          {
+            text: "OK",
+            onPress: () => {
+              navigation.goBack();
+            },
+            style: "cancel",
+          },
+        ]);
+      })
+      .catch((e) => console.log(e));
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView
@@ -98,7 +123,12 @@ export default function AddScreen(props) {
           // showsVerticalScrollIndicator={true}
           // persistentScrollbar={true}
         >
-          <SingleDropDown nameList={nameList} labelID="Name of Subscription" />
+          <SingleDropDown
+            nameList={nameList}
+            labelID="Name of Subscription"
+            name={name}
+            setName={setName}
+          />
           <View style={[show ? { height: "7%" } : { height: 0 }]}>
             <View
               style={[styles.inputView, { display: show ? "flex" : "none" }]}
@@ -124,7 +154,9 @@ export default function AddScreen(props) {
               keyboardType="numeric"
               originalPlaceholder="Cost"
               value={cost}
-              onChangeText={(text) => setCost(text)}
+              onChangeText={(text) => {
+                setCost(text);
+              }}
             />
           </View>
           <View style={styles.inputView}>
@@ -154,7 +186,11 @@ export default function AddScreen(props) {
             <SwitchOnOff />
           </View>
         </ScrollView>
-        <AddFAB labelID="SAVE" iconID="content-save-check-outline" />
+        <AddFAB
+          labelID="SAVE"
+          iconID="content-save-check-outline"
+          onPressID={() => saveSub()}
+        />
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
