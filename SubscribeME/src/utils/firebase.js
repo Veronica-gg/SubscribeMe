@@ -27,12 +27,16 @@ const app = getApps.length < 1 ? initializeApp(firebaseConfig) : getApp();
 const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(AsyncStorage),
 });
-connectAuthEmulator(auth, "http://192.168.1.4:9099");
 
 const firestore = getFirestore(app);
-connectFirestoreEmulator(firestore, "192.168.1.4", 8080);
 
 const functions = getFunctions(getApp(), "europe-west1");
-connectFunctionsEmulator(functions, "192.168.1.4", 5001);
+
+const debug = false;
+if (debug) {
+  connectAuthEmulator(auth, "http://192.168.1.4:9099");
+  connectFirestoreEmulator(firestore, "192.168.1.4", 8080);
+  connectFunctionsEmulator(functions, "192.168.1.4", 5001);
+}
 
 export { auth, firestore, functions };

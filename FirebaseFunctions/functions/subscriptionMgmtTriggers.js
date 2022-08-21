@@ -12,3 +12,17 @@ exports.onSubDelete = functions
       await removeSubFromMember(snap.ref, member);
     }
   });
+
+async function removeSubFromMember(subRef, userRef) {
+  return await userRef
+    .update({
+      subscriptions: admin.firestore.FieldValue.arrayRemove(subRef),
+    })
+    .then(() => {
+      return true;
+    })
+    .catch((e) => {
+      console.log(e);
+      return false;
+    });
+}

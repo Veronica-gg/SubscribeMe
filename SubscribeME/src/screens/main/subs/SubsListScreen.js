@@ -17,12 +17,14 @@ export default function SubsListScreen() {
   const [subs, setSubs] = useState([]);
 
   const onRefresh = React.useCallback(() => {
+    // Manages pull to refresh
     setRefreshing(true);
     setLoading(false);
     getSubs().then(() => setRefreshing(false));
   }, []);
 
   function getSubs() {
+    // Async call to remote subscriptions
     const subs = httpsCallable(
       functions,
       "manageSubscription-getUserSubscription"

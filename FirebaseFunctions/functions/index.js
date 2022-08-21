@@ -6,25 +6,3 @@ exports.manageSubscription = require("./manageSubscription.js");
 exports.userMgmtTriggers = require("./userMgmtTriggers");
 exports.subscriptionMgmtTriggers = require("./subscriptionMgmtTriggers.js");
 exports.manageUser = require("./manageUser.js");
-
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-exports.helloWorld = functions
-  .region("europe-west1")
-  .https.onRequest((request, response) => {
-    functions.logger.info("Hello logs!", { structuredData: true });
-    response.send({
-      result: admin.auth().deleteUser("F70mUSZFSkRcJwEsfYrWQP34Zgx2"),
-    });
-    // const q = query(
-    //   collection(firestore, "users"),
-    //   where(documentId(), "==", auth.currentUser.uid)
-    // );
-    // getDocs(q).then((v) => {
-    //   v.forEach((doc) => {
-    //     console.log(doc.get("subscription")[0]);
-    //   });
-    //   //console.log(docs);
-    // });
-  });
