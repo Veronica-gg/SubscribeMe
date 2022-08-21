@@ -6,7 +6,10 @@ exports.onUserCreation = functions
   .region("europe-west1")
   .auth.user()
   .onCreate((user) => {
-    return db.collection("users").doc(user.uid).set({ subscriptions: [] });
+    return db
+      .collection("users")
+      .doc(user.uid)
+      .set({ friends: [], subscriptions: [] }, { merge: true });
   });
 
 exports.onSubInsert = functions

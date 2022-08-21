@@ -11,7 +11,7 @@ export default function HomeScreen() {
       functions,
       "subscriptionMgmtTriggers-deleteSubscription"
     );
-    fun({ subscription: "3LAsIkNo3ht5GH8woG6p" })
+    fun({ subscription: "mM3xdAb6qzYM2kaqZQ0J" })
       .then((v) => {
         console.log(v);
       })

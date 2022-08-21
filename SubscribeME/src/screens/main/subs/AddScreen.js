@@ -97,7 +97,6 @@ export default function AddScreen(props) {
             text: "OK",
             onPress: () => {
               navigation.goBack();
-              props.route.params.setTryAgain(!props.route.params.tryAgain);
             },
             style: "cancel",
           },

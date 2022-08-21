@@ -1,6 +1,6 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import SubsItem from "../../../components/SubsItem";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import AddFAB from "../../../components/AddFAB";
 import { functions } from "../../../utils/firebase";
 import { httpsCallable } from "firebase/functions";
@@ -29,8 +29,10 @@ export default function SubsListScreen() {
     );
     return subs()
       .then((v) => {
-        setSubs(v.data);
         console.log(v.data);
+        if (v.data.message != "ok");
+        //TODO manage if no subs available and/or show error message
+        setSubs(v.data.subs);
       })
       .catch((e) => {
         Alert.alert("Error", "Could not fetch data. Check your connection.", [
@@ -44,6 +46,8 @@ export default function SubsListScreen() {
       });
   }
   useEffect(() => {
+    // Manages first call of update and further calls on tryAgain press
+    console.log("ACTIVE");
     let isMounted = true;
     if (isMounted) {
       setLoading(true);
@@ -57,6 +61,8 @@ export default function SubsListScreen() {
       isMounted = false;
     };
   }, [tryAgain]);
+
+  //TODO -- add use useIsFocused to check if refresh is needed
 
   function renderItem({ item }) {
     return (
@@ -82,12 +88,6 @@ export default function SubsListScreen() {
         alignItems: "center",
       }}
     >
-      {loading && (
-        <LoadingIndicator
-          size="large"
-          style={{ position: "absolute", bottom: "50%" }}
-        />
-      )}
       <FlatList
         fadingEdgeLength={"5%"}
         contentContainerStyle={{
@@ -111,12 +111,15 @@ export default function SubsListScreen() {
         labelID="ADD NEW"
         margin="16"
         onPressID={() => {
-          navigation.navigate("Add", {
-            tryAgain: tryAgain,
-            setTryAgain: setTryAgain,
-          });
+          navigation.navigate("Add");
         }}
       />
+      {loading && (
+        <LoadingIndicator
+          size="large"
+          style={{ position: "absolute", bottom: "50%" }}
+        />
+      )}
     </SafeAreaView>
   );
 }
