@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
-  updateProfile,
 } from "firebase/auth";
 import {
   StyleSheet,
@@ -47,9 +46,6 @@ export default function Register({ navigation }) {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        updateProfile(user, { displayName: userName }).catch((e) =>
-          console.log(e)
-        );
         setRemoteName(userName);
         if (user != null) {
           sendEmailVerification(auth.currentUser)

@@ -3,23 +3,6 @@ const admin = require("firebase-admin");
 const { FieldValue } = require("firebase/firestore");
 const db = admin.firestore();
 
-// exports.deleteUser = functions
-//   .region("europe-west1")
-//   .https.onCall((data, context) => {
-//     let uid = context.auth.uid;
-//   });
-
-// async function asyncGetUserSubs(uid) {
-//   return await db
-//     .collection("users")
-//     .doc(uid)
-//     .get()
-//     .then((subs) => {
-//       if (subs.exists) return subs.data().subscriptions;
-//       else return [];
-//     });
-// }
-
 exports.setName = functions
   .region("europe-west1")
   .https.onCall(async (data, context) => {
@@ -61,12 +44,12 @@ exports.addFriendRequest = functions
     }
     return uidDoc
       .update({
-        pendingFriends: admin.firestore.FieldValue.arrayUnion(friendDoc),
+        pendingFriendsSent: admin.firestore.FieldValue.arrayUnion(friendDoc),
       })
       .then(() => {
         return friendDoc
           .update({
-            pendingFriends: admin.firestore.FieldValue.arrayUnion(uidDoc),
+            pendingFriendsRecv: admin.firestore.FieldValue.arrayUnion(uidDoc),
           })
           .then(() => {
             return { message: "ok" };
@@ -80,33 +63,60 @@ exports.addFriendRequest = functions
       });
   });
 
-exports.addFriend = functions // react only on friend request accepted
+exports.answerFriendRequest = functions // manage accepted or rejected friend request
   .region("europe-west1")
   .https.onCall(async (data, context) => {
+    const accepted = data.accepted;
     let error = false;
     let uid = context.auth.uid;
     let uidDoc = db.collection("users").doc(uid);
-    let friendRecord = await admin
-      .auth()
-      .getUserByEmail(data.email)
-      .catch(() => {
-        error = true;
-      });
-    if (error) return { message: "errorNotExists" };
-    if (friendRecord.uid === uid) return { message: "errorNoOwnFriend" };
-    let friendDoc = db.collection("users").doc(friendRecord.uid);
+    let friendReqDoc = db.collection("users").doc(data.friendReqUid);
     let uidLoadedDoc = await uidDoc.get().catch(() => {
       error = true;
     });
+    let friendReqLoadedDoc = await friendReqDoc.get().catch(() => {
+      error = true;
+    });
     if (error) return { message: "errorInternal" };
-    if (uidLoadedDoc.data().friends.find((el) => el.isEqual(friendDoc))) {
-      return { message: "errorAlreadyFriend" };
+    if (
+      !(
+        uidLoadedDoc
+          .data()
+          .pendingFriendsRecv.find((el) => el.isEqual(friendReqDoc)) &&
+        friendReqLoadedDoc
+          .data()
+          .pendingFriendsSent.find((el) => el.isEqual(uidDoc))
+      )
+    ) {
+      return { message: "errorNoSuchReq" };
     }
     return uidDoc
-      .update({ friends: admin.firestore.FieldValue.arrayUnion(friendDoc) })
+      .update(
+        accepted
+          ? {
+              friends: admin.firestore.FieldValue.arrayUnion(friendDoc),
+              pendingFriendsRecv:
+                admin.firestore.FieldValue.arrayRemove(friendDoc),
+            }
+          : {
+              pendingFriendsRecv:
+                admin.firestore.FieldValue.arrayRemove(friendDoc),
+            }
+      )
       .then(() => {
         return friendDoc
-          .update({ friends: admin.firestore.FieldValue.arrayUnion(uidDoc) })
+          .update(
+            accepted
+              ? {
+                  friends: admin.firestore.FieldValue.arrayUnion(uidDoc),
+                  pendingFriendsSent:
+                    admin.firestore.FieldValue.arrayRemove(uidDoc),
+                }
+              : {
+                  pendingFriendsSent:
+                    admin.firestore.FieldValue.arrayRemove(uidDoc),
+                }
+          )
           .then(() => {
             return { message: "ok" };
           })
@@ -142,3 +152,68 @@ exports.removeFriend = functions
         return { message: "errorUpdateMe" };
       });
   });
+
+exports.getFriendsData = functions // function to get list of friends, requests sent or received
+  .region("europe-west1")
+  .https.onCall((data, context) => {
+    let uid = context.auth.uid;
+    const subs = asyncGetFriends(uid, data.requestType);
+    return subs.then((res) => {
+      if (res === -1) return { message: "errorGetFriends", friends: [] };
+      else {
+        return this.getUsersInfo(res).then((queryResult) => {
+          return queryResult;
+        });
+      }
+    });
+  });
+
+async function asyncGetFriends(uid, friendType) {
+  if (
+    !(
+      friendType === "friends" ||
+      friendType === "pendingFriendsRecv" ||
+      friendType === "pendingFriendsSent"
+    )
+  )
+    return -1;
+  return await db
+    .collection("users")
+    .doc(uid)
+    .get()
+    .then((subs) => {
+      if (subs.exists) {
+        if (friendType === "friends") return subs.data().friends;
+        else if (friendType === "pendingFriendsRecv")
+          return subs.data().pendingFriendsRecv;
+        else if (friendType === "pendingFriendsSent")
+          return subs.data().pendingFriendsSent;
+      } else {
+        return -1;
+      }
+      return -1;
+    });
+}
+
+exports.getUsersInfo = async function getUsersInfo(users) {
+  if (!users) return { message: "errorUsersUndefined", users: [] };
+  let infos = [];
+  let error = false;
+  for (const user of users) {
+    let getError = false;
+    const userInfo = await user.get().catch(() => {
+      getError = true;
+      error = true;
+    });
+    if (!getError && userInfo.exists) {
+      infos.push({
+        name: userInfo.data().name,
+        email: userInfo.data().email,
+        id: userInfo.id,
+      });
+    } else {
+      error = true;
+    }
+  }
+  return { message: error ? "errorFetchingUsers" : "ok", users: infos };
+};
