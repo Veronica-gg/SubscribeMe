@@ -1,6 +1,7 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const { FieldValue } = require("firebase/firestore");
+const { getUsersInfo } = require("./manageUser");
 const db = admin.firestore();
 
 /** Returns all the user's subs */
@@ -37,12 +38,19 @@ async function getSubscriptionsInfo(subs) {
   let infos = [];
   let error = false;
   for (const sub of subs) {
+    let getError = false;
     const subInfo = await sub.get().catch(() => {
-      error = true;
+      getError = true; // one variable to check the single iteration
+      error = true; // the other to check errors in the whole execution
     });
-    if (!error && subInfo.exists) {
+    if (!getError && subInfo.exists) {
+      let membersInfo = await getUsersInfo(subInfo.data().members);
       infos.push(
-        craftSubscriptionInfoResponse({ ...subInfo.data(), id: subInfo.id })
+        craftSubscriptionInfoResponse({
+          ...subInfo.data(),
+          id: subInfo.id,
+          members: membersInfo,
+        })
       );
     } else {
       error = true;
@@ -52,7 +60,7 @@ async function getSubscriptionsInfo(subs) {
 }
 
 function craftSubscriptionInfoResponse(sub) {
-  return { id: sub.id, name: sub.name, price: sub.price };
+  return { id: sub.id, name: sub.name, price: sub.price, members: sub.members };
 }
 
 exports.setNewSubscription = functions
@@ -65,7 +73,7 @@ exports.setNewSubscription = functions
         name: data.name,
         price: data.price,
         owner: db.collection("users").doc(uid),
-        members: [db.collection("users").doc(uid)],
+        members: [db.collection("users").doc(uid)], // adding myself as member? For now useful to debug, then TODO
       })
       .then((ref) => {
         db.collection("users")
@@ -80,7 +88,10 @@ async function removeMemberFromSub(subRef, userRef) {
     .update({
       members: admin.firestore.FieldValue.arrayRemove(userRef),
     })
-    .catch((e) => console.log(e));
+    .catch((e) => {
+      console.log(e);
+      return false;
+    });
 }
 
 async function removeSubFromMember(subRef, userRef) {
@@ -96,6 +107,38 @@ async function removeSubFromMember(subRef, userRef) {
       return false;
     });
 }
+
+exports.removeMember = functions
+  .region("europe-west1")
+  .https.onCall(async (data, context) => {
+    let error = false;
+    const uid = context.auth.uid;
+    const subRef = db.collection("subscriptions").doc(data.subscription);
+    const subInfo = await subRef.get().catch(() => {
+      error = true;
+    });
+    if (
+      error ||
+      !this.allowedToChangeMembers(
+        uid,
+        subInfo.data().owner,
+        subInfo.data().members
+      )
+    )
+      return { message: "errorNotAllowed" };
+    const uidToDelete = this.checkSubOwnership(uid, subInfo.data().owner)
+      ? data.userToRemove
+      : uid;
+    const refUidToDelete = db.collection(uid).doc(uidToDelete);
+    return removeSubFromMember(subRef, refUidToDelete).then((isRemoved) => {
+      if (isRemoved) {
+        return removeMemberFromSub(subRef, refUidToDelete).then((res) => {
+          if (res) return { message: "ok" };
+          else return { message: "errorRemoveMemberFromSub" };
+        });
+      } else return { message: "errorRemoveSubFromMember" };
+    });
+  });
 
 exports.deleteSubscription = functions
   .region("europe-west1")
@@ -122,6 +165,18 @@ exports.deleteSubscription = functions
       });
   });
 
-exports.checkSubOwnership = function checkSubOwnership(uid, sub) {
-  if (uid && sub) return uid === sub;
+exports.checkSubOwnership = function checkSubOwnership(uid, subOwner) {
+  if (uid && subOwner) return uid === subOwner;
+};
+
+exports.allowedToChangeMembers = function allowedToChangeMembers(
+  uid,
+  owner,
+  members
+) {
+  if (checkSubOwnership(uid, owner)) return true;
+  for (const member of members) {
+    if (checkSubOwnership(uid, member)) return true;
+  }
+  return false;
 };
