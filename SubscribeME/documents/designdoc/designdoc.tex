@@ -13,7 +13,7 @@
 \pagestyle{fancy} 
 \fancyhf{} 
 \fancyhead[L]{Andrea Giarduz}
-\fancyhead[R]{DIMA}
+\fancyhead[R]{Design Document -- DIMA}
 \fancyhead[C]{Veronica Grosso}
 \fancyfoot[C]{\thepage}
 
@@ -21,30 +21,71 @@
 \author{Veronica Grosso \and Andrea Giarduz}
 
 \begin{document}
+% \begin{titlepage}
+%     \begin{center}
+%         \vspace*{2.0cm}
+
+%         \huge{\textbf{Design Document}}
+
+%         \vspace{0.4cm}
+
+%         \huge{SubscribeME Application}
+
+%         \vspace{0.8cm}
+
+
+%         \LARGE{Design and Implementation of Mobile Applications}
+
+%         \vspace{0.8cm}
+
+%         \LARGE{Politecnico di Milano}
+%         \\
+%         \LARGE{2021/2022}
+
+%         % \vspace{1.5cm}
+
+
+%         \vfill
+
+%         \Large{Giarduz Andrea\\
+%             Grosso Veronica
+%         }
+
+%         \vspace{0.8cm}
+
+%         \Large
+%         Prof. Luciano Baresi
+%     \end{center}
+% \end{titlepage}
+
+
 \begin{titlepage}
     \begin{center}
-        \vspace*{2.0cm}
-
-        \huge{\textbf{Design Document}}
-
-        \vspace{0.4cm}
-
-        \huge{SubscribeME Application}
-
-        \vspace{0.8cm}
-
-
+        \vspace*{1cm}
+        \begin{figure}[h]
+            \begin{center}
+                \includegraphics[width=4.5cm, clip]{../../assets/logo.png}
+            \end{center}
+            \label{title:logo}
+        \end{figure}
+        \vspace*{1cm}
+        \LARGE{{\scshape Politecnico di Milano}}
+        \\
         \LARGE{Design and Implementation of Mobile Applications}
-
-        \vspace{0.8cm}
-
-        \LARGE{Politecnico di Milano}
         \\
         \LARGE{2021/2022}
 
-        % \vspace{1.5cm}
+        \vspace*{1.5cm}
+        \Huge{DD}
+        \\
+        \Large{{\scshape Design Document}}
 
+        \vspace{1.5cm}
 
+        \LARGE{\textbf{SubscribeME -- a subscription manager app}}
+        \\
+        \vspace{1cm}
+        \Large{August 30, 2022}
         \vfill
 
         \Large{Giarduz Andrea\\
@@ -63,17 +104,98 @@
 \begin{center}
     \LARGE{\textbf{SubscribeME Design Document}}
 \end{center}
-\section{Goal}
+\section{Introduction}\label{sec:intro}
+\subsection{Purpose}
+The purpose of this Design Document is to provide a guide and a walk-through of the application \textit{SubscribeME}, in order to explain the design choices we made and to show the logic behind its architecture.
+
+\subsection{Scope}
+\textit{SubscribeME} is a mobile application that keeps track of all the memberships that the user activated. The users should be aware of how much money they are spending and in which subscriptions, and be reminded of each renewal date.
+
+In this way, the users are always in control of their finances, without forgetting where their money is going, when the payment is due and whether the specific subscription is worth keeping.
+
+\subsection{Document Structure}
+The document is structured in eight sections:
+\begin{enumerate}
+    \item[\ref{sec:intro}.] \textbf{Introduction}: is an overview of the purpose of the Design Document and of the problem analyzed.
+    \item[\ref{sec:features}.] \textbf{Application Features}: presents the application features and the basic functioning of the application.
+    \item[\ref{sec:char}.] \textbf{User Characteristics}: explains the user characteristics and use cases adopted when the app was realized. It gives an overview of the target population that was considered during the design phase.
+    \item[ \ref{sec:design}.] \textbf{Design Overview}: the system architecture is presented. Diagrams and graphs are used to help the reader visualize and understand the underlying structure and to see how the different components are linked to each other and work together. The implementation of the server-client architecture is explained.
+    \item[\ref{sec:ui}.] \textbf{User Interface Design}: User Interface choices and designs, along with screenshots of the final implementation of the app.
+    \item[\ref{sec:test}.] \textbf{Implementation, Integration and Test Plan}: testing of the components and the results and statistics of these tests are presented analytically.
+    \item[\ref{sec:dev}.] \textbf{Future Development}: the next steps of this project occupy the last part of the document, Section , giving a few inputs on possible future works that can be implemented.
+    \item[\ref{sec:ref}.] \textbf{References}: includes the tools and the references used to define the document.
+\end{enumerate}
+
 \newpage
-\section{Application Features}
+\section{Application Features}\label{sec:features}
+There are five main features in the \textit{SubscribeME} app:
+\begin{itemize}
+    \item the \textbf{Login/Signup} function: the users need to signup and login to be able to use the application. There is a persistent layer for each user and all the information is saved in the Data Base.
+    \item the \textbf{Home page}: a sum-up is provided, with the amount of money that the user is spending at that moment on subscriptions. There is also the reminder to pay for the membership with the closest deadline.
+    \item the \textbf{Subscriptions List}: the user should be able to add, modify and delete their subscriptions on the app.
+          In order to add a membership, the user must provide the following details:
+          \begin{itemize}
+              \item[-] the name of the membership,
+              \item[-] the renewal date,
+              \item[-] how often does the subscription activates,
+              \item[-] the amount of money due,
+              \item[-] which card is being currently used to pay for it,
+              \item[-] whether the payment is automatic or not,
+              \item[-] if they are sharing the subscription with any friend.
+          \end{itemize}
+          In this last case, the user knows they owe money to a friend, even if the subscription may not be in their name.
+    \item the \textbf{Statistics page}: offers them the opportunity of analyzing first hand their expenses, seeing how many subscriptions per category (Music, Movies \& TV, Shopping, Tech or Other) they activated and how much money they spend on each of them.
+    \item the \textbf{Profile section}: it contains the Friends list and the feature to add new friends. Also there are some settings that are customizable and a system of notifications and reminders can be set up to help the user be aware of what they should manually pay and what is automatically renewed.
+\end{itemize}
+
 \newpage
-\section{User Characteristics}
+\section{User Characteristics}\label{sec:char}
+The target population is anyone who has multiple subscriptions active, who wants some help in keeping track of the costs and of the deadlines. Most importantly, it is useful for people who tend to activate memberships and then forget about them, so that they do not waste any money in unused perks.
+
+\subsection{Scenarios}\label{sub:scenarios}
+\subsubsection{Add subscription}
+
+\subsubsection{Reminder of the manual payment for a subscription}
+
+\subsubsection{Monitoring the Statistics}
+
+\subsubsection{Share a subscription with a friend}
+
+\subsection{Use Cases}\label{sub:usecases}
+
 \newpage
-\section{Design Overview}
+\section{Design Overview}\label{sec:design}
+
 \newpage
-\section{User Interface Design}
+\section{User Interface Design}\label{sec:ui}
+\subsection{Flow Graphs}
+
+\subsection{Screenshots}
+\subsubsection{Smartphone Application}
+
+\subsubsection{Tablet Application}
+
 \newpage
-\section{Testing}
+\section{Implementation, Integration and Test Plan}\label{sec:test}
+\subsection{Implementation Order}
+
+\subsection{Integration and Test Plan}
+
 \newpage
-\section{Future Development}
+\section{Future Development}\label{sec:dev}
+Some possible improvements and further implementations could be:
+\begin{itemize}
+    \item notifications?
+    \item automatic recognition of subscriptions
+    \item payment system integrated
+    \item chat between friends
+\end{itemize}
+
+\section{References}\label{sec:ref}
+The tools that we used are:
+\begin{itemize}
+    \item \LaTeX\ for the document editing;
+    \item diagrams
+    \item libraries
+\end{itemize}
 \end{document}
