@@ -5,6 +5,7 @@ import { Button, Text } from "react-native-paper";
 export default function SubmitButton(props) {
   return (
     <Button
+      {...props}
       style={[styles.submitBtn, { ...props.style }]}
       mode="contained"
       onPress={props.onPressID}
@@ -12,7 +13,6 @@ export default function SubmitButton(props) {
       //textColor="#FFF9F3"
       labelStyle={{ fontSize: 25 }}
       contentStyle={{ height: "100%" }}
-      {...props}
     >
       <Text style={{ fontSize: 16, color: "#FFF9F3" }}>{props.textID}</Text>
     </Button>

@@ -5,7 +5,7 @@ import AddFAB from "./AddFAB";
 
 const DetailCard = (props) => (
   <Card style={styles.container}>
-    <Card.Content style={{ flex: 1 }}>
+    <Card.Content style={{ flex: 1, paddingTop: 0 }}>
       <View style={styles.row}>
         <Title>Cost</Title>
         <Paragraph>${props.price}</Paragraph>
@@ -37,7 +37,14 @@ const DetailCard = (props) => (
       <View style={[styles.row, { flex: 0 }]}></View>
     </Card.Content>
     <Card.Actions>
-      <AddFAB labelID="EDIT" iconID="circle-edit-outline" />
+      <View style={styles.row}>
+        <AddFAB labelID="EDIT" iconID="circle-edit-outline" />
+        <AddFAB
+          labelID="DELETE"
+          iconID="delete"
+          style={{ left: 0, backgroundColor: "#CA4D57" }}
+        />
+      </View>
     </Card.Actions>
   </Card>
 );
@@ -53,7 +60,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 20,
+    padding: 10,
   },
 });
 export default DetailCard;

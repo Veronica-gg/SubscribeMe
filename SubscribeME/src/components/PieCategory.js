@@ -30,11 +30,12 @@ const PieCategory = ({ data, accessor, absolute }) => {
         width={Dimensions.get("window").width}
         height={220}
         chartConfig={{
-          backgroundColor: "#ffffff",
-          backgroundGradientFrom: "white",
-          backgroundGradientTo: "white",
+          backgroundColor: "#3098FF",
+          backgroundGradientFrom: "#3098FF",
+          backgroundGradientTo: "#3E3384",
+          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           decimalPlaces: 2, // optional, defaults to 2dp
-          color: (opacity = 1) => `rgba(54,64,81, ${opacity})`,
+          // color: (opacity = 1) => `rgba(54,64,81, ${opacity})`,
         }}
         accessor={accessor}
         backgroundColor="transparent"

@@ -21,8 +21,10 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function AddScreen(props) {
   const navigation = useNavigation();
-  const [show, setShow] = useState(false);
   const [name, setName] = useState("");
+  const [customName, setCustomName] = useState("");
+  const [type, setType] = useState("");
+  const [customType, setCustomType] = useState("");
   const [cost, setCost] = useState("");
   const [card, setCard] = useState("");
   const categoryList = [
@@ -118,7 +120,7 @@ export default function AddScreen(props) {
         }}
       >
         <ScrollView
-          style={{ flexGrow: 0.89, width: "100%" }}
+          style={{ flexGrow: 0.9, width: "100%" }}
           contentContainerStyle={styles.contentContainer}
           // showsVerticalScrollIndicator={true}
           // persistentScrollbar={true}
@@ -129,22 +131,44 @@ export default function AddScreen(props) {
             name={name}
             setName={setName}
           />
-          <View style={[show ? { height: "7%" } : { height: 0 }]}>
-            <View
-              style={[styles.inputView, { display: show ? "flex" : "none" }]}
-            >
-              <TextInput
-                autoCapitalize="words"
-                autoCorrect={false}
-                autoComplete="name"
-                keyboardType="default"
-                originalPlaceholder="Name of Subscription"
-                value={name}
-                onChangeText={(text) => setName(text)}
-              />
-            </View>
+          <View
+            style={[
+              styles.inputView,
+              { display: name == "other" ? "flex" : "none" },
+            ]}
+          >
+            <TextInput
+              autoCapitalize="words"
+              autoCorrect={false}
+              autoComplete="name"
+              keyboardType="default"
+              originalPlaceholder="Custom Name of Subscription"
+              value={customName}
+              onChangeText={(text) => setCustomName(text)}
+            />
           </View>
-          <SingleDropDown nameList={typeList} labelID="Type of Subscription" />
+          <SingleDropDown
+            nameList={typeList}
+            name={type}
+            setName={setType}
+            labelID="Type of Subscription"
+          />
+          <View
+            style={[
+              styles.inputView,
+              { display: type == "other" ? "flex" : "none" },
+            ]}
+          >
+            <TextInput
+              autoCapitalize="words"
+              autoCorrect={false}
+              autoComplete="name"
+              keyboardType="default"
+              originalPlaceholder="Custom Type of Subscription"
+              value={customType}
+              onChangeText={(text) => setCustomType(text)}
+            />
+          </View>
           <SingleDropDown nameList={categoryList} labelID="Category" />
           <View style={styles.inputView}>
             <TextInput
@@ -189,6 +213,7 @@ export default function AddScreen(props) {
         <AddFAB
           labelID="SAVE"
           iconID="content-save-check-outline"
+          // style={{ width: "80%" }}
           onPressID={() => saveSub()}
         />
       </SafeAreaView>

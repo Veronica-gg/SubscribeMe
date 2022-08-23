@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { auth, functions } from "../../../utils/firebase";
 import { httpsCallable } from "firebase/functions";
+import { Text } from "react-native-paper";
 
 function logout() {
   auth
@@ -45,7 +46,7 @@ export default function ProfileScreen() {
             autoCorrect={false}
             autoComplete="email"
             keyboardType="email-address"
-            originalPlaceholder="E-mail"
+            originalPlaceholder="Your friend's e-mail"
             value={friendEmail}
             onChangeText={(text) => setFriendEmail(text)}
           />
@@ -64,12 +65,6 @@ export default function ProfileScreen() {
           style={{
             position: "absolute",
             bottom: 0,
-            width: "80%",
-            borderRadius: 25,
-            height: 50,
-            justifyContent: "center",
-            marginTop: 40,
-            marginBottom: 20,
           }}
         />
       </SafeAreaView>
@@ -81,7 +76,7 @@ const styles = StyleSheet.create({
   inputView: {
     width: "70%",
     height: 52,
-    marginBottom: 20,
+    marginVertical: 20,
     alignItems: "center",
   },
 });

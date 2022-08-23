@@ -108,7 +108,7 @@ export default function SubsListScreen() {
         }
       />
       <AddFAB
-        style={{ position: "relative" }}
+        style={{ position: "relative", width: "80%" }}
         iconID="plus-circle-multiple-outline"
         labelID="ADD NEW"
         margin="16"

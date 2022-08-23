@@ -1,4 +1,5 @@
 import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { Surface } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BarChartPrice from "../../../components/BarChartPrice";
 import PieCategory from "../../../components/PieCategory";
@@ -81,11 +82,12 @@ export default function StatsScreen() {
         // showsVerticalScrollIndicator={true}
         // persistentScrollbar={true}
       >
-        <Text style={styles.title}>Your Category Shares</Text>
-
-        <View>
-          <PieCategory data={chartData} accessor="total" absolute={false} />
-        </View>
+        <Surface style={styles.surf}>
+          <Text style={styles.title}>Your Category Shares</Text>
+          <View>
+            <PieCategory data={chartData} accessor="total" absolute={false} />
+          </View>
+        </Surface>
 
         <Text style={styles.title}>$$ for each category</Text>
         <View style={{ marginBottom: 10 }}>
@@ -98,7 +100,19 @@ export default function StatsScreen() {
 
 const styles = StyleSheet.create({
   title: {
-    margin: 20,
+    marginTop: 20,
     fontWeight: "bold",
+  },
+  surf: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: "95%",
+    borderRadius: "16",
+    margin: 5,
+    paddingBottom: 20,
+    backgroundColor: "rgba(48, 152, 255, 0.4)",
+    backgroundGradientFrom: "#3098FF",
+    backgroundGradientTo: "#3E3384",
+    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
   },
 });
