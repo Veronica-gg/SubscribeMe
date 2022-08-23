@@ -5,7 +5,7 @@ import { Button, Text } from "react-native-paper";
 export default function SubmitButton(props) {
   return (
     <Button
-      style={styles.submitBtn}
+      style={[styles.submitBtn, { ...props.style }]}
       mode="contained"
       onPress={props.onPressID}
       icon={props.iconID}

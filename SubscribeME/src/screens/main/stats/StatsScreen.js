@@ -1,5 +1,6 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import BarChartPrice from "../../../components/BarChartPrice";
 import PieCategory from "../../../components/PieCategory";
 
 export default function StatsScreen() {
@@ -51,6 +52,16 @@ export default function StatsScreen() {
       legendFontSize: 15,
     },
   ];
+
+  const data = {
+    labels: ["Shopping", "Movies/TV", "Music", "Tech", "Other"],
+    datasets: [
+      {
+        data: [20, 45, 28, 80, 90],
+      },
+    ],
+  };
+
   return (
     <SafeAreaView
       edges={["left", "right"]}
@@ -61,23 +72,33 @@ export default function StatsScreen() {
         alignItems: "center",
       }}
     >
-      <Text>Your Category Shares</Text>
+      <ScrollView
+        style={{ flexGrow: 1, width: "100%" }}
+        contentContainerStyle={{
+          justifyContent: "top",
+          alignItems: "center",
+        }}
+        // showsVerticalScrollIndicator={true}
+        // persistentScrollbar={true}
+      >
+        <Text style={styles.title}>Your Category Shares</Text>
 
-      <View>
-        <PieCategory data={chartData} accessor="total" absolute={false} />
-      </View>
+        <View>
+          <PieCategory data={chartData} accessor="total" absolute={false} />
+        </View>
+
+        <Text style={styles.title}>$$ for each category</Text>
+        <View style={{ marginBottom: 10 }}>
+          <BarChartPrice data={data} />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
-// const styles = StyleSheet.create({
-//   legend: {
-//     marginHorizontal: 50,
-//   },
-//   legendItem: {
-//     flexDirection: "row",
-//   },
-//   legendItemValue: {
-//     marginHorizontal: 10,
-//   },
-// });
+const styles = StyleSheet.create({
+  title: {
+    margin: 20,
+    fontWeight: "bold",
+  },
+});

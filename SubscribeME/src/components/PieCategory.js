@@ -4,7 +4,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { PieChart } from "react-native-chart-kit";
 
 const PieCategory = ({ data, accessor, absolute }) => {
-  // Order by asscesor value
+  // Order by accessor value
 
   const sortedData = useMemo(() => {
     return data.sort((a, b) => b[accessor] - a[accessor]);
@@ -59,12 +59,12 @@ const PieCategory = ({ data, accessor, absolute }) => {
 
 const styles = StyleSheet.create({
   legend: {
-    marginHorizontal: 20,
+    marginHorizontal: "25%",
   },
   legendItem: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
   },
   legendItemValue: {
     marginHorizontal: 20,
