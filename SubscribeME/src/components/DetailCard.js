@@ -38,7 +38,11 @@ const DetailCard = (props) => (
     </Card.Content>
     <Card.Actions>
       <View style={styles.row}>
-        <AddFAB labelID="EDIT" iconID="circle-edit-outline" />
+        <AddFAB
+          labelID="EDIT"
+          iconID="circle-edit-outline"
+          onPressID={props.onPressID}
+        />
         <AddFAB
           labelID="DELETE"
           iconID="delete"
