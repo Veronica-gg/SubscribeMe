@@ -42,7 +42,12 @@ export default function DescriptionScreen(props) {
         card="PLACEHOLDER"
         auto="PLACEHOLDER"
         cat="PLACEHOLDER"
-        onEdit={() => navigation.navigate("Add", { name: "Edit subscription" })}
+        onEdit={() =>
+          navigation.navigate("Add", {
+            edit: true,
+            ...props.route.params,
+          })
+        }
         onDelete={() => {
           deleteSub(props.route.params.id);
         }}

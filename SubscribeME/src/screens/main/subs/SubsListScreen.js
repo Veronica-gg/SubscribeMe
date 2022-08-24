@@ -25,11 +25,11 @@ export default function SubsListScreen() {
 
   function getSubs() {
     // Async call to remote subscriptions
-    const subs = httpsCallable(
+    const fun = httpsCallable(
       functions,
       "manageSubscription-getUserSubscription"
     );
-    return subs()
+    return fun()
       .then((v) => {
         console.log(v.data);
         if (v.data.message != "ok");

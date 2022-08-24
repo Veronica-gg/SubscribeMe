@@ -76,10 +76,57 @@ exports.setNewSubscription = functions
         members: [db.collection("users").doc(uid)], // adding myself as member? For now useful to debug, then TODO
       })
       .then((ref) => {
-        db.collection("users")
+        return db
+          .collection("users")
           .doc(uid)
           .update({ subscriptions: admin.firestore.FieldValue.arrayUnion(ref) })
-          .catch((e) => console.log(e));
+          .then(() => {
+            return { message: "ok" };
+          })
+          .catch(() => {
+            return { message: "errorAddSubToUser" };
+          });
+      })
+      .catch(() => {
+        return { message: "errorSubNotAdded" };
+      });
+  });
+
+exports.editSubscription = functions
+  .region("europe-west1")
+  .https.onCall((data, context) => {
+    const uid = context.auth.uid;
+    const subscription = db.collection("subscriptions").doc(data.id);
+    return subscription
+      .set(
+        {
+          name: data.name,
+          price: data.price,
+          owner: db.collection("users").doc(uid),
+          members: [db.collection("users").doc(uid)], // adding myself as member? For now useful to debug, then TODO
+        },
+        { merge: true }
+      )
+      .then(() => {
+        return subscription
+          .get()
+          .then(async (res) => {
+            if (res.exists) {
+              let membersInfo = await getUsersInfo(res.data().members);
+              let subCrafted = craftSubscriptionInfoResponse({
+                ...res.data(),
+                id: res.id,
+                members: membersInfo,
+              });
+              return { message: "ok", subs: subCrafted };
+            } else return { message: "errorCouldNotEdit" };
+          })
+          .catch(() => {
+            return { message: "errorCouldNotEdit" };
+          }); // TODO IMPORTANT, trigger to change members
+      })
+      .catch(() => {
+        return { message: "errorCouldNotEdit" };
       });
   });
 

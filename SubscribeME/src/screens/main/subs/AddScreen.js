@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SingleDropDown from "../../../components/SingleDropDown";
 import MultiDropDown from "../../../components/MultiDropDown";
@@ -27,6 +27,17 @@ export default function AddScreen(props) {
   const [customType, setCustomType] = useState("");
   const [cost, setCost] = useState("");
   const [card, setCard] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
+
+  useEffect(() => {
+    if (props.route.params && props.route.params.edit) {
+      navigation.setOptions({ title: "Edit subscription" });
+      setCost(String(props.route.params.price));
+      setName(props.route.params.name);
+      setIsEdit(true);
+    }
+  }, []);
+
   const categoryList = [
     { label: "Movies & TV", value: "movies" },
     { label: "Music", value: "music" },
@@ -87,22 +98,34 @@ export default function AddScreen(props) {
     },
   ];
 
-  function saveSub() {
-    const addSub = httpsCallable(
-      functions,
-      "manageSubscription-setNewSubscription"
-    );
-    addSub({ name: name, price: Number(cost) })
+  function saveSub(isEdit) {
+    let fun;
+    if (isEdit) {
+      fun = httpsCallable(functions, "manageSubscription-editSubscription");
+    } else {
+      fun = httpsCallable(functions, "manageSubscription-setNewSubscription");
+    }
+    fun({
+      name: name,
+      price: Number(cost),
+      id: isEdit ? props.route.params.id : null,
+    })
       .then((v) => {
-        Alert.alert("Subscription added", "", [
-          {
-            text: "OK",
-            onPress: () => {
-              navigation.goBack();
+        Alert.alert(
+          isEdit ? "Subscription edited!" : "Subscription added!",
+          "",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                if (isEdit) {
+                  navigation.navigate("Description", { ...v.data.subs });
+                } else navigation.navigate("SubsList");
+              },
+              style: "cancel",
             },
-            style: "cancel",
-          },
-        ]);
+          ]
+        );
       })
       .catch((e) => console.log(e));
   }
@@ -214,7 +237,7 @@ export default function AddScreen(props) {
           labelID="SAVE"
           iconID="content-save-check-outline"
           // style={{ width: "80%" }}
-          onPressID={() => saveSub()}
+          onPressID={() => saveSub(isEdit)}
         />
       </SafeAreaView>
     </TouchableWithoutFeedback>
