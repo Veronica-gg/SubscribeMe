@@ -152,7 +152,7 @@ exports.deleteSubscription = functions
           return subToDelete
             .delete()
             .then(() => {
-              return { message: "subDeleted" };
+              return { message: "ok" };
             })
             .catch(() => {
               return { message: "errorDeletion" };

@@ -1,9 +1,30 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import DetailCard from "../../../components/DetailCard";
 import { useNavigation } from "@react-navigation/native";
+import { functions } from "../../../utils/firebase";
+import { httpsCallable } from "firebase/functions";
 
 export default function DescriptionScreen(props) {
   const navigation = useNavigation();
+
+  function deleteSub(id) {
+    // Async call to remote subscriptions
+    const fun = httpsCallable(
+      functions,
+      "manageSubscription-deleteSubscription"
+    );
+    return fun({ subscription: id })
+      .then((v) => {
+        console.log(v.data);
+        if (v.data.message != "ok");
+        //TODO manage if no subs available and/or show error message
+        navigation.navigate("SubsList");
+      })
+      .catch(() => {
+        Alert.alert("Error", "Could not delete subscription.");
+      });
+  }
+
   return (
     <SafeAreaView
       style={{
@@ -21,9 +42,10 @@ export default function DescriptionScreen(props) {
         card="PLACEHOLDER"
         auto="PLACEHOLDER"
         cat="PLACEHOLDER"
-        onPressID={() =>
-          navigation.navigate("Add", { name: "Edit subscription" })
-        }
+        onEdit={() => navigation.navigate("Add", { name: "Edit subscription" })}
+        onDelete={() => {
+          deleteSub(props.route.params.id);
+        }}
       />
     </SafeAreaView>
   );

@@ -41,12 +41,13 @@ const DetailCard = (props) => (
         <AddFAB
           labelID="EDIT"
           iconID="circle-edit-outline"
-          onPressID={props.onPressID}
+          onPressID={props.onEdit}
         />
         <AddFAB
           labelID="DELETE"
           iconID="delete"
           style={{ left: 0, backgroundColor: "#CA4D57" }}
+          onPressID={props.onDelete}
         />
       </View>
     </Card.Actions>
