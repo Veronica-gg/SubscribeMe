@@ -3,6 +3,7 @@ import DetailCard from "../../../components/DetailCard";
 import { useNavigation } from "@react-navigation/native";
 import { functions } from "../../../utils/firebase";
 import { httpsCallable } from "firebase/functions";
+import { Alert } from "react-native";
 
 export default function DescriptionScreen(props) {
   const navigation = useNavigation();
@@ -18,7 +19,18 @@ export default function DescriptionScreen(props) {
         console.log(v.data);
         if (v.data.message != "ok");
         //TODO manage if no subs available and/or show error message
-        navigation.navigate("SubsList");
+        Alert.alert(
+          "Delete",
+          "Are you sure you want to delete the subscription?",
+          [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel",
+            },
+            { text: "OK", onPress: () => navigation.navigate("SubsList") },
+          ]
+        );
       })
       .catch(() => {
         Alert.alert("Error", "Could not delete subscription.");
@@ -42,6 +54,7 @@ export default function DescriptionScreen(props) {
         card="PLACEHOLDER"
         auto="PLACEHOLDER"
         cat="PLACEHOLDER"
+        repeat="PLACEHOLDER"
         onEdit={() =>
           navigation.navigate("Add", {
             edit: true,

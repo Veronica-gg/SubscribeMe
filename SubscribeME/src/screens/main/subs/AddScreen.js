@@ -26,6 +26,7 @@ export default function AddScreen(props) {
   const [type, setType] = useState("");
   const [customType, setCustomType] = useState("");
   const [cost, setCost] = useState("");
+  const [repeat, setRepeat] = useState("");
   const [card, setCard] = useState("");
   const [isEdit, setIsEdit] = useState(false);
 
@@ -96,6 +97,13 @@ export default function AddScreen(props) {
       label: "Giovanna",
       value: "giovanna",
     },
+  ];
+
+  const repeatList = [
+    { label: "Week", value: "week" },
+    { label: "Month", value: "month" },
+    { label: "Year", value: "year" },
+    { label: "None", value: "none" },
   ];
 
   function saveSub(isEdit) {
@@ -206,6 +214,12 @@ export default function AddScreen(props) {
               }}
             />
           </View>
+          <SingleDropDown
+            nameList={repeatList}
+            labelID="Repeat every"
+            name={repeat}
+            setName={setRepeat}
+          />
           <View style={styles.inputView}>
             <TextInput
               autoCapitalize="none"
@@ -222,15 +236,21 @@ export default function AddScreen(props) {
           <Text style={styles.text}>Renewal Date:</Text>
           <DatePick />
           <View
-            style={{
-              marginTop: 20,
-              // flex: 1,
-              flexDirection: "row",
-              alignItems: "center",
-            }}
+            // style={{
+            //   marginTop: 20,
+            //   flex: 1,
+            //   flexDirection: "row",
+            //   alignItems: "center",
+            //   borderWidth: 1,
+            //   borderRadius: 16,
+            //   width: "90%",
+            // }}
+            style={styles.inputView}
           >
-            <Text style={styles.text}>Automatic Payment:</Text>
-            <SwitchOnOff />
+            <View style={{ flex: 1, flexDirection: "row" }}>
+              <TextInput label="Automatic Payment" mode="outlined" />
+              <SwitchOnOff style={{ position: "absolute", right: 10 }} />
+            </View>
           </View>
         </ScrollView>
         <AddFAB
@@ -260,7 +280,7 @@ const styles = StyleSheet.create({
   text: {
     // flex: 1,
     // flexDirection: "row",
-    fontWeight: "bold",
+    // fontWeight: "bold",
     marginRight: 10,
   },
 });

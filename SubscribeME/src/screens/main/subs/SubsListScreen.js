@@ -71,9 +71,9 @@ export default function SubsListScreen() {
       <SubsItem
         key={item.id}
         tit={item.name}
-        des="Family plan"
-        iconID="netflix"
-        dateID="numeric-5-circle"
+        des="Family"
+        iconID={item.name == "other" ? "card-account-details" : item.name}
+        dateID={require("../../../../assets/days/25.png")}
         onPressID={() => {
           navigation.navigate("Description", { ...item });
         }}

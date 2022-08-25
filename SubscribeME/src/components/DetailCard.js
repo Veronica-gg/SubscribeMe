@@ -15,6 +15,10 @@ const DetailCard = (props) => (
         <Paragraph>{props.date}</Paragraph>
       </View>
       <View style={styles.row}>
+        <Title>Repeat every</Title>
+        <Paragraph>{props.repeat}</Paragraph>
+      </View>
+      <View style={styles.row}>
         <Title>Type</Title>
         <Paragraph>{props.type}</Paragraph>
       </View>
@@ -34,6 +38,7 @@ const DetailCard = (props) => (
         <Title>Category</Title>
         <Paragraph>{props.cat}</Paragraph>
       </View>
+
       <View style={[styles.row, { flex: 0 }]}></View>
     </Card.Content>
     <Card.Actions>
