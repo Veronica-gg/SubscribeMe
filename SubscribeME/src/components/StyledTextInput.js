@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { TextInput as PaperTextInput } from "react-native-paper";
+import SwitchOnOff from "./SwitchOnOff";
 
 const TextInput = (props) => {
   const isPassword = props.isPassword === true;
+  const isAuto = props.isAuto === true;
   const [showPassword, setShowPassword] = useState(false);
   const [focus, setFocus] = useState(false);
   return (
@@ -27,6 +29,8 @@ const TextInput = (props) => {
               showPassword ? setShowPassword(false) : setShowPassword(true);
             }}
           />
+        ) : isAuto ? (
+          <PaperTextInput.Affix text={<SwitchOnOff />} />
         ) : null
       }
       secureTextEntry={isPassword && !showPassword}

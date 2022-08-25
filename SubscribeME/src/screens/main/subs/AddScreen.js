@@ -232,9 +232,22 @@ export default function AddScreen(props) {
               maxLength={4}
             />
           </View>
-          <MultiDropDown nameList={friendsList} labelID="Friends" />
-          <Text style={styles.text}>Renewal Date:</Text>
-          <DatePick />
+          <View
+            style={{
+              width: "100%",
+              height: 60,
+              margin: 10,
+              marginBottom: 25,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <MultiDropDown nameList={friendsList} labelID="Friends" />
+          </View>
+          <View style={styles.inputView}>
+            <DatePick />
+          </View>
+
           <View
             // style={{
             //   marginTop: 20,
@@ -247,9 +260,18 @@ export default function AddScreen(props) {
             // }}
             style={styles.inputView}
           >
-            <View style={{ flex: 1, flexDirection: "row" }}>
-              <TextInput label="Automatic Payment" mode="outlined" />
-              <SwitchOnOff style={{ position: "absolute", right: 10 }} />
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+              }}
+            >
+              <TextInput
+                mode="outlined"
+                isAuto
+                value="Automatic Payment"
+                disabled={true}
+              />
             </View>
           </View>
         </ScrollView>
