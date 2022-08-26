@@ -24,6 +24,11 @@ const defaultTheme = {
     card: "#FFF9F3", // Navigation header and bottom bar bckgnd
     accent: "#AF9408",
     border: "#FFFFFF",
+    music: "rgba(255, 148, 40, 0.4)",
+    movies: "rgba(48, 152, 255, 0.4)",
+    shopping: "rgba(62, 51, 132, 0.4)",
+    tech: "rgba(202, 77, 87, 0.4)",
+    other: "rgba(255, 218, 181, 0.7)",
   },
 };
 const darkTheme = defaultTheme;
@@ -35,4 +40,4 @@ export { defaultTheme, darkTheme };
 // "#FF9428" deep saffron (orange) - 255, 148, 40
 // "#CA4D57" brick red - 202, 77, 87
 // "#FFF9F3" seashell - 255, 249, 243
-// #FFFFFF,#FFF9F3,#FFEEDE,#FFE4CA,#FFDAB5,#FFD0A1,#FFC68D
+// #FFFFFF,#FFF9F3,#FFEEDE,#FFE4CA,#FFDAB5 (255, 218, 181),#FFD0A1,#FFC68D

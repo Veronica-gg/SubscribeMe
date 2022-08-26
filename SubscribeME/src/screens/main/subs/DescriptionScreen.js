@@ -55,6 +55,7 @@ export default function DescriptionScreen(props) {
         auto="PLACEHOLDER"
         cat="PLACEHOLDER"
         repeat="PLACEHOLDER"
+        category="tech"
         onEdit={() =>
           navigation.navigate("Add", {
             edit: true,

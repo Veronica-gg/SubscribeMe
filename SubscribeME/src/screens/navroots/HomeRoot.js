@@ -10,6 +10,7 @@ export default function HomeRoot() {
       initialRouteName="Home"
       screenOptions={{
         headerTitleAlign: "center",
+        headerShown: false,
       }}
     >
       <Stack.Screen name="Home" component={HomeScreen} />

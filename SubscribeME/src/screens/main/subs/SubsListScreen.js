@@ -79,6 +79,7 @@ export default function SubsListScreen() {
             : item.name
         }
         dateID={require("../../../../assets/days/25.png")}
+        category={"tech"}
         onPressID={() => {
           navigation.navigate("Description", { ...item });
         }}
@@ -139,6 +140,7 @@ const r = () => {
       des="Family plan"
       iconID="netflix"
       dateID="numeric-5-circle"
+      category="rgba(255, 148, 40, 0.7)"
       onPressID={() => {
         getSubs();
         //navigation.navigate("Description", { name: "NETFLIX" });
@@ -149,6 +151,7 @@ const r = () => {
       des="Student plan"
       iconID="spotify"
       dateID="numeric-7-circle"
+      category="rgba(202, 77, 87, 0.7)"
       onPressID={() => {
         navigation.navigate("Description", { name: "SPOTIFY" });
       }}

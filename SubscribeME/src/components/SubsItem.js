@@ -1,14 +1,19 @@
 import * as React from "react";
 import { List, Paragraph, Surface, Text } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
+import { useTheme } from "react-native-paper";
 
 export default function SubsItem(props) {
+  const { colors } = useTheme();
   return (
     <Surface style={styles.surface} elevation={1}>
       <List.Item
         title={props.tit}
         description={props.des}
-        style={styles.container}
+        style={[
+          styles.container,
+          { backgroundColor: colors[props.category] || colors.background },
+        ]}
         left={(p) => <List.Icon {...p} icon={props.iconID} />}
         right={(p) => (
           <View>
