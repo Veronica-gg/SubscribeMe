@@ -89,10 +89,17 @@ export default function StatsScreen() {
           </View>
         </Surface>
 
-        <Text style={styles.title}>$$ for each category</Text>
-        <View style={{ marginBottom: 10 }}>
+        <Surface
+          style={[
+            styles.surf,
+            { backgroundColor: "#CA4D57", paddingBottom: 0 },
+          ]}
+        >
+          <Text style={[styles.title, { color: "#FFF9F3" }]}>
+            $$ for each category
+          </Text>
           <BarChartPrice data={data} />
-        </View>
+        </Surface>
       </ScrollView>
     </SafeAreaView>
   );
@@ -109,10 +116,11 @@ const styles = StyleSheet.create({
     width: "95%",
     borderRadius: "16",
     margin: 5,
+    marginBottom: 20,
     paddingBottom: 20,
     backgroundColor: "rgba(48, 152, 255, 0.4)",
-    backgroundGradientFrom: "#3098FF",
-    backgroundGradientTo: "#3E3384",
-    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+    // backgroundGradientFrom: "#3098FF",
+    // backgroundGradientTo: "#3E3384",
+    // color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
   },
 });

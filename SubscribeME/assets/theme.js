@@ -35,3 +35,4 @@ export { defaultTheme, darkTheme };
 // "#FF9428" deep saffron (orange) - 255, 148, 40
 // "#CA4D57" brick red - 202, 77, 87
 // "#FFF9F3" seashell - 255, 249, 243
+// #FFFFFF,#FFF9F3,#FFEEDE,#FFE4CA,#FFDAB5,#FFD0A1,#FFC68D

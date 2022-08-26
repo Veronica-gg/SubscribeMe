@@ -4,7 +4,7 @@ import { BarChart } from "react-native-chart-kit";
 
 const BarChartPrice = ({ data, accessor, absolute }) => {
   return (
-    <View style={styles}>
+    <View>
       <BarChart
         style={styles.graphStyle}
         data={data}
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   graphStyle: {
     justifyContent: "center",
     alignItems: "center",
-    marginVertical: 8,
+    // marginVertical: 8,
     borderRadius: 16,
     paddingTop: 25,
   },

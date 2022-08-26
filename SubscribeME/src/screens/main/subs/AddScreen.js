@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Keyboard,
   TouchableWithoutFeedback,
+  KeyboardAvoidingView,
   ScrollView,
   Alert,
 } from "react-native";
@@ -58,6 +59,14 @@ export default function AddScreen(props) {
     {
       label: "Amazon Prime",
       value: "aprime",
+    },
+    {
+      label: "Apple",
+      value: "apple",
+    },
+    {
+      label: "Microsoft",
+      value: "microsoft",
     },
     {
       label: "Other",
@@ -152,128 +161,132 @@ export default function AddScreen(props) {
       >
         <ScrollView
           style={{ flexGrow: 0.9, width: "100%" }}
-          contentContainerStyle={styles.contentContainer}
+          // contentContainerStyle={styles.contentContainer}
           // showsVerticalScrollIndicator={true}
           // persistentScrollbar={true}
         >
-          <SingleDropDown
-            nameList={nameList}
-            labelID="Name of Subscription"
-            name={name}
-            setName={setName}
-          />
-          <View
-            style={[
-              styles.inputView,
-              { display: name == "other" ? "flex" : "none" },
-            ]}
+          <KeyboardAvoidingView
+            style={styles.contentContainer}
+            behavior="padding"
           >
-            <TextInput
-              autoCapitalize="words"
-              autoCorrect={false}
-              autoComplete="name"
-              keyboardType="default"
-              originalPlaceholder="Custom Name of Subscription"
-              value={customName}
-              onChangeText={(text) => setCustomName(text)}
+            <SingleDropDown
+              nameList={nameList}
+              labelID="Name of Subscription"
+              name={name}
+              setName={setName}
             />
-          </View>
-          <SingleDropDown
-            nameList={typeList}
-            name={type}
-            setName={setType}
-            labelID="Type of Subscription"
-          />
-          <View
-            style={[
-              styles.inputView,
-              { display: type == "other" ? "flex" : "none" },
-            ]}
-          >
-            <TextInput
-              autoCapitalize="words"
-              autoCorrect={false}
-              autoComplete="name"
-              keyboardType="default"
-              originalPlaceholder="Custom Type of Subscription"
-              value={customType}
-              onChangeText={(text) => setCustomType(text)}
-            />
-          </View>
-          <SingleDropDown nameList={categoryList} labelID="Category" />
-          <View style={styles.inputView}>
-            <TextInput
-              autoCapitalize="none"
-              autoCorrect={false}
-              autoComplete="number"
-              keyboardType="numeric"
-              originalPlaceholder="Cost"
-              value={cost}
-              onChangeText={(text) => {
-                setCost(text);
-              }}
-            />
-          </View>
-          <SingleDropDown
-            nameList={repeatList}
-            labelID="Repeat every"
-            name={repeat}
-            setName={setRepeat}
-          />
-          <View style={styles.inputView}>
-            <TextInput
-              autoCapitalize="none"
-              autoCorrect={false}
-              autoComplete="number"
-              keyboardType="numeric"
-              originalPlaceholder="Card's last 4 digits"
-              value={card}
-              onChangeText={(text) => setCard(text)}
-              maxLength={4}
-            />
-          </View>
-          <View
-            style={{
-              width: "100%",
-              height: 60,
-              margin: 10,
-              marginBottom: 25,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <MultiDropDown nameList={friendsList} labelID="Friends" />
-          </View>
-          <View style={styles.inputView}>
-            <DatePick />
-          </View>
-
-          <View
-            // style={{
-            //   marginTop: 20,
-            //   flex: 1,
-            //   flexDirection: "row",
-            //   alignItems: "center",
-            //   borderWidth: 1,
-            //   borderRadius: 16,
-            //   width: "90%",
-            // }}
-            style={styles.inputView}
-          >
             <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-              }}
+              style={[
+                styles.inputView,
+                { display: name == "other" ? "flex" : "none" },
+              ]}
             >
               <TextInput
-                mode="outlined"
-                isAuto
-                value="Automatic Payment"
-                disabled={true}
+                autoCapitalize="words"
+                autoCorrect={false}
+                autoComplete="name"
+                keyboardType="default"
+                originalPlaceholder="Custom Name of Subscription"
+                value={customName}
+                onChangeText={(text) => setCustomName(text)}
               />
             </View>
-          </View>
+            <SingleDropDown
+              nameList={typeList}
+              name={type}
+              setName={setType}
+              labelID="Type of Subscription"
+            />
+            <View
+              style={[
+                styles.inputView,
+                { display: type == "other" ? "flex" : "none" },
+              ]}
+            >
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                autoComplete="name"
+                keyboardType="default"
+                originalPlaceholder="Custom Type of Subscription"
+                value={customType}
+                onChangeText={(text) => setCustomType(text)}
+              />
+            </View>
+            <SingleDropDown nameList={categoryList} labelID="Category" />
+            <View style={styles.inputView}>
+              <TextInput
+                autoCapitalize="none"
+                autoCorrect={false}
+                autoComplete="number"
+                keyboardType="numeric"
+                originalPlaceholder="Cost"
+                value={cost}
+                onChangeText={(text) => {
+                  setCost(text);
+                }}
+              />
+            </View>
+            <SingleDropDown
+              nameList={repeatList}
+              labelID="Repeat every"
+              name={repeat}
+              setName={setRepeat}
+            />
+            <View style={styles.inputView}>
+              <TextInput
+                autoCapitalize="none"
+                autoCorrect={false}
+                autoComplete="number"
+                keyboardType="numeric"
+                originalPlaceholder="Card's last 4 digits"
+                value={card}
+                onChangeText={(text) => setCard(text)}
+                maxLength={4}
+              />
+            </View>
+            <View
+              style={{
+                width: "100%",
+                height: 60,
+                margin: 10,
+                marginBottom: 25,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <MultiDropDown nameList={friendsList} labelID="Friends" />
+            </View>
+            <View style={styles.inputView}>
+              <DatePick />
+            </View>
+            <View
+              // style={{
+              //   marginTop: 20,
+              //   flex: 1,
+              //   flexDirection: "row",
+              //   alignItems: "center",
+              //   borderWidth: 1,
+              //   borderRadius: 16,
+              //   width: "90%",
+              // }}
+              style={styles.inputView}
+            >
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                }}
+              >
+                <TextInput
+                  mode="outlined"
+                  isAuto
+                  value="Automatic Payment"
+                  disabled={true}
+                />
+              </View>
+            </View>
+          </KeyboardAvoidingView>
         </ScrollView>
         <AddFAB
           labelID="SAVE"

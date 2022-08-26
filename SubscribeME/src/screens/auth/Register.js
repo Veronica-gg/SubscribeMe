@@ -72,7 +72,7 @@ export default function Register({ navigation }) {
         <View
           style={[
             styles.inputView,
-            { height: isEmailWrong ? 72 : 52, width: "100%" },
+            { height: isEmailWrong ? 80 : 60, width: "100%" },
           ]}
         >
           <View style={[styles.inputView, { marginBottom: 0 }]}>
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
 
   inputView: {
     width: "70%",
-    height: 52,
+    height: 60,
     marginBottom: 20,
     alignItems: "center",
   },

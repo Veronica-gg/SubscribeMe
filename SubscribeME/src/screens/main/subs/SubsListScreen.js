@@ -38,12 +38,11 @@ export default function SubsListScreen() {
       })
       .catch((e) => {
         Alert.alert("Error", "Could not fetch data. Check your connection.", [
+          { text: "Dismiss", style: "cancel" },
           {
             text: "Try Again",
             onPress: () => setTryAgain(!tryAgain),
-            style: "cancel",
           },
-          { text: "Dismiss" },
         ]);
       });
   }
@@ -72,7 +71,13 @@ export default function SubsListScreen() {
         key={item.id}
         tit={item.name}
         des="Family"
-        iconID={item.name == "other" ? "card-account-details" : item.name}
+        iconID={
+          item.name == "other"
+            ? "card-account-details"
+            : item.name == "aprime"
+            ? "card-account-details"
+            : item.name
+        }
         dateID={require("../../../../assets/days/25.png")}
         onPressID={() => {
           navigation.navigate("Description", { ...item });

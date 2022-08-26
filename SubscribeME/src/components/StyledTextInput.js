@@ -6,11 +6,11 @@ import SwitchOnOff from "./SwitchOnOff";
 const TextInput = (props) => {
   const isPassword = props.isPassword === true;
   const isAuto = props.isAuto === true;
+  const isFriend = props.isFriend === true;
   const [showPassword, setShowPassword] = useState(false);
   const [focus, setFocus] = useState(false);
   return (
     <PaperTextInput
-      dense
       placeholder={focus ? null : props.originalPlaceholder}
       //placeholderTextColor="#003f5c"
       label={focus ? props.originalPlaceholder : null}
@@ -31,6 +31,8 @@ const TextInput = (props) => {
           />
         ) : isAuto ? (
           <PaperTextInput.Affix text={<SwitchOnOff />} />
+        ) : isFriend ? (
+          <PaperTextInput.Icon icon="delete" />
         ) : null
       }
       secureTextEntry={isPassword && !showPassword}
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
     //padding: "4%",
     //marginLeft: "5%",
     //marginRight: "5%",
-    //alignItems: "center",
+    // alignItems: "center",
     //textAlign: "center",
   },
 });
