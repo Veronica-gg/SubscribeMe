@@ -4,6 +4,8 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider as PaperProvider } from "react-native-paper";
 import AuthRoot from "./src/screens/navroots/AuthRoot";
 import { defaultTheme, darkTheme } from "./assets/theme";
+import { Provider } from "react-redux";
+import { store } from "./src/redux/store";
 
 function App() {
   return (
@@ -18,8 +20,10 @@ export default function AppWithProviders() {
   const theme =
     Appearance.getColorScheme() == "light" ? defaultTheme : darkTheme;
   return (
-    <PaperProvider theme={defaultTheme}>
-      <App />
-    </PaperProvider>
+    <Provider store={store}>
+      <PaperProvider theme={defaultTheme}>
+        <App />
+      </PaperProvider>
+    </Provider>
   );
 }
