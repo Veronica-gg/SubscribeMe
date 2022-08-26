@@ -8,13 +8,17 @@ import { useEffect, useState } from "react";
 import React from "react";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import { RefreshControl, FlatList, Alert } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { updateSubs } from "../../../redux/reducer";
 
 export default function SubsListScreen() {
+  const subs = useSelector((state) => state.data.subs);
+  const dispatch = useDispatch();
+
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [tryAgain, setTryAgain] = useState(false);
-  const [subs, setSubs] = useState([]);
 
   const onRefresh = React.useCallback(() => {
     // Manages pull to refresh
@@ -34,9 +38,9 @@ export default function SubsListScreen() {
         console.log(v.data);
         if (v.data.message != "ok");
         //TODO manage if no subs available and/or show error message
-        setSubs(v.data.subs);
+        dispatch(updateSubs({ subs: v.data.subs }));
       })
-      .catch((e) => {
+      .catch(() => {
         Alert.alert("Error", "Could not fetch data. Check your connection.", [
           {
             text: "Try Again",
