@@ -50,6 +50,7 @@ export default function SubsListScreen() {
         updatePromise
           .then((res) => {
             if (res.message != "ok" && subs.length === 0) {
+              console.log(res);
               tryAgainAlert();
             }
             setLoading(false);

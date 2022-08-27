@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Alert, StyleSheet } from "react-native";
-import { TextInput as PaperTextInput, View } from "react-native-paper";
-import SwitchOnOff from "./SwitchOnOff";
+import { TextInput as PaperTextInput, View, Switch } from "react-native-paper";
 
 const TextInput = (props) => {
   const isPassword = props.isPassword === true;
@@ -45,7 +44,15 @@ const TextInput = (props) => {
             }}
           />
         ) : isAuto ? (
-          <PaperTextInput.Affix text={<SwitchOnOff />} />
+          <PaperTextInput.Affix
+            text={
+              <Switch
+                value={props.toggleValue}
+                onValueChange={props.onToggle}
+                color="#CA4D57"
+              />
+            }
+          />
         ) : isFriend ? (
           <PaperTextInput.Icon
             icon="delete"

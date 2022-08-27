@@ -10,7 +10,6 @@ export default function SubmitButton(props) {
       mode="contained"
       onPress={props.onPressID}
       icon={props.iconID}
-      //textColor="#FFF9F3"
       labelStyle={{ fontSize: 25 }}
       contentStyle={{ height: "100%" }}
     >
@@ -27,6 +26,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 40,
     marginBottom: 20,
-    //backgroundColor: "#3E3384",
   },
 });

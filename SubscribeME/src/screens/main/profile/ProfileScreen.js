@@ -39,6 +39,7 @@ export default function ProfileScreen() {
   const [expandedPwd, setExpandedPwd] = useState(false);
   const handlePwdPress = () => setExpandedPwd(!expandedPwd);
 
+  const oldEmail = "PLACEHOLDER";
   const [newEmail, setNewEmail] = useState("");
   const [newName, setNewName] = useState("");
   const [oldPwd, setOldPwd] = useState("");
@@ -273,16 +274,11 @@ export default function ProfileScreen() {
                   },
                 ]}
               >
-                <Text style={styles.title}>Insert password</Text>
+                <Text style={styles.title}>This is your current e-mail</Text>
                 <View style={styles.inputView}>
                   <PaperTextInput
-                    // autoCapitalize="none"
-                    autoCorrect={false}
-                    originalPlaceholder="Password"
-                    // backgroundColor="transparent"
-                    value={oldPwd}
-                    isPassword
-                    onChangeText={(text) => setOldPwd(text)}
+                    value={oldEmail}
+                    disabled={true}
                     theme={{
                       colors: {
                         background: colors.profileCard,
@@ -301,6 +297,23 @@ export default function ProfileScreen() {
                     // backgroundColor="transparent"
                     value={newEmail}
                     onChangeText={(text) => setNewEmail(text)}
+                    theme={{
+                      colors: {
+                        background: colors.profileCard,
+                      },
+                    }}
+                  />
+                </View>
+                <Text style={styles.title}>Insert password</Text>
+                <View style={styles.inputView}>
+                  <PaperTextInput
+                    // autoCapitalize="none"
+                    autoCorrect={false}
+                    originalPlaceholder="Password"
+                    // backgroundColor="transparent"
+                    value={oldPwd}
+                    isPassword
+                    onChangeText={(text) => setOldPwd(text)}
                     theme={{
                       colors: {
                         background: colors.profileCard,

@@ -19,18 +19,6 @@ export default function DescriptionScreen(props) {
         console.log(v.data);
         if (v.data.message != "ok");
         //TODO manage if no subs available and/or show error message
-        Alert.alert(
-          "Delete",
-          "Are you sure you want to delete the subscription?",
-          [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
-            },
-            { text: "OK", onPress: () => navigation.navigate("SubsList") },
-          ]
-        );
       })
       .catch(() => {
         Alert.alert("Error", "Could not delete subscription.");
@@ -64,7 +52,26 @@ export default function DescriptionScreen(props) {
           })
         }
         onDelete={() => {
-          deleteSub(props.route.params.id);
+          Alert.alert(
+            "Delete",
+            "Are you sure you want to delete the subscription?",
+            [
+              {
+                text: "Cancel",
+                onPress: () => {
+                  console.log("Cancel Pressed");
+                },
+                style: "cancel",
+              },
+              {
+                text: "OK",
+                onPress: () => {
+                  deleteSub(props.route.params.id);
+                  navigation.navigate("SubsList");
+                },
+              },
+            ]
+          );
         }}
       />
     </SafeAreaView>

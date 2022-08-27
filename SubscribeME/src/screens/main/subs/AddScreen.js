@@ -2,18 +2,9 @@ import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SingleDropDown from "../../../components/SingleDropDown";
 import MultiDropDown from "../../../components/MultiDropDown";
-import AddFAB from "../../../components/AddFAB";
 import DatePick from "../../../components/DatePick";
 import TextInput from "../../../components/StyledTextInput";
-import {
-  View,
-  StyleSheet,
-  Keyboard,
-  TouchableWithoutFeedback,
-  KeyboardAvoidingView,
-  ScrollView,
-  Alert,
-} from "react-native";
+import { View, StyleSheet, ScrollView, Alert } from "react-native";
 import { HelperText } from "react-native-paper";
 import { functions } from "../../../utils/firebase";
 import { httpsCallable } from "firebase/functions";
@@ -24,8 +15,19 @@ import {
   validateCost,
 } from "../../../utils/utils";
 import SubmitButton from "../../../components/SubmitButton";
+import {
+  categoryList,
+  nameList,
+  typeList,
+  friendsList,
+  repeatList,
+  currencyList,
+} from "./defaultSubValue";
+import { LinearGradient } from "expo-linear-gradient";
+import { useTheme } from "react-native-paper";
 
 export default function AddScreen(props) {
+  const { colors } = useTheme();
   const navigation = useNavigation();
   const [name, setName] = useState("");
   const [customName, setCustomName] = useState("");
@@ -39,6 +41,10 @@ export default function AddScreen(props) {
   const [card, setCard] = useState("");
   const [isCardWrong, setIsCardWrong] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const [inputDate, setInputDate] = useState(undefined);
+
+  const [logoutHeight, setLogoutHeight] = useState(0);
 
   useEffect(() => {
     if (props.route.params && props.route.params.edit) {
@@ -48,48 +54,6 @@ export default function AddScreen(props) {
       setIsEdit(true);
     }
   }, []);
-
-  const categoryList = [
-    { label: "Movies & TV", value: "movies" },
-    { label: "Music", value: "music" },
-    { label: "Shopping", value: "shopping" },
-    { label: "Tech", value: "tech" },
-    { label: "Other", value: "other" },
-  ];
-  const nameList = [
-    { label: "Netflix", value: "netflix" },
-    { label: "Spotify", value: "spotify" },
-    { label: "Amazon Prime", value: "aprime" },
-    { label: "Apple", value: "apple" },
-    { label: "Microsoft", value: "microsoft" },
-    { label: "Other", value: "other" },
-  ];
-
-  const typeList = [
-    { label: "Personal", value: "personal" },
-    { label: "Family", value: "family" },
-    { label: "Student", value: "student" },
-    { label: "Other", value: "other" },
-  ];
-
-  const friendsList = [
-    { label: "Virginia", value: "virginia" },
-    { label: "Aldo", value: "aldo" },
-    { label: "Giovanna", value: "giovanna" },
-  ];
-
-  const repeatList = [
-    { label: "Week", value: "week" },
-    { label: "Month", value: "month" },
-    { label: "Year", value: "year" },
-    { label: "None", value: "none" },
-  ];
-
-  const currencyList = [
-    { label: "€", value: "eur" },
-    { label: "$", value: "usd" },
-    { label: "£", value: "gbp" },
-  ];
 
   function saveSub(isEdit) {
     let fun;
@@ -129,7 +93,6 @@ export default function AddScreen(props) {
       style={{
         flex: 1,
         justifyContent: "top",
-        //backgroundColor: "#FFF9F3",
         alignItems: "center",
         marginTop: 10,
       }}
@@ -284,9 +247,20 @@ export default function AddScreen(props) {
           <MultiDropDown nameList={friendsList} labelID="Friends" />
         </View>
         <View style={styles.inputView}>
-          <DatePick />
+          <DatePick
+            inputDate={inputDate}
+            onChange={(d) => {
+              setInputDate(d);
+            }}
+          />
         </View>
-        <View style={styles.inputView}>
+        <View
+          style={{
+            ...styles.inputView,
+            backgroundColor: colors.backgroundColor,
+            marginBottom: logoutHeight * 1.2,
+          }}
+        >
           <View
             style={{
               flex: 1,
@@ -298,26 +272,53 @@ export default function AddScreen(props) {
               isAuto
               value="Automatic Payment"
               disabled={true}
+              toggleValue={isSwitchOn}
+              onToggle={() => {
+                setIsSwitchOn(!isSwitchOn);
+              }}
             />
           </View>
         </View>
       </ScrollView>
-      <SubmitButton
-        textID="SAVE"
-        iconID="content-save-check-outline"
+      <LinearGradient
         style={{
-          // flex: 1,
-          justifyContent: "flex-end",
-          marginTop: 5,
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          height: 100,
         }}
-        disabled={
-          addFieldsFilled(name, type, category, cost, currency, repeat, card) &&
-          !isCostNotDigit
-            ? false
-            : true
-        }
-        onPressID={() => saveSub(isEdit)}
+        colors={[colors.background + "00", colors.background]}
+        pointerEvents={"none"}
       />
+      <View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          alignItems: "center",
+          backgroundColor: "transparent",
+        }}
+        onLayout={(e) => {
+          setLogoutHeight(e.nativeEvent.layout.height);
+        }}
+      >
+        <SubmitButton
+          textID="SAVE"
+          iconID="content-save-check-outline"
+          style={{
+            // flex: 1,
+            justifyContent: "flex-end",
+            marginTop: 0,
+          }}
+          disabled={
+            addFieldsFilled(name, type, category, cost, currency, repeat) &&
+            !isCostNotDigit
+              ? false
+              : true
+          }
+          onPressID={() => saveSub(isEdit)}
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -326,7 +327,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: "top",
     flexGrow: 1,
-    //backgroundColor: "#FFF9F3",
     alignItems: "center",
     justifyContent: "top",
     flexDirection: "column",

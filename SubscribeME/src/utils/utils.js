@@ -26,8 +26,7 @@ function correctLoginFields(email, password) {
   return email.length > 0 && password.length >= minLength;
 }
 
-function addFieldsFilled(name, type, category, cost, currency, repeat, card) {
-  // TODO -- friends, date (?) and automatic
+function addFieldsFilled(name, type, category, cost, currency, repeat) {
   return (
     name != null &&
     name != "" &&
@@ -40,9 +39,7 @@ function addFieldsFilled(name, type, category, cost, currency, repeat, card) {
     currency != null &&
     currency != "" &&
     repeat != null &&
-    repeat != "" &&
-    card != null &&
-    card != ""
+    repeat != ""
   );
 }
 
