@@ -1,16 +1,24 @@
 import { View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Surface, Text } from "react-native-paper";
 import { updateState } from "../../../redux/stateUpdater";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
   const name = useSelector((state) => state.data.name);
+  const isFocused = useIsFocused();
+  const [firstRender, setFirstRender] = useState(true);
+
   useEffect(() => {
-    updateState(dispatch, true, true, false);
-  }, []);
+    if (!isFocused) return;
+    let isName = !name && firstRender ? false : true;
+    firstRender && setFirstRender(false);
+    updateState(dispatch, true, true, isName);
+  }, [isFocused]);
+
   return (
     <SafeAreaView edges={["left", "right"]} style={styles.safe}>
       <View

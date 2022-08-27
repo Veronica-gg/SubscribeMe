@@ -9,7 +9,15 @@ exports.onUserCreation = functions
     return db
       .collection("users")
       .doc(user.uid)
-      .set({ friends: [], subscriptions: [] }, { merge: true });
+      .set(
+        {
+          friends: [],
+          pendingFriendsRecv: [],
+          pendingFriendsSent: [],
+          subscriptions: [],
+        },
+        { merge: true }
+      );
   });
 
 exports.onSubInsert = functions

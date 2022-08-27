@@ -40,11 +40,4 @@ const currencyList = [
   { label: "£", value: "gbp" },
 ];
 
-export {
-  categoryList,
-  nameList,
-  typeList,
-  friendsList,
-  repeatList,
-  currencyList,
-};
+export { categoryList, nameList, typeList, repeatList, currencyList };

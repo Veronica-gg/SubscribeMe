@@ -1,23 +1,43 @@
-import { useState } from "react";
-import { StyleSheet, SafeAreaView, View, SectionList } from "react-native";
+import { useState, useCallback } from "react";
+import {
+  StyleSheet,
+  SafeAreaView,
+  View,
+  SectionList,
+  RefreshControl,
+} from "react-native";
 import PaperTextInput from "../../../components/StyledTextInput";
 import { Text } from "react-native-paper";
+import { useDispatch, useSelector } from "react-redux";
+import { updateState } from "../../../redux/stateUpdater";
 
 export default function PendingRequests() {
+  const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    // Manages pull to refresh
+    setRefreshing(true);
+    updateState(dispatch, false, true, false).friends.then((promise) => {
+      setRefreshing(false);
+    });
+  }, []);
   const requests = [
     {
       title: "Inbox",
-      data: ["TRY1", "TRY2"],
+      data: useSelector((state) => state.data.pendingFriendsRecv),
     },
-    { title: "Sent", data: ["PERSON1"] },
+    {
+      title: "Sent",
+      data: useSelector((state) => state.data.pendingFriendsSent),
+    },
   ];
   function renderItem({ item }) {
     return (
       <View style={styles.inputView}>
         <PaperTextInput
           disabled={true}
-          value={"Pending1"}
+          value={item.name + " - " + item.email}
           isPending
           style={{ textAlign: "center", width: "90%" }}
         />
@@ -44,9 +64,9 @@ export default function PendingRequests() {
         renderSectionHeader={({ section: { title } }) => (
           <Text style={styles.header}>{title}</Text>
         )}
-        // refreshControl={
-        //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        // }
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </SafeAreaView>
   );

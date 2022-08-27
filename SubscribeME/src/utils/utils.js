@@ -7,7 +7,7 @@ function validateEmail(email) {
 //Only alpha numeric names
 function validateName(name) {
   var regex = /^\w+$/;
-  return name.match(regex);
+  return name.length > 0 && name.length <= maxLength && name.match(regex);
 }
 
 const minLength = 6;

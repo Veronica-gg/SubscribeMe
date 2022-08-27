@@ -17,7 +17,9 @@ export function updateState(
     );
     return fun()
       .then((v) => {
-        dispatch(updateSubs({ subs: v.data.subs }));
+        if (v.data.message === "ok") {
+          dispatch(updateSubs({ subs: v.data.subs }));
+        }
         return v.data;
       })
       .catch(() => {
@@ -30,13 +32,15 @@ export function updateState(
     const fun = httpsCallable(functions, "manageUser-getFriendsData");
     return fun()
       .then((v) => {
-        dispatch(
-          updateFriends({
-            friends: v.data.friends,
-            pendingFriendsRecv: v.data.pendingFriendsRecv,
-            pendingFriendsSent: v.data.pendingFriendsSent,
-          })
-        );
+        if (v.data.message === "ok") {
+          dispatch(
+            updateFriends({
+              friends: v.data.friends,
+              pendingFriendsRecv: v.data.pendingFriendsRecv,
+              pendingFriendsSent: v.data.pendingFriendsSent,
+            })
+          );
+        }
         return v.data;
       })
       .catch(() => {
@@ -48,12 +52,14 @@ export function updateState(
     const fun = httpsCallable(functions, "manageUser-getCurrentUserInfo");
     return fun([], true)
       .then((v) => {
-        dispatch(
-          updateProfile({
-            name: v.data.users[0].name,
-            email: v.data.users[0].email,
-          })
-        );
+        if (v.data.message === "ok") {
+          dispatch(
+            updateProfile({
+              name: v.data.users[0].name,
+              email: v.data.users[0].email,
+            })
+          );
+        }
         return v.data;
       })
       .catch(() => {

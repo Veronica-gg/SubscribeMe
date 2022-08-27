@@ -5,7 +5,11 @@ import DropDown from "react-native-paper-dropdown";
 function MultiDropDown(props) {
   const [showMultiSelectDropDown, setShowMultiSelectDropDown] = useState(false);
   const [friends, setFriends] = useState(String);
-
+  let names = [];
+  for (const friend of props.nameList) {
+    let displayName = (friend.name || "User") + " - " + friend.email;
+    names.push({ label: displayName, value: friend.id });
+  }
   return (
     <SafeAreaView style={styles.safeContainerStyle}>
       <DropDown
@@ -16,7 +20,7 @@ function MultiDropDown(props) {
         onDismiss={() => setShowMultiSelectDropDown(false)}
         value={friends}
         setValue={setFriends}
-        list={props.nameList}
+        list={names}
         multiSelect
       />
     </SafeAreaView>
