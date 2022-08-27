@@ -73,6 +73,17 @@ export default function StatsScreen() {
         alignItems: "center",
       }}
     >
+      <View
+        style={{
+          textAlign: "left",
+          alignItems: "flex-start",
+          justifyContent: "flex-start",
+          flexDirection: "row",
+          width: "100%",
+        }}
+      >
+        <Text style={styles.mainTitle}>Statistics</Text>
+      </View>
       <ScrollView
         style={{ flexGrow: 1, width: "100%" }}
         contentContainerStyle={{
@@ -80,17 +91,6 @@ export default function StatsScreen() {
           alignItems: "center",
         }}
       >
-        <View
-          style={{
-            textAlign: "left",
-            alignItems: "flex-start",
-            justifyContent: "flex-start",
-            flexDirection: "row",
-            width: "100%",
-          }}
-        >
-          <Text style={styles.mainTitle}>Statistics</Text>
-        </View>
         <View
           style={{
             justifyContent: "center",

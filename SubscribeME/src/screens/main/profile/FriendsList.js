@@ -54,6 +54,19 @@ export default function FriendsListPage() {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        ListEmptyComponent={
+          <View
+            style={{
+              width: "95%",
+              alignSelf: "center",
+              margin: 10,
+            }}
+          >
+            <Text style={{ marginHorizontal: 10 }}>
+              No friends added yet :{"("}
+            </Text>
+          </View>
+        }
       />
     </SafeAreaView>
   );
