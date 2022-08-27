@@ -27,7 +27,7 @@ import PaperTextInput from "../../../components/StyledTextInput";
 function logout() {
   auth
     .signOut()
-    .then(alert("Signed out!"))
+    // .then(alert("Signed out!"))
     .catch((error) => alert(error));
 }
 

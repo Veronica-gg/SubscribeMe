@@ -20,9 +20,9 @@ export default function Login({ navigation }) {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        if (user) {
-          alert("Logged in!");
-        }
+        // if (user) {
+        //   alert("Logged in!");
+        // }
       })
       .catch((error) => alert(error.message));
   };

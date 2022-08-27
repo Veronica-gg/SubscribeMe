@@ -15,7 +15,10 @@ export default function DetailCard(props) {
       <Card.Content style={{ flex: 1, paddingTop: 0 }}>
         <View style={styles.row}>
           <Title>Cost</Title>
-          <Paragraph>${props.price}</Paragraph>
+          <Paragraph>
+            {props.currency}
+            {props.price}
+          </Paragraph>
         </View>
         <View style={styles.row}>
           <Title>Renewal Date</Title>

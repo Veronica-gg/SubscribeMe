@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SingleDropDown from "../../../components/SingleDropDown";
 import MultiDropDown from "../../../components/MultiDropDown";
@@ -14,11 +14,16 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { Text } from "react-native-paper";
+import { HelperText } from "react-native-paper";
 import { functions } from "../../../utils/firebase";
 import { httpsCallable } from "firebase/functions";
-import SwitchOnOff from "../../../components/SwitchOnOff";
 import { useNavigation } from "@react-navigation/native";
+import {
+  addFieldsFilled,
+  validateCard,
+  validateCost,
+} from "../../../utils/utils";
+import SubmitButton from "../../../components/SubmitButton";
 
 export default function AddScreen(props) {
   const navigation = useNavigation();
@@ -26,9 +31,13 @@ export default function AddScreen(props) {
   const [customName, setCustomName] = useState("");
   const [type, setType] = useState("");
   const [customType, setCustomType] = useState("");
+  const [category, setCategory] = useState("");
   const [cost, setCost] = useState("");
+  const [isCostNotDigit, setIsCostDigit] = useState(false);
+  const [currency, setCurrency] = useState("");
   const [repeat, setRepeat] = useState("");
   const [card, setCard] = useState("");
+  const [isCardWrong, setIsCardWrong] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
@@ -48,64 +57,25 @@ export default function AddScreen(props) {
     { label: "Other", value: "other" },
   ];
   const nameList = [
-    {
-      label: "Netflix",
-      value: "netflix",
-    },
-    {
-      label: "Spotify",
-      value: "spotify",
-    },
-    {
-      label: "Amazon Prime",
-      value: "aprime",
-    },
-    {
-      label: "Apple",
-      value: "apple",
-    },
-    {
-      label: "Microsoft",
-      value: "microsoft",
-    },
-    {
-      label: "Other",
-      value: "other",
-    },
+    { label: "Netflix", value: "netflix" },
+    { label: "Spotify", value: "spotify" },
+    { label: "Amazon Prime", value: "aprime" },
+    { label: "Apple", value: "apple" },
+    { label: "Microsoft", value: "microsoft" },
+    { label: "Other", value: "other" },
   ];
 
   const typeList = [
-    {
-      label: "Personal",
-      value: "personal",
-    },
-    {
-      label: "Family",
-      value: "family",
-    },
-    {
-      label: "Student",
-      value: "student",
-    },
-    {
-      label: "Other",
-      value: "other",
-    },
+    { label: "Personal", value: "personal" },
+    { label: "Family", value: "family" },
+    { label: "Student", value: "student" },
+    { label: "Other", value: "other" },
   ];
 
   const friendsList = [
-    {
-      label: "Virginia",
-      value: "virginia",
-    },
-    {
-      label: "Aldo",
-      value: "aldo",
-    },
-    {
-      label: "Giovanna",
-      value: "giovanna",
-    },
+    { label: "Virginia", value: "virginia" },
+    { label: "Aldo", value: "aldo" },
+    { label: "Giovanna", value: "giovanna" },
   ];
 
   const repeatList = [
@@ -113,6 +83,12 @@ export default function AddScreen(props) {
     { label: "Month", value: "month" },
     { label: "Year", value: "year" },
     { label: "None", value: "none" },
+  ];
+
+  const currencyList = [
+    { label: "€", value: "eur" },
+    { label: "$", value: "usd" },
+    { label: "£", value: "gbp" },
   ];
 
   function saveSub(isEdit) {
@@ -160,7 +136,7 @@ export default function AddScreen(props) {
         }}
       >
         <ScrollView
-          style={{ flexGrow: 0.9, width: "100%" }}
+          style={{ flexGrow: 1, width: "100%" }}
           // contentContainerStyle={styles.contentContainer}
           // showsVerticalScrollIndicator={true}
           // persistentScrollbar={true}
@@ -213,37 +189,92 @@ export default function AddScreen(props) {
                 onChangeText={(text) => setCustomType(text)}
               />
             </View>
-            <SingleDropDown nameList={categoryList} labelID="Category" />
-            <View style={styles.inputView}>
-              <TextInput
-                autoCapitalize="none"
-                autoCorrect={false}
-                autoComplete="number"
-                keyboardType="numeric"
-                originalPlaceholder="Cost"
-                value={cost}
-                onChangeText={(text) => {
-                  setCost(text);
-                }}
-              />
+            <SingleDropDown
+              nameList={categoryList}
+              labelID="Category"
+              name={category}
+              setName={setCategory}
+            />
+            <View
+              style={[
+                styles.inputView,
+                {
+                  height: isCostNotDigit ? 80 : 60,
+                  width: "100%",
+                },
+              ]}
+            >
+              <View style={[styles.inputView, { marginBottom: 0 }]}>
+                <TextInput
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  autoComplete="number"
+                  keyboardType="numeric"
+                  originalPlaceholder="Cost"
+                  value={cost}
+                  error={isCostNotDigit}
+                  onChangeText={(text) => {
+                    setCost(text);
+                    // if (isCostDigit) {
+                    setIsCostDigit(!validateCost(text));
+                    // }
+                  }}
+                  onBlur={() => {
+                    cost.length > 0
+                      ? setIsCostDigit(!validateCost(cost))
+                      : setIsCostDigit(false);
+                  }}
+                />
+              </View>
+              <HelperText type="error" visible={isCostNotDigit}>
+                Cost must be provided in digits, with only 1 comma
+              </HelperText>
             </View>
+            <SingleDropDown
+              nameList={currencyList}
+              labelID="Currency"
+              name={currency}
+              setName={setCurrency}
+            />
             <SingleDropDown
               nameList={repeatList}
               labelID="Repeat every"
               name={repeat}
               setName={setRepeat}
             />
-            <View style={styles.inputView}>
-              <TextInput
-                autoCapitalize="none"
-                autoCorrect={false}
-                autoComplete="number"
-                keyboardType="numeric"
-                originalPlaceholder="Card's last 4 digits"
-                value={card}
-                onChangeText={(text) => setCard(text)}
-                maxLength={4}
-              />
+            <View
+              style={[
+                styles.inputView,
+                {
+                  height: isCardWrong ? 80 : 60,
+                  width: "100%",
+                },
+              ]}
+            >
+              <View style={[styles.inputView, { marginBottom: 0 }]}>
+                <TextInput
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  autoComplete="number"
+                  keyboardType="numeric"
+                  originalPlaceholder="Card's last 4 digits"
+                  value={card}
+                  error={isCardWrong}
+                  onChangeText={(text) => {
+                    setCard(text);
+                    setIsCardWrong(!validateCard(text));
+                  }}
+                  maxLength={4}
+                  onBlur={() => {
+                    card.length > 0
+                      ? setIsCardWrong(!validateCard(card))
+                      : setIsCardWrong(false);
+                  }}
+                />
+              </View>
+              <HelperText type="error" visible={isCardWrong}>
+                Must be exactly 4 digits
+              </HelperText>
             </View>
             <View
               style={{
@@ -260,18 +291,7 @@ export default function AddScreen(props) {
             <View style={styles.inputView}>
               <DatePick />
             </View>
-            <View
-              // style={{
-              //   marginTop: 20,
-              //   flex: 1,
-              //   flexDirection: "row",
-              //   alignItems: "center",
-              //   borderWidth: 1,
-              //   borderRadius: 16,
-              //   width: "90%",
-              // }}
-              style={styles.inputView}
-            >
+            <View style={styles.inputView}>
               <View
                 style={{
                   flex: 1,
@@ -288,10 +308,27 @@ export default function AddScreen(props) {
             </View>
           </KeyboardAvoidingView>
         </ScrollView>
-        <AddFAB
-          labelID="SAVE"
+        <SubmitButton
+          textID="SAVE"
           iconID="content-save-check-outline"
-          // style={{ width: "80%" }}
+          style={{
+            // flex: 1,
+            justifyContent: "flex-end",
+            marginTop: 5,
+          }}
+          disabled={
+            addFieldsFilled(
+              name,
+              type,
+              category,
+              cost,
+              currency,
+              repeat,
+              card
+            ) && !isCostNotDigit
+              ? false
+              : true
+          }
           onPressID={() => saveSub(isEdit)}
         />
       </SafeAreaView>

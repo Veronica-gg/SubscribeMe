@@ -22,11 +22,14 @@ import {
   validateEmail,
   correctRegistrationFields,
   minLength,
+  maxLength,
+  validateName,
 } from "../../utils/utils";
 
 export default function Register({ navigation }) {
   const [email, setEmail] = useState("");
   const [isEmailWrong, setIsEmailWrong] = useState(false);
+  const [isNameWrong, setIsNameWrong] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordTooShort, setPasswordTooShort] = useState(false);
   const [showPasswordStrength, setShowPasswordStrength] = useState(false);
@@ -62,12 +65,39 @@ export default function Register({ navigation }) {
           style={styles.image}
           source={require("../../../assets/subscription-model.png")}
         />
-        <View style={styles.inputView}>
-          <TextInput
-            originalPlaceholder="Name"
-            value={name}
-            onChangeText={(text) => setName(text)}
-          />
+        <View
+          style={[
+            styles.inputView,
+            {
+              height: name.length > maxLength || isNameWrong ? 80 : 60,
+              width: "100%",
+            },
+          ]}
+        >
+          <View style={[styles.inputView, { marginBottom: 0 }]}>
+            <TextInput
+              originalPlaceholder="Name"
+              value={name}
+              onChangeText={(text) => {
+                setName(text);
+                // if (isNameWrong) {
+                setIsNameWrong(!validateName(text));
+                // }
+              }}
+              error={name.length > maxLength || isNameWrong}
+              onBlur={() => {
+                name.length > 0
+                  ? setIsNameWrong(!validateName(name))
+                  : setIsNameWrong(false);
+              }}
+            />
+          </View>
+          <HelperText
+            type="error"
+            visible={name.length > maxLength || isNameWrong}
+          >
+            Name must be {"<"} 10 char and alphanumeric
+          </HelperText>
         </View>
         <View
           style={[
@@ -142,7 +172,9 @@ export default function Register({ navigation }) {
           onPressID={handleSignup}
           iconID="account-plus"
           disabled={
-            !correctRegistrationFields(name, email, password) || isEmailWrong
+            !correctRegistrationFields(name, email, password) ||
+            isEmailWrong ||
+            isNameWrong
           }
         ></SubmitButton>
         <LineButton

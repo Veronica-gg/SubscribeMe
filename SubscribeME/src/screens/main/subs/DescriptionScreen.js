@@ -48,6 +48,7 @@ export default function DescriptionScreen(props) {
     >
       <DetailCard
         price={props.route.params.price}
+        currency="PLACEHOLDER"
         date="PLACEHOLDER"
         type="PLACEHOLDER"
         friends="PLACEHOLDER"
