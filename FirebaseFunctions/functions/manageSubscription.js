@@ -63,18 +63,36 @@ function craftSubscriptionInfoResponse(sub) {
   return { id: sub.id, name: sub.name, price: sub.price, members: sub.members };
 }
 
+function parseInputSubData(sub, uid) {
+  let members = [];
+  for (const member of sub.members || []) {
+    members.push(member);
+  }
+  return {
+    name: sub.name || "other",
+    customName: sub.customName || "Unknown",
+    price: sub.price || 0,
+    currency: sub.currency || "eur",
+    owner: db.collection("users").doc(uid),
+    members: members,
+    renewalDate: sub.date || new Date(Date.now()).toDateString(),
+    renewalPeriod: sub.renewalPeriod || "none",
+    renewalEach: sub.renewalEach || 0,
+    category: sub.category || "other",
+    type: sub.type || "other",
+    customType: sub.customType || "Other",
+    card: sub.card || "0000",
+    autoRenewal: sub.autoRenewal || false,
+  };
+}
+
 exports.setNewSubscription = functions
   .region("europe-west1")
   .https.onCall((data, context) => {
     let uid = context.auth.uid;
     return db
       .collection("subscriptions")
-      .add({
-        name: data.name,
-        price: data.price,
-        owner: db.collection("users").doc(uid),
-        members: [db.collection("users").doc(uid)], // adding myself as member? For now useful to debug, then TODO
-      })
+      .add(parseInputSubData(data, uid))
       .then((ref) => {
         return db
           .collection("users")

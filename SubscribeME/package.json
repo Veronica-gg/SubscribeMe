@@ -46,7 +46,8 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "eslint-plugin-react-hooks": "^4.6.0"
   },
   "private": true
 }

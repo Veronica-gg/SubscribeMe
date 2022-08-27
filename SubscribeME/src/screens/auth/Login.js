@@ -12,17 +12,18 @@ import { correctLoginFields } from "../../utils/utils";
 import SubmitButton from "../../components/SubmitButton";
 import LineButton from "../../components/LineButton";
 import TextInput from "../../components/StyledTextInput";
+import { useSelector, useDispatch } from "react-redux";
+import { updateState } from "../../redux/stateUpdater";
 
 export default function Login({ navigation }) {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        // if (user) {
-        //   alert("Logged in!");
-        // }
+        updateState(dispatch);
       })
       .catch((error) => alert(error.message));
   };

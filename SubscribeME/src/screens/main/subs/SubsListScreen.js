@@ -9,7 +9,7 @@ import React from "react";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import { RefreshControl, FlatList, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { updateSubs } from "../../../redux/reducer";
+import { updateProfile, updateSubs } from "../../../redux/reducer";
 
 export default function SubsListScreen() {
   const subs = useSelector((state) => state.data.subs);

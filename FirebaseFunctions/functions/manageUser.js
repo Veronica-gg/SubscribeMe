@@ -7,10 +7,9 @@ exports.setName = functions
   .region("europe-west1")
   .https.onCall(async (data, context) => {
     let uid = context.auth.uid;
-    return db
-      .collection("users")
-      .doc(uid)
-      .set({ name: data.name }, { merge: true })
+    return admin
+      .auth()
+      .updateUser(uid, { displayName: data.name })
       .then(() => {
         return { message: "ok" };
       })
@@ -157,40 +156,55 @@ exports.getFriendsData = functions // function to get list of friends, requests 
   .region("europe-west1")
   .https.onCall((data, context) => {
     let uid = context.auth.uid;
-    const subs = asyncGetFriends(uid, data.requestType);
-    return subs.then((res) => {
-      if (res === -1) return { message: "errorGetFriends", friends: [] };
+    const friendsDict = asyncGetFriends(uid);
+    return friendsDict.then(async (res) => {
+      if (res === -1)
+        return {
+          message: "errorGetFriends",
+          friends: [],
+          pendingFriendsRecv: [],
+          pendingFriendsSent: [],
+        };
       else {
-        return this.getUsersInfo(res).then((queryResult) => {
-          return queryResult;
-        });
+        const friends = await this.getUsersInfo(res.friends);
+        const pendingFriendsRecv = await this.getUsersInfo(
+          res.pendingFriendsRecv
+        );
+        const pendingFriendsSent = await this.getUsersInfo(
+          res.pendingFriendsSent
+        );
+        return {
+          message:
+            friends.message != "ok" ||
+            pendingFriendsRecv.message != "ok" ||
+            pendingFriendsSent.message != "ok"
+              ? "errorGetFriendsInfo"
+              : "ok",
+          friends: friends.users,
+          pendingFriendsRecv: pendingFriendsRecv.users,
+          pendingFriendsSent: pendingFriendsSent.users,
+        };
       }
     });
   });
 
-async function asyncGetFriends(uid, friendType) {
-  if (
-    !(
-      friendType === "friends" ||
-      friendType === "pendingFriendsRecv" ||
-      friendType === "pendingFriendsSent"
-    )
-  )
-    return -1;
+async function asyncGetFriends(uid) {
   return await db
     .collection("users")
     .doc(uid)
     .get()
-    .then((subs) => {
-      if (subs.exists) {
-        if (friendType === "friends") return subs.data().friends;
-        else if (friendType === "pendingFriendsRecv")
-          return subs.data().pendingFriendsRecv;
-        else if (friendType === "pendingFriendsSent")
-          return subs.data().pendingFriendsSent;
+    .then((record) => {
+      if (record.exists) {
+        return {
+          friends: record.data().friends || [],
+          pendingFriendsRecv: record.data().pendingFriendsRecv || [],
+          pendingFriendsSent: record.data().pendingFriendsSent || [],
+        };
       } else {
         return -1;
       }
+    })
+    .catch(() => {
       return -1;
     });
 }
@@ -201,15 +215,18 @@ exports.getUsersInfo = async function getUsersInfo(users) {
   let error = false;
   for (const user of users) {
     let getError = false;
-    const userInfo = await user.get().catch(() => {
-      getError = true;
-      error = true;
-    });
-    if (!getError && userInfo.exists) {
+    const userInfo = await admin
+      .auth()
+      .getUser(user.id)
+      .catch(() => {
+        getError = true;
+        error = true;
+      });
+    if (!getError) {
       infos.push({
-        name: userInfo.data().name,
-        email: userInfo.data().email,
-        id: userInfo.id,
+        name: userInfo.displayName,
+        email: userInfo.email,
+        id: userInfo.uid,
       });
     } else {
       error = true;
@@ -217,3 +234,10 @@ exports.getUsersInfo = async function getUsersInfo(users) {
   }
   return { message: error ? "errorFetchingUsers" : "ok", users: infos };
 };
+
+exports.getCurrentUserInfo = functions
+  .region("europe-west1")
+  .https.onCall((data, context) => {
+    let uid = context.auth.uid;
+    return this.getUsersInfo([db.collection("users").doc(uid)]);
+  });

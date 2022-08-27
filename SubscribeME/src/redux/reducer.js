@@ -5,6 +5,8 @@ const initialState = {
   email: "",
   subs: [],
   friends: [],
+  pendingFriendsRecv: [],
+  pendingFriendsSent: [],
 };
 
 const stateSlice = createSlice({
@@ -16,6 +18,8 @@ const stateSlice = createSlice({
     },
     updateFriends: (state, action) => {
       state.friends = action.payload.friends;
+      state.pendingFriendsRecv = action.payload.pendingFriendsRecv;
+      state.pendingFriendsSent = action.payload.pendingFriendsSent;
     },
     updateProfile: (state, action) => {
       state.name = action.payload.name;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { auth } from "../../utils/firebase";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -7,24 +7,35 @@ import Register from "../auth/Register";
 import Root from "./MainRoot";
 import LoadingScreen from "../LoadingScreen";
 import { StyleSheet } from "react-native";
-import { defaultTheme, darkTheme } from "../../../assets/theme";
+import { defaultTheme } from "../../../assets/theme";
+import { useDispatch } from "react-redux";
+import { updateState } from "../../redux/stateUpdater";
 
 const Stack = createNativeStackNavigator();
 const theme = defaultTheme;
 
 export default function AuthRoot() {
+  const dispatch = useDispatch();
   const [loaded, setLoaded] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      setSignedIn(true);
-    } else {
-      setSignedIn(false);
-    }
-    if (!loaded) {
-      setLoaded(true);
-    }
-  });
+
+  React.useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setSignedIn(true);
+      } else {
+        setSignedIn(false);
+      }
+      if (!loaded) {
+        if (user) {
+          updateState(dispatch, true, true, false);
+        }
+        setLoaded(true);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
   if (!loaded) {
     return <LoadingScreen />;
   } else {
