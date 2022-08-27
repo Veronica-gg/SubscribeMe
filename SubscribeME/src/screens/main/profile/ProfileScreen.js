@@ -20,6 +20,8 @@ export default function ProfileScreen() {
   const { colors } = useTheme();
   const navigation = useNavigation();
 
+  const [logoutHeight, setLogoutHeight] = useState(0);
+
   const [expandedAdd, setExpandedAdd] = useState(false);
   const handleAddPress = () => setExpandedAdd(!expandedAdd);
 
@@ -60,6 +62,8 @@ export default function ProfileScreen() {
           width: "100%",
         }}
         contentContainerStyle={styles.contentContainer}
+        automaticallyAdjustKeyboardInsets
+        keyboardShouldPersistTaps="handled"
       >
         <Surface style={styles.surf}>
           <Text style={[styles.title, { marginBottom: 10 }]}>
@@ -125,7 +129,7 @@ export default function ProfileScreen() {
             }}
           />
         </Surface>
-        <Surface style={styles.surf}>
+        <Surface style={{ ...styles.surf, marginBottom: logoutHeight * 1.2 }}>
           <Text style={[styles.title, { marginBottom: 10 }]}>
             Profile Settings
           </Text>
@@ -296,6 +300,9 @@ export default function ProfileScreen() {
           width: "100%",
           alignItems: "center",
           backgroundColor: "transparent",
+        }}
+        onLayout={(e) => {
+          setLogoutHeight(e.nativeEvent.layout.height);
         }}
       >
         <SubmitButton
