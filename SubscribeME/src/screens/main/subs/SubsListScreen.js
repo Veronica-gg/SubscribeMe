@@ -2,14 +2,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import SubsItem from "../../../components/SubsItem";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import AddFAB from "../../../components/AddFAB";
-import { functions } from "../../../utils/firebase";
-import { httpsCallable } from "firebase/functions";
 import { useEffect, useState } from "react";
 import React from "react";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import { RefreshControl, FlatList, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { updateProfile, updateSubs } from "../../../redux/reducer";
+import { updateState } from "../../../redux/stateUpdater";
 
 export default function SubsListScreen() {
   const subs = useSelector((state) => state.data.subs);
@@ -19,55 +17,49 @@ export default function SubsListScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [tryAgain, setTryAgain] = useState(false);
+  const isFocused = useIsFocused();
+
+  const tryAgainAlert = () =>
+    Alert.alert("Error", "Could not fetch data. Check your connection.", [
+      { text: "Dismiss", style: "cancel" },
+      {
+        text: "Try Again",
+        onPress: () => {
+          setTryAgain(!tryAgain);
+        },
+      },
+    ]);
 
   const onRefresh = React.useCallback(() => {
     // Manages pull to refresh
     setRefreshing(true);
     setLoading(false);
-    getSubs().then(() => setRefreshing(false));
+    updateState(dispatch, true, false, false).subs.then((promise) => {
+      setRefreshing(false);
+    });
   }, []);
 
-  function getSubs() {
-    // Async call to remote subscriptions
-    const fun = httpsCallable(
-      functions,
-      "manageSubscription-getUserSubscription"
-    );
-    return fun()
-      .then((v) => {
-        console.log(v.data);
-        if (v.data.message != "ok");
-        //TODO manage if no subs available and/or show error message
-        dispatch(updateSubs({ subs: v.data.subs }));
-      })
-      .catch(() => {
-        Alert.alert("Error", "Could not fetch data. Check your connection.", [
-          { text: "Dismiss", style: "cancel" },
-          {
-            text: "Try Again",
-            onPress: () => setTryAgain(!tryAgain),
-          },
-        ]);
-      });
-  }
   useEffect(() => {
     // Manages first call of update and further calls on tryAgain press
-    console.log("ACTIVE");
+    if (!isFocused) return;
     let isMounted = true;
     if (isMounted) {
-      setLoading(true);
-      getSubs()
-        .then(() => {
-          setLoading(false);
-        })
-        .catch((e) => console.log(e));
+      setLoading(tryAgain || subs.length === 0);
+      const updatePromise = updateState(dispatch, true, false, false).subs;
+      if (updatePromise)
+        updatePromise
+          .then((res) => {
+            if (res.message != "ok" && subs.length === 0) {
+              tryAgainAlert();
+            }
+            setLoading(false);
+          })
+          .catch((e) => console.log(e));
     }
     return () => {
       isMounted = false;
     };
-  }, [tryAgain]);
-
-  //TODO -- add use useIsFocused to check if refresh is needed
+  }, [tryAgain || isFocused]);
 
   function renderItem({ item }) {
     return (
@@ -135,30 +127,3 @@ export default function SubsListScreen() {
     </SafeAreaView>
   );
 }
-
-const r = () => {
-  <>
-    {renderedSubs}
-    <SubsItem
-      tit="NETFLIX"
-      des="Family plan"
-      iconID="netflix"
-      dateID="numeric-5-circle"
-      category="rgba(255, 148, 40, 0.7)"
-      onPressID={() => {
-        getSubs();
-        //navigation.navigate("Description", { name: "NETFLIX" });
-      }}
-    />
-    <SubsItem
-      tit="SPOTIFY"
-      des="Student plan"
-      iconID="spotify"
-      dateID="numeric-7-circle"
-      category="rgba(202, 77, 87, 0.7)"
-      onPressID={() => {
-        navigation.navigate("Description", { name: "SPOTIFY" });
-      }}
-    />
-  </>;
-};
