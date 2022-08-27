@@ -13,6 +13,7 @@ export default function SubsListRoot() {
       initialRouteName="Profile"
       screenOptions={{
         headerTitleAlign: "center",
+        headerShown: false,
       }}
     >
       <Stack.Screen name="Profile" component={ProfileScreen} />

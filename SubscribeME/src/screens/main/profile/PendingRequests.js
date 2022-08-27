@@ -46,7 +46,7 @@ export default function PendingRequests() {
   }
 
   return (
-    <SafeAreaView edges={["left", "right"]} style={styles.safe}>
+    <SafeAreaView edges={["left", "right", "top"]} style={styles.safe}>
       <SectionList
         fadingEdgeLength={"5%"}
         contentContainerStyle={{

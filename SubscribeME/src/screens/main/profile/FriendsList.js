@@ -36,7 +36,7 @@ export default function FriendsListPage() {
     );
   }
   return (
-    <SafeAreaView edges={["left", "right"]} style={styles.safe}>
+    <SafeAreaView edges={["left", "right", "top"]} style={styles.safe}>
       <FlatList
         fadingEdgeLength={"5%"}
         contentContainerStyle={{

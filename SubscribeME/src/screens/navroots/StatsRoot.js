@@ -10,6 +10,7 @@ export default function SubsListRoot() {
       initialRouteName="StatsScreen"
       screenOptions={{
         headerTitleAlign: "center",
+        headerShown: false,
       }}
     >
       <Stack.Screen

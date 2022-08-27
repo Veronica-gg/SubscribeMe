@@ -65,7 +65,7 @@ export default function StatsScreen() {
 
   return (
     <SafeAreaView
-      edges={["left", "right"]}
+      edges={["left", "right", "top"]}
       style={{
         flex: 1,
         justifyContent: "top",
@@ -79,27 +79,44 @@ export default function StatsScreen() {
           justifyContent: "top",
           alignItems: "center",
         }}
-        // showsVerticalScrollIndicator={true}
-        // persistentScrollbar={true}
       >
-        <Surface style={styles.surf}>
-          <Text style={styles.title}>Your Category Shares</Text>
-          <View>
-            <PieCategory data={chartData} accessor="total" absolute={false} />
-          </View>
-        </Surface>
-
-        <Surface
-          style={[
-            styles.surf,
-            { backgroundColor: "#CA4D57", paddingBottom: 0 },
-          ]}
+        <View
+          style={{
+            textAlign: "left",
+            alignItems: "flex-start",
+            justifyContent: "flex-start",
+            flexDirection: "row",
+            width: "100%",
+          }}
         >
-          <Text style={[styles.title, { color: "#FFF9F3" }]}>
-            $$ for each category
-          </Text>
-          <BarChartPrice data={data} />
-        </Surface>
+          <Text style={styles.mainTitle}>Statistics</Text>
+        </View>
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%",
+          }}
+        >
+          <Surface style={styles.surf}>
+            <Text style={styles.title}>Your Category Shares</Text>
+            <View>
+              <PieCategory data={chartData} accessor="total" absolute={false} />
+            </View>
+          </Surface>
+
+          <Surface
+            style={[
+              styles.surf,
+              { backgroundColor: "#CA4D57", paddingBottom: 0 },
+            ]}
+          >
+            <Text style={[styles.title, { color: "#FFF9F3" }]}>
+              $$ for each category
+            </Text>
+            <BarChartPrice data={data} />
+          </Surface>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -110,6 +127,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontWeight: "bold",
   },
+  mainTitle: {
+    textAlign: "left",
+    fontSize: 30,
+    margin: 20,
+  },
   surf: {
     justifyContent: "center",
     alignItems: "center",
@@ -119,8 +141,5 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingBottom: 20,
     backgroundColor: "rgba(48, 152, 255, 0.4)",
-    // backgroundGradientFrom: "#3098FF",
-    // backgroundGradientTo: "#3E3384",
-    // color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
   },
 });

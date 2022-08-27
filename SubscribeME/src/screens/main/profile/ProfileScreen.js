@@ -72,7 +72,7 @@ export default function ProfileScreen() {
   }
   return (
     <SafeAreaView
-      edges={["left", "right"]}
+      edges={["left", "right", "top"]}
       style={{
         flex: 1,
         justifyContent: "top",

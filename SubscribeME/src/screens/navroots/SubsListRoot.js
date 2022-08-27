@@ -23,12 +23,15 @@ export default function SubsListRoot() {
       <Stack.Screen
         name="Description"
         component={DescriptionScreen}
-        options={({ route }) => ({ title: route.params.customName })}
+        options={({ route }) => ({
+          title: route.params.customName,
+          headerShown: true,
+        })}
       />
       <Stack.Screen
         name="Add"
         component={AddScreen}
-        options={{ title: "Add New Subscription" }}
+        options={{ title: "Add New Subscription", headerShown: true }}
       />
     </Stack.Navigator>
   );
