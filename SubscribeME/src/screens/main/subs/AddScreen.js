@@ -19,16 +19,19 @@ import {
   categoryList,
   nameList,
   typeList,
-  friendsList,
   repeatList,
   currencyList,
 } from "./defaultSubValue";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from "react-native-paper";
+import { useSelector } from "react-redux";
 
 export default function AddScreen(props) {
   const { colors } = useTheme();
   const navigation = useNavigation();
+
+  const friendsList = useSelector((state) => state.data.friends);
+
   const [name, setName] = useState("");
   const [customName, setCustomName] = useState("");
   const [type, setType] = useState("");

@@ -2,20 +2,24 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const { FieldValue } = require("firebase/firestore");
 const db = admin.firestore();
+const maxLength = 10;
 
 exports.setName = functions
   .region("europe-west1")
   .https.onCall(async (data, context) => {
     let uid = context.auth.uid;
+    let name = data.name;
+    if (name.length === 0 || name.length > maxLength || !name.match(/^\w+$/))
+      name = "User";
     return admin
       .auth()
-      .updateUser(uid, { displayName: data.name })
+      .updateUser(uid, { displayName: name })
       .then((v) => {
         return { message: "ok", user: { name: v.displayName, email: v.email } };
       })
       .catch(() => {
         return { message: "error", user: { name: "User", email: "" } };
-      }); //TODO -- check name validity
+      });
   });
 
 // the idea is that first we add a friend, and then the other must accept. Do we need other parameters?
@@ -38,10 +42,14 @@ exports.addFriendRequest = functions
       error = true;
     });
     if (error) return { message: "errorInternal" };
-    if (uidLoadedDoc.data().friends.find((el) => el.isEqual(friendDoc))) {
+    if (
+      !uidLoadedDoc.data().friends ||
+      uidLoadedDoc.data().friends.find((el) => el.isEqual(friendDoc))
+    ) {
       return { message: "errorAlreadyFriend" };
     }
     if (
+      !uidLoadedDoc.data().pendingFriendsRecv ||
       uidLoadedDoc.data().pendingFriendsRecv.find((el) => el.isEqual(friendDoc))
     ) {
       return answerFriendRequestAsync(
@@ -85,6 +93,8 @@ async function answerFriendRequestAsync(data, context) {
     return { message: "errorInternalFriendUid" };
   });
   if (
+    !uidLoadedDoc.data().pendingFriendsRecv ||
+    !friendReqLoadedDoc.data().pendingFriendsSent ||
     !(
       uidLoadedDoc
         .data()

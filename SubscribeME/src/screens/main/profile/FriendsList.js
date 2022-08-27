@@ -1,22 +1,34 @@
-import React from "react";
-import { StyleSheet, FlatList, SafeAreaView, View } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  FlatList,
+  SafeAreaView,
+  View,
+  RefreshControl,
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import PaperTextInput from "../../../components/StyledTextInput";
+import { updateState } from "../../../redux/stateUpdater";
 
 export default function FriendsListPage() {
-  const friends = [
-    {
-      id: "01",
-      title: "First Item",
-    },
-    { id: "02", title: "Second" },
-    { id: "03", title: "Third" },
-  ];
+  const friends = useSelector((state) => state.data.friends);
+  const dispatch = useDispatch();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    // Manages pull to refresh
+    setRefreshing(true);
+    updateState(dispatch, false, true, true).friends.then((promise) => {
+      setRefreshing(false);
+    });
+  }, []);
+
   function renderItem({ item }) {
     return (
       <View style={styles.inputView}>
         <PaperTextInput
           disabled={true}
-          value={"Friend1"}
+          value={item.name}
           isFriend
           style={{ width: "90%" }}
         />
@@ -38,9 +50,9 @@ export default function FriendsListPage() {
         }}
         data={friends}
         renderItem={renderItem}
-        // refreshControl={
-        //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        // }
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </SafeAreaView>
   );

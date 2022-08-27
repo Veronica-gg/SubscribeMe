@@ -1,15 +1,17 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import SubmitButton from "../../../components/SubmitButton";
-import { useState } from "react";
-import { StyleSheet, View, ScrollView, Alert } from "react-native";
+import { useEffect, useState } from "react";
+import { StyleSheet, View, ScrollView, Alert, Keyboard } from "react-native";
 import { auth, functions } from "../../../utils/firebase";
 import { httpsCallable } from "firebase/functions";
 import { List, Surface, Text, useTheme } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import PaperTextInput from "../../../components/StyledTextInput";
 import { LinearGradient } from "expo-linear-gradient";
 import PasswordStrengthBar from "../../../components/PasswordStrengthBar";
 import { minLength } from "../../../utils/utils";
+import { updateState } from "../../../redux/stateUpdater";
+import { useDispatch } from "react-redux";
 
 function logout() {
   auth
@@ -21,6 +23,13 @@ function logout() {
 export default function ProfileScreen() {
   const { colors } = useTheme();
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (!isFocused) return;
+    updateState(dispatch, false, true, true);
+  }, [isFocused]);
 
   const [logoutHeight, setLogoutHeight] = useState(0);
 
@@ -136,6 +145,7 @@ export default function ProfileScreen() {
                       "You have successfully sent a request to add a friend.",
                       [{ text: "OK", onPress: () => {} }]
                     );
+                    Keyboard.dismiss();
                   }}
                   textID="ADD FRIEND"
                   iconID="account-multiple-plus"

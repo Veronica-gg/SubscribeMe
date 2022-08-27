@@ -13,7 +13,7 @@ exports.getUserSubscription = functions
     return subs.then((res) => {
       if (res === -1) return { message: "errorGetUserSubs", subs: [] };
       else {
-        return getSubscriptionsInfo(res).then((queryResult) => {
+        return getSubscriptionsInfo(res, uid).then((queryResult) => {
           return queryResult;
         });
       }
@@ -34,7 +34,7 @@ async function asyncGetUserSubs(uid) {
     });
 }
 
-async function getSubscriptionsInfo(subs) {
+async function getSubscriptionsInfo(subs, uid) {
   let infos = [];
   let error = false;
   for (const sub of subs) {
@@ -46,11 +46,14 @@ async function getSubscriptionsInfo(subs) {
     if (!getError && subInfo.exists) {
       let membersInfo = await getUsersInfo(subInfo.data().members);
       infos.push(
-        craftSubscriptionInfoResponse({
-          ...subInfo.data(),
-          id: subInfo.id,
-          members: membersInfo,
-        })
+        craftSubscriptionInfoResponse(
+          {
+            ...subInfo.data(),
+            id: subInfo.id,
+            members: membersInfo,
+          },
+          uid
+        )
       );
     } else {
       error = true;
@@ -59,8 +62,23 @@ async function getSubscriptionsInfo(subs) {
   return { message: error ? "fetchingSubError" : "ok", subs: infos };
 }
 
-function craftSubscriptionInfoResponse(sub) {
-  return { id: sub.id, name: sub.name, price: sub.price, members: sub.members };
+function craftSubscriptionInfoResponse(sub, uid) {
+  return {
+    id: sub.id,
+    autoRenewal: sub.autoRenewal,
+    card: sub.card,
+    category: sub.category,
+    currency: sub.currency,
+    customName: sub.customName,
+    customType: sub.customType,
+    name: sub.name,
+    owner: sub.owner.id === uid,
+    price: sub.price,
+    renewalDate: sub.renewalDate,
+    renewalEach: sub.renewalEach,
+    renewalPeriod: sub.renewalPeriod,
+    type: sub.type,
+  };
 }
 
 function parseInputSubData(sub, uid) {
@@ -114,7 +132,7 @@ exports.editSubscription = functions
   .region("europe-west1")
   .https.onCall((data, context) => {
     const uid = context.auth.uid;
-    const subscription = db.collection("subscriptions").doc(data.id);
+    const subscription = db.collection("subscriptions").doc(data.id); // TODO -- check owner
     return subscription
       .set(
         {
@@ -131,11 +149,14 @@ exports.editSubscription = functions
           .then(async (res) => {
             if (res.exists) {
               let membersInfo = await getUsersInfo(res.data().members);
-              let subCrafted = craftSubscriptionInfoResponse({
-                ...res.data(),
-                id: res.id,
-                members: membersInfo,
-              });
+              let subCrafted = craftSubscriptionInfoResponse(
+                {
+                  ...res.data(),
+                  id: res.id,
+                  members: membersInfo,
+                },
+                uid
+              );
               return { message: "ok", subs: subCrafted };
             } else return { message: "errorCouldNotEdit" };
           })
