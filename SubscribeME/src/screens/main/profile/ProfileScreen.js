@@ -4,12 +4,17 @@ import { useState } from "react";
 import { StyleSheet, View, ScrollView, Alert } from "react-native";
 import { auth, functions } from "../../../utils/firebase";
 import { httpsCallable } from "firebase/functions";
-import { List, Surface, Text, useTheme } from "react-native-paper";
+import { List, Surface, Text, useTheme, HelperText } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import PaperTextInput from "../../../components/StyledTextInput";
 import { LinearGradient } from "expo-linear-gradient";
 import PasswordStrengthBar from "../../../components/PasswordStrengthBar";
-import { minLength } from "../../../utils/utils";
+import {
+  maxLength,
+  minLength,
+  validateEmail,
+  validateName,
+} from "../../../utils/utils";
 
 function logout() {
   auth
@@ -27,9 +32,6 @@ export default function ProfileScreen() {
   const [expandedAdd, setExpandedAdd] = useState(false);
   const handleAddPress = () => setExpandedAdd(!expandedAdd);
 
-  const [expandedReq, setExpandedReq] = useState(false);
-  const handleReqPress = () => setExpandedAdd(!expandedReq);
-
   const [expandedName, setExpandedName] = useState(false);
   const handleNamePress = () => setExpandedName(!expandedName);
 
@@ -41,7 +43,11 @@ export default function ProfileScreen() {
 
   const oldEmail = "PLACEHOLDER";
   const [newEmail, setNewEmail] = useState("");
+  const [isEmailWrong, setIsEmailWrong] = useState(false);
+  const [isFriendEmailWrong, setIsFriendEmailWrong] = useState(false);
   const [newName, setNewName] = useState("");
+  const [isNameWrong, setIsNameWrong] = useState(false);
+  const [pwd, setPwd] = useState("");
   const [oldPwd, setOldPwd] = useState("");
   const [newPwd, setNewPwd] = useState("");
   const [passwordTooShort, setPasswordTooShort] = useState(false);
@@ -112,15 +118,26 @@ export default function ProfileScreen() {
                 ]}
               >
                 <Text style={styles.title}>Insert Friend's e-mail</Text>
-                <View style={styles.inputView}>
+                <View style={[styles.inputView, { marginBottom: 0 }]}>
                   <PaperTextInput
                     autoCapitalize="none"
                     autoCorrect={false}
                     autoComplete="email"
                     keyboardType="email-address"
-                    originalPlaceholder="Your friend's e-mail"
+                    originalPlaceholder="Your friend's E-mail"
                     value={friendEmail}
-                    onChangeText={(text) => setFriendEmail(text)}
+                    error={isFriendEmailWrong}
+                    onChangeText={(text) => {
+                      setFriendEmail(text);
+                      if (isFriendEmailWrong) {
+                        setIsFriendEmailWrong(!validateEmail(text));
+                      }
+                    }}
+                    onBlur={() => {
+                      friendEmail.length > 0
+                        ? setIsFriendEmailWrong(!validateEmail(friendEmail))
+                        : setIsFriendEmailWrong(false);
+                    }}
                     theme={{
                       colors: {
                         background: colors.profileCard,
@@ -128,6 +145,9 @@ export default function ProfileScreen() {
                     }}
                   />
                 </View>
+                <HelperText type="error" visible={isFriendEmailWrong}>
+                  Wrong e-mail format
+                </HelperText>
                 <SubmitButton
                   onPressID={() => {
                     addFriend();
@@ -140,6 +160,7 @@ export default function ProfileScreen() {
                   textID="ADD FRIEND"
                   iconID="account-multiple-plus"
                   style={styles.submit}
+                  disabled={isFriendEmailWrong || friendEmail.length == 0}
                 />
               </Surface>
             </List.Accordion>
@@ -207,14 +228,22 @@ export default function ProfileScreen() {
                 ]}
               >
                 <Text style={styles.title}>Insert updated name</Text>
-                <View style={styles.inputView}>
+                <View style={[styles.inputView, { marginBottom: 0 }]}>
                   <PaperTextInput
-                    // autoCapitalize="none"
-                    autoCorrect={false}
                     originalPlaceholder="Updated Name"
-                    // backgroundColor="transparent"
                     value={newName}
-                    onChangeText={(text) => setNewName(text)}
+                    onChangeText={(text) => {
+                      setNewName(text);
+                      // if (isNameWrong) {
+                      setIsNameWrong(!validateName(text));
+                      // }
+                    }}
+                    error={newName.length > maxLength || isNameWrong}
+                    onBlur={() => {
+                      newName.length > 0
+                        ? setIsNameWrong(!validateName(newName))
+                        : setIsNameWrong(false);
+                    }}
                     theme={{
                       colors: {
                         background: colors.profileCard,
@@ -222,6 +251,12 @@ export default function ProfileScreen() {
                     }}
                   />
                 </View>
+                <HelperText
+                  type="error"
+                  visible={newName.length > maxLength || isNameWrong}
+                >
+                  Name must be {"<"} 10 char and alphanumeric
+                </HelperText>
                 <SubmitButton
                   onPressID={() => {
                     // addFriend();
@@ -234,6 +269,11 @@ export default function ProfileScreen() {
                   textID="SAVE NEW NAME"
                   iconID="account-check"
                   style={styles.submit}
+                  disabled={
+                    newName.length == 0 ||
+                    newName.length > maxLength ||
+                    isNameWrong
+                  }
                 />
               </Surface>
             </List.Accordion>
@@ -287,16 +327,26 @@ export default function ProfileScreen() {
                   />
                 </View>
                 <Text style={styles.title}>Insert updated e-mail</Text>
-                <View style={styles.inputView}>
+                <View style={[styles.inputView, { marginBottom: 0 }]}>
                   <PaperTextInput
                     autoCapitalize="none"
                     autoCorrect={false}
                     autoComplete="email"
                     keyboardType="email-address"
                     originalPlaceholder="Updated E-mail"
-                    // backgroundColor="transparent"
                     value={newEmail}
-                    onChangeText={(text) => setNewEmail(text)}
+                    error={isEmailWrong}
+                    onChangeText={(text) => {
+                      setNewEmail(text);
+                      if (isEmailWrong) {
+                        setIsEmailWrong(!validateEmail(text));
+                      }
+                    }}
+                    onBlur={() => {
+                      newEmail.length > 0
+                        ? setIsEmailWrong(!validateEmail(newEmail))
+                        : setIsEmailWrong(false);
+                    }}
                     theme={{
                       colors: {
                         background: colors.profileCard,
@@ -304,6 +354,9 @@ export default function ProfileScreen() {
                     }}
                   />
                 </View>
+                <HelperText type="error" visible={isEmailWrong}>
+                  Wrong e-mail format
+                </HelperText>
                 <Text style={styles.title}>Insert password</Text>
                 <View style={styles.inputView}>
                   <PaperTextInput
@@ -311,9 +364,9 @@ export default function ProfileScreen() {
                     autoCorrect={false}
                     originalPlaceholder="Password"
                     // backgroundColor="transparent"
-                    value={oldPwd}
+                    value={pwd}
                     isPassword
-                    onChangeText={(text) => setOldPwd(text)}
+                    onChangeText={(text) => setPwd(text)}
                     theme={{
                       colors: {
                         background: colors.profileCard,
@@ -328,6 +381,11 @@ export default function ProfileScreen() {
                   textID="SAVE NEW E-MAIL"
                   iconID="email-check"
                   style={styles.submit}
+                  disabled={
+                    isEmailWrong ||
+                    newEmail.length == 0 ||
+                    pwd.length < minLength
+                  }
                 />
               </Surface>
             </List.Accordion>
@@ -513,7 +571,11 @@ const styles = StyleSheet.create({
   accordion: {
     width: "100%",
   },
-  submit: { justifyContent: "top", marginTop: 0, width: "90%" },
+  submit: {
+    alignItems: "center",
+    marginTop: 0,
+    width: "90%",
+  },
 
   PasswordStrengthBar: {
     width: "90%",

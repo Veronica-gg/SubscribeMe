@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, FlatList, SafeAreaView, View } from "react-native";
-import PaperTextInput from "../../../components/StyledTextInput";
+import TextInput from "../../../components/StyledTextInput";
 
 export default function FriendsListPage() {
   const friends = [
@@ -14,7 +14,7 @@ export default function FriendsListPage() {
   function renderItem({ item }) {
     return (
       <View style={styles.inputView}>
-        <PaperTextInput
+        <TextInput
           disabled={true}
           value={"Friend1"}
           isFriend

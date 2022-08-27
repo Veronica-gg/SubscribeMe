@@ -101,7 +101,7 @@ export default function AddScreen(props) {
         style={{ width: "100%" }}
         contentContainerStyle={styles.contentContainer}
         automaticallyAdjustKeyboardInsets
-        keyboardShouldPersistTaps="handled"
+        // keyboardShouldPersistTaps="handled"
       >
         <SingleDropDown
           nameList={nameList}

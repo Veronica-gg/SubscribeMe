@@ -1,10 +1,11 @@
 import * as React from "react";
 import { Card, Title, Paragraph, useTheme } from "react-native-paper";
-import { StyleSheet, View } from "react-native";
-import AddFAB from "./AddFAB";
+import { Alert, StyleSheet, View } from "react-native";
+import SubmitButton from "./SubmitButton";
 
 export default function DetailCard(props) {
   const { colors } = useTheme();
+  const notOwner = true;
   return (
     <Card
       style={[
@@ -53,15 +54,38 @@ export default function DetailCard(props) {
       </Card.Content>
       <Card.Actions>
         <View style={styles.row}>
-          <AddFAB
-            labelID="EDIT"
+          <SubmitButton
+            textID="EDIT"
             iconID="circle-edit-outline"
-            onPressID={props.onEdit}
+            onPressID={() => {
+              notOwner
+                ? Alert.alert(
+                    "Cannot edit subscription",
+                    "You cannot edit the subscription, since you are not the owner.",
+                    [{ text: "OK", onPress: () => {} }]
+                  )
+                : props.onEdit;
+            }}
+            style={{
+              width: "50%",
+              position: "absolute",
+              right: 0,
+              bottom: -10,
+              backgroundColor: notOwner
+                ? colors.primary + "30"
+                : colors.primary,
+            }}
           />
-          <AddFAB
-            labelID="DELETE"
+          <SubmitButton
+            textID="DELETE"
             iconID="delete"
-            style={{ left: 0, backgroundColor: "#CA4D57" }}
+            style={{
+              width: "50%",
+              position: "absolute",
+              left: 0,
+              bottom: -10,
+              backgroundColor: colors.secondary,
+            }}
             onPressID={props.onDelete}
           />
         </View>
@@ -82,5 +106,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 10,
+    marginTop: 10,
+    marginBottom: 0,
   },
 });

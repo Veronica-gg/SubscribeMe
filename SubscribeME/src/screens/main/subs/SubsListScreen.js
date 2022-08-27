@@ -1,18 +1,19 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import SubsItem from "../../../components/SubsItem";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
-import AddFAB from "../../../components/AddFAB";
-import { useEffect, useState } from "react";
-import React from "react";
+import { useEffect, useState, useCallback } from "react";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 import { RefreshControl, FlatList, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { updateState } from "../../../redux/stateUpdater";
+import { useTheme } from "react-native-paper";
+import SubmitButton from "../../../components/SubmitButton";
 
 export default function SubsListScreen() {
   const subs = useSelector((state) => state.data.subs);
   const dispatch = useDispatch();
 
+  const { colors } = useTheme();
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -30,7 +31,7 @@ export default function SubsListScreen() {
       },
     ]);
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = useCallback(() => {
     // Manages pull to refresh
     setRefreshing(true);
     setLoading(false);
@@ -110,11 +111,16 @@ export default function SubsListScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       />
-      <AddFAB
-        style={{ position: "relative", width: "80%" }}
+      <SubmitButton
+        style={{
+          // flex: 1,
+          justifyContent: "flex-end",
+          backgroundColor: colors.primary,
+          marginTop: 0,
+        }}
         iconID="plus-circle-multiple-outline"
-        labelID="ADD NEW"
-        margin="16"
+        textID="ADD NEW"
+        // margin="16"
         onPressID={() => {
           navigation.navigate("Add");
         }}
