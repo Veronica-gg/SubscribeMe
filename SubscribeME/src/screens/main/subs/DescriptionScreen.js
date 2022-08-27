@@ -8,6 +8,12 @@ import { Alert } from "react-native";
 export default function DescriptionScreen(props) {
   const navigation = useNavigation();
 
+  const currencySymbol = {
+    eur: "€",
+    usd: "$",
+    gbp: "£",
+  };
+
   function deleteSub(id) {
     // Async call to remote subscriptions
     const fun = httpsCallable(
@@ -36,15 +42,16 @@ export default function DescriptionScreen(props) {
     >
       <DetailCard
         price={props.route.params.price}
-        currency="PLACEHOLDER"
-        date="PLACEHOLDER"
-        type="PLACEHOLDER"
+        currency={currencySymbol[props.route.params.currency]}
+        date={props.route.params.renewalDate}
+        type={props.route.params.customType}
         friends="PLACEHOLDER"
-        card="PLACEHOLDER"
-        auto="PLACEHOLDER"
-        cat="PLACEHOLDER"
-        repeat="PLACEHOLDER"
-        category="tech"
+        card={props.route.params.card}
+        auto={props.route.params.autoRenewal ? "YES" : "NO"}
+        cat={props.route.params.category}
+        repeat={props.route.params.renewalPeriod}
+        category={props.route.params.category}
+        owner={props.route.params.owner}
         onEdit={() =>
           navigation.navigate("Add", {
             edit: true,

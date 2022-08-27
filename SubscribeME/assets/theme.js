@@ -29,7 +29,7 @@ const defaultTheme = {
     movies: "rgba(48, 152, 255, 0.4)",
     shopping: "rgba(62, 51, 132, 0.4)",
     tech: "rgba(202, 77, 87, 0.4)",
-    other: "rgba(255, 218, 181, 0.7)",
+    other: "rgba(255, 218, 181, 0.5)",
   },
 };
 const darkTheme = defaultTheme;

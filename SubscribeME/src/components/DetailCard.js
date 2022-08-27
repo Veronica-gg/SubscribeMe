@@ -5,7 +5,7 @@ import SubmitButton from "./SubmitButton";
 
 export default function DetailCard(props) {
   const { colors } = useTheme();
-  const notOwner = true;
+  const notOwner = !props.owner;
   return (
     <Card
       style={[

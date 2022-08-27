@@ -68,7 +68,7 @@ export default function SubsListScreen() {
       <SubsItem
         key={item.id}
         tit={item.name}
-        des="Family"
+        des={item.type}
         iconID={
           item.name == "other"
             ? "card-account-details"
@@ -76,8 +76,8 @@ export default function SubsListScreen() {
             ? "card-account-details"
             : item.name
         }
-        dateID={require("../../../../assets/days/25.png")}
-        category={"tech"}
+        dateID={require("../../../../assets/days/" + 9 + ".png")}
+        category={item.category}
         onPressID={() => {
           navigation.navigate("Description", { ...item });
         }}
