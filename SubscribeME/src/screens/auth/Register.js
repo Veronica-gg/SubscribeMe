@@ -25,6 +25,7 @@ import {
 } from "../../utils/utils";
 
 export default function Register({ navigation }) {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [isEmailWrong, setIsEmailWrong] = useState(false);
   const [password, setPassword] = useState("");
@@ -37,6 +38,12 @@ export default function Register({ navigation }) {
     fun({ name: userName })
       .then((v) => {
         console.log("Name set: " + userName); //TODO -- set maximum length of name
+        dispatch(
+          updateProfile({
+            name: name,
+            email: email,
+          })
+        );
       })
       .catch((e) => console.log(e));
   }

@@ -2,22 +2,18 @@ import { Button, View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { auth, functions } from "../../../utils/firebase";
 import { httpsCallable } from "firebase/functions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { updateProfile } from "../../../redux/reducer";
 import { Surface, Text } from "react-native-paper";
+import { updateState } from "../../../redux/stateUpdater";
 
 export default function HomeScreen() {
-  function dummy() {
-    const fun = httpsCallable(
-      functions,
-      "subscriptionMgmtTriggers-deleteSubscription"
-    );
-    fun({ subscription: "mM3xdAb6qzYM2kaqZQ0J" })
-      .then((v) => {
-        console.log(v);
-      })
-      .catch((e) => console.log(e));
-  }
-
+  const dispatch = useDispatch();
+  const name = useSelector((state) => state.data.name);
+  useEffect(() => {
+    updateState(dispatch);
+  }, []);
   return (
     <SafeAreaView edges={["left", "right"]} style={styles.safe}>
       <View
@@ -30,13 +26,15 @@ export default function HomeScreen() {
           // borderWidth: 4,
         }}
       >
-        <Text style={styles.title}>Hi, User!</Text>
+        <Text style={styles.title}>
+          Hi, {name && name.length > 0 ? name : "User"}!
+        </Text>
       </View>
       <View style={styles.view}>
         {/* <Button
           title="Dummy"
           onPress={() => {
-            dummy();
+            dispatch(updateProfile({ name: "aaaa", email: "email" }));
           }}
         ></Button> */}
         <Surface
