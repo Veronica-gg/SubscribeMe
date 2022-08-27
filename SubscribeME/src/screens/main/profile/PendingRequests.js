@@ -67,6 +67,23 @@ export default function PendingRequests() {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        renderSectionFooter={({ section }) => {
+          if (section.data.length == 0) {
+            return (
+              <View
+                style={{
+                  width: "95%",
+                  alignSelf: "center",
+                }}
+              >
+                <Text style={{ marginHorizontal: 10 }}>
+                  No {section.title} requests :{"("}
+                </Text>
+              </View>
+            );
+          }
+          return null;
+        }}
       />
     </SafeAreaView>
   );

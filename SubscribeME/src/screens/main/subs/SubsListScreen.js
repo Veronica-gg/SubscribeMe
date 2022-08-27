@@ -3,7 +3,13 @@ import SubsItem from "../../../components/SubsItem";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useCallback } from "react";
 import LoadingIndicator from "../../../components/LoadingIndicator";
-import { RefreshControl, FlatList, Alert, SectionList } from "react-native";
+import {
+  RefreshControl,
+  FlatList,
+  Alert,
+  SectionList,
+  View,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { updateState } from "../../../redux/stateUpdater";
 import { useTheme, Text } from "react-native-paper";
@@ -130,6 +136,26 @@ export default function SubsListScreen() {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        renderSectionFooter={({ section }) => {
+          if (section.data.length == 0) {
+            return (
+              <View
+                style={{
+                  width: "95%",
+                  alignSelf: "center",
+                }}
+              >
+                <Text style={{ marginHorizontal: 10 }}>
+                  Nothing here :{"("}{" "}
+                  {section.title == "My subscriptions"
+                    ? "Why don't you add one below?"
+                    : ""}
+                </Text>
+              </View>
+            );
+          }
+          return null;
+        }}
       />
       <SubmitButton
         style={{

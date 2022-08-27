@@ -22,7 +22,9 @@ const stateSlice = createSlice({
       state.pendingFriendsSent = action.payload.pendingFriendsSent;
     },
     updateProfile: (state, action) => {
-      state.name = action.payload.name;
+      if (action.payload.name) {
+        state.name = action.payload.name;
+      }
       state.email = action.payload.email;
     },
   },

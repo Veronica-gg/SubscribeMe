@@ -55,7 +55,10 @@ export function updateState(
         if (v.data.message === "ok") {
           dispatch(
             updateProfile({
-              name: v.data.users[0].name,
+              name:
+                v.data.users[0].name && v.data.users[0].name.length > 0
+                  ? v.data.users[0].name
+                  : null,
               email: v.data.users[0].email,
             })
           );
