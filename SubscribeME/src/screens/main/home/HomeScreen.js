@@ -20,15 +20,13 @@ export default function HomeScreen() {
   }, [isFocused]);
 
   return (
-    <SafeAreaView edges={["left", "right"]} style={styles.safe}>
+    <SafeAreaView edges={["left", "right", "top"]} style={styles.safe}>
       <View
         style={{
           textAlign: "left",
           alignItems: "flex-start",
           justifyContent: "flex-start",
           flexDirection: "row",
-          marginTop: 40,
-          // borderWidth: 4,
         }}
       >
         <Text style={styles.title}>

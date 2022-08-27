@@ -3,14 +3,14 @@ import SubsItem from "../../../components/SubsItem";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useCallback } from "react";
 import LoadingIndicator from "../../../components/LoadingIndicator";
-import { RefreshControl, FlatList, Alert } from "react-native";
+import { RefreshControl, FlatList, Alert, SectionList } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { updateState } from "../../../redux/stateUpdater";
-import { useTheme } from "react-native-paper";
+import { useTheme, Text } from "react-native-paper";
 import SubmitButton from "../../../components/SubmitButton";
 
 export default function SubsListScreen() {
-  const subs = useSelector((state) => state.data.subs);
+  const subsState = useSelector((state) => state.data.subs);
   const dispatch = useDispatch();
 
   const { colors } = useTheme();
@@ -19,6 +19,21 @@ export default function SubsListScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [tryAgain, setTryAgain] = useState(false);
   const isFocused = useIsFocused();
+  const [subs, setSubs] = useState([
+    { title: "My subscriptions", data: [] },
+    { title: "Shared with me", data: [] },
+  ]);
+
+  useEffect(() => {
+    let subsRes = [
+      { title: "My subscriptions", data: [] },
+      { title: "Shared with me", data: [] },
+    ];
+    for (const s of subsState) {
+      subsRes[s.owner ? 0 : 1].data.push(s);
+    }
+    setSubs(subsRes);
+  }, [subsState]);
 
   const tryAgainAlert = () =>
     Alert.alert("Error", "Could not fetch data. Check your connection.", [
@@ -67,8 +82,8 @@ export default function SubsListScreen() {
     return (
       <SubsItem
         key={item.id}
-        tit={item.name}
-        des={item.type}
+        tit={item.customName}
+        des={item.customType}
         iconID={
           item.name == "other"
             ? "card-account-details"
@@ -87,14 +102,14 @@ export default function SubsListScreen() {
 
   return (
     <SafeAreaView
-      edges={["left", "right"]}
+      edges={["left", "right", "top"]}
       style={{
         flex: 1,
         justifyContent: "top",
         alignItems: "center",
       }}
     >
-      <FlatList
+      <SectionList
         fadingEdgeLength={"5%"}
         contentContainerStyle={{
           width: "100%",
@@ -105,7 +120,12 @@ export default function SubsListScreen() {
           width: "100%",
           alignContent: "center",
         }}
-        data={subs}
+        sections={subs}
+        renderSectionHeader={({ section: { title } }) => (
+          <Text style={{ fontSize: 20, fontWeight: "bold", padding: 20 }}>
+            {title}
+          </Text>
+        )}
         renderItem={renderItem}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

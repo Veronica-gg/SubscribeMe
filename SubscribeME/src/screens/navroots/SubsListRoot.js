@@ -12,6 +12,7 @@ export default function SubsListRoot() {
       initialRouteName="SubsList"
       screenOptions={{
         headerTitleAlign: "center",
+        headerShown: false,
       }}
     >
       <Stack.Screen
@@ -22,7 +23,7 @@ export default function SubsListRoot() {
       <Stack.Screen
         name="Description"
         component={DescriptionScreen}
-        options={({ route }) => ({ title: route.params.name })}
+        options={({ route }) => ({ title: route.params.customName })}
       />
       <Stack.Screen
         name="Add"

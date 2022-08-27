@@ -6,6 +6,15 @@ const categoryList = [
   { label: "Other", value: "other" },
 ];
 
+let categoryDict = {};
+for (const element of categoryList) {
+  categoryDict[element.value] = element.label;
+}
+
+function getDisplayCategory(category) {
+  return categoryDict[category];
+}
+
 const nameList = [
   { label: "Netflix", value: "netflix" },
   { label: "Spotify", value: "spotify" },
@@ -48,6 +57,14 @@ const repeatList = [
   { label: "Year", value: "year" },
   { label: "None", value: "none" },
 ];
+let repeatDict = {};
+for (const element of repeatList) {
+  repeatDict[element.value] = element.label;
+}
+
+function getDisplayRepeat(repeat) {
+  return repeatDict[repeat];
+}
 
 const currencyList = [
   { label: "€", value: "eur" },
@@ -63,4 +80,6 @@ export {
   currencyList,
   getCustomName,
   getCustomType,
+  getDisplayCategory,
+  getDisplayRepeat,
 };

@@ -2,6 +2,10 @@ import * as React from "react";
 import { Card, Title, Paragraph, useTheme } from "react-native-paper";
 import { Alert, StyleSheet, View } from "react-native";
 import SubmitButton from "./SubmitButton";
+import {
+  getDisplayCategory,
+  getDisplayRepeat,
+} from "../screens/main/subs/defaultSubValue";
 
 export default function DetailCard(props) {
   const { colors } = useTheme();
@@ -27,7 +31,7 @@ export default function DetailCard(props) {
         </View>
         <View style={styles.row}>
           <Title>Repeat every</Title>
-          <Paragraph>{props.repeat}</Paragraph>
+          <Paragraph>{getDisplayRepeat(props.repeat)}</Paragraph>
         </View>
         <View style={styles.row}>
           <Title>Type</Title>
@@ -47,7 +51,7 @@ export default function DetailCard(props) {
         </View>
         <View style={styles.row}>
           <Title>Category</Title>
-          <Paragraph>{props.cat}</Paragraph>
+          <Paragraph>{getDisplayCategory(props.cat)}</Paragraph>
         </View>
 
         <View style={[styles.row, { flex: 0 }]}></View>
