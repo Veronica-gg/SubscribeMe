@@ -6,30 +6,13 @@ exports.onUserCreation = functions
   .region("europe-west1")
   .auth.user()
   .onCreate((user) => {
-    return db
-      .collection("users")
-      .doc(user.uid)
-      .set(
-        {
-          friends: [],
-          pendingFriendsRecv: [],
-          pendingFriendsSent: [],
-          subscriptions: [],
-        },
-        { merge: true }
-      );
-  });
-
-exports.onSubInsert = functions
-  .region("europe-west1")
-  .firestore.document("/subscriptions/{subId}")
-  .onCreate((snap, context) => {
-    return snap
-      .data()
-      .owner.update({
-        subscriptions: admin.firestore.FieldValue.arrayUnion(
-          db.collection("subscriptions").doc(context.params.subId)
-        ),
-      })
-      .catch((e) => console.log(e));
+    return db.collection("users").doc(user.uid).set(
+      {
+        friends: [],
+        pendingFriendsRecv: [],
+        pendingFriendsSent: [],
+        subscriptions: [],
+      },
+      { merge: true }
+    );
   });
