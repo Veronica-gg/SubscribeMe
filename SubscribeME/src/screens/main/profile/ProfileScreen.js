@@ -27,6 +27,9 @@ export default function ProfileScreen() {
   const [expandedAdd, setExpandedAdd] = useState(false);
   const handleAddPress = () => setExpandedAdd(!expandedAdd);
 
+  const [expandedReq, setExpandedReq] = useState(false);
+  const handleReqPress = () => setExpandedAdd(!expandedReq);
+
   const [expandedName, setExpandedName] = useState(false);
   const handleNamePress = () => setExpandedName(!expandedName);
 
@@ -117,6 +120,11 @@ export default function ProfileScreen() {
                     originalPlaceholder="Your friend's e-mail"
                     value={friendEmail}
                     onChangeText={(text) => setFriendEmail(text)}
+                    theme={{
+                      colors: {
+                        background: colors.profileCard,
+                      },
+                    }}
                   />
                 </View>
                 <SubmitButton
@@ -130,6 +138,14 @@ export default function ProfileScreen() {
               </Surface>
             </List.Accordion>
           </List.Section>
+          <List.Item
+            title="Pending Requests"
+            style={styles.container}
+            left={(p) => <List.Icon {...p} icon="account-clock" />}
+            onPress={() => {
+              navigation.navigate("PendingReq");
+            }}
+          />
           <List.Item
             title="List of Friends"
             style={styles.container}
@@ -193,6 +209,11 @@ export default function ProfileScreen() {
                     // backgroundColor="transparent"
                     value={newName}
                     onChangeText={(text) => setNewName(text)}
+                    theme={{
+                      colors: {
+                        background: colors.profileCard,
+                      },
+                    }}
                   />
                 </View>
                 <SubmitButton
@@ -252,6 +273,11 @@ export default function ProfileScreen() {
                     value={oldPwd}
                     isPassword
                     onChangeText={(text) => setOldPwd(text)}
+                    theme={{
+                      colors: {
+                        background: colors.profileCard,
+                      },
+                    }}
                   />
                 </View>
                 <Text style={styles.title}>Insert updated e-mail</Text>
@@ -265,6 +291,11 @@ export default function ProfileScreen() {
                     // backgroundColor="transparent"
                     value={newEmail}
                     onChangeText={(text) => setNewEmail(text)}
+                    theme={{
+                      colors: {
+                        background: colors.profileCard,
+                      },
+                    }}
                   />
                 </View>
                 <SubmitButton
@@ -323,6 +354,11 @@ export default function ProfileScreen() {
                     value={oldPwd}
                     isPassword
                     onChangeText={(text) => setOldPwd(text)}
+                    theme={{
+                      colors: {
+                        background: colors.profileCard,
+                      },
+                    }}
                   />
                 </View>
                 <Text style={styles.title}>Insert updated password</Text>
@@ -351,6 +387,11 @@ export default function ProfileScreen() {
                         newPwd.length < minLength && newPwd.length > 0
                       );
                       setShowPasswordStrength(newPwd.length > 0);
+                    }}
+                    theme={{
+                      colors: {
+                        background: colors.profileCard,
+                      },
                     }}
                   />
                 </View>

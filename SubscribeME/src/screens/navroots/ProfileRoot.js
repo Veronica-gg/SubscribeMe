@@ -3,6 +3,7 @@ import * as React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ProfileScreen from "../main/profile/ProfileScreen";
 import FriendsListPage from "../main/profile/FriendsList";
+import PendingRequests from "../main/profile/PendingRequests";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,13 @@ export default function SubsListRoot() {
         component={FriendsListPage}
         options={{
           title: "List of Friends",
+        }}
+      />
+      <Stack.Screen
+        name="PendingReq"
+        component={PendingRequests}
+        options={{
+          title: "Pending Requests",
         }}
       />
     </Stack.Navigator>
