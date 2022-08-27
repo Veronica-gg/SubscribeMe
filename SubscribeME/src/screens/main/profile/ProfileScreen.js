@@ -1,7 +1,7 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import SubmitButton from "../../../components/SubmitButton";
 import { useState } from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView, Alert } from "react-native";
 import { auth, functions } from "../../../utils/firebase";
 import { httpsCallable } from "firebase/functions";
 import { List, Surface, Text, useTheme } from "react-native-paper";
@@ -130,6 +130,11 @@ export default function ProfileScreen() {
                 <SubmitButton
                   onPressID={() => {
                     addFriend();
+                    Alert.alert(
+                      "Request sent",
+                      "You have successfully sent a request to add a friend.",
+                      [{ text: "OK", onPress: () => {} }]
+                    );
                   }}
                   textID="ADD FRIEND"
                   iconID="account-multiple-plus"
@@ -219,6 +224,11 @@ export default function ProfileScreen() {
                 <SubmitButton
                   onPressID={() => {
                     // addFriend();
+                    Alert.alert(
+                      "Name correctly saved",
+                      "You have successfully updated your name.",
+                      [{ text: "OK", onPress: () => {} }]
+                    );
                   }}
                   textID="SAVE NEW NAME"
                   iconID="account-check"

@@ -25,19 +25,12 @@ const TextInput = (props) => {
       left={
         isPending ? (
           <PaperTextInput.Icon
-            icon="delete"
+            icon="account-check"
             onPress={() => {
               Alert.alert(
-                "Delete",
-                "Are you sure you want to delete the pending request?",
-                [
-                  {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  { text: "OK", onPress: () => {} },
-                ]
+                "Request Accepted",
+                "You have accepted the pending request.",
+                [{ text: "OK", onPress: () => {} }]
               );
             }}
           />
@@ -73,12 +66,19 @@ const TextInput = (props) => {
           />
         ) : isPending ? (
           <PaperTextInput.Icon
-            icon="account-check"
+            icon="delete"
             onPress={() => {
               Alert.alert(
-                "Request Accepted",
-                "You have accepted the pending request.",
-                [{ text: "OK", onPress: () => {} }]
+                "Delete",
+                "Are you sure you want to delete the pending request?",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  { text: "OK", onPress: () => {} },
+                ]
               );
             }}
           />
