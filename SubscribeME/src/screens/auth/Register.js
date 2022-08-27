@@ -25,6 +25,7 @@ import {
   maxLength,
   validateName,
 } from "../../utils/utils";
+import { useSelector, useDispatch } from "react-redux";
 
 export default function Register({ navigation }) {
   const dispatch = useDispatch();

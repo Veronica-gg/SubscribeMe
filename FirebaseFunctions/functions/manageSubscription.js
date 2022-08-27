@@ -159,7 +159,10 @@ async function removeMemberFromSub(subRef, userRef) {
     });
 }
 
-async function removeSubFromMember(subRef, userRef) {
+exports.removeSubFromMember = async function removeSubFromMember(
+  subRef,
+  userRef
+) {
   return await userRef
     .update({
       subscriptions: admin.firestore.FieldValue.arrayRemove(subRef),
@@ -171,7 +174,7 @@ async function removeSubFromMember(subRef, userRef) {
       console.log(e);
       return false;
     });
-}
+};
 
 exports.removeMember = functions
   .region("europe-west1")

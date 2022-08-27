@@ -1,10 +1,7 @@
-import { Button, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { auth, functions } from "../../../utils/firebase";
-import { httpsCallable } from "firebase/functions";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { updateProfile } from "../../../redux/reducer";
 import { Surface, Text } from "react-native-paper";
 import { updateState } from "../../../redux/stateUpdater";
 
