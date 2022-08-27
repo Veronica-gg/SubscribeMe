@@ -18,9 +18,10 @@ export function updateState(
     return fun()
       .then((v) => {
         dispatch(updateSubs({ subs: v.data.subs }));
+        return v.data;
       })
-      .catch((e) => {
-        console.log(e);
+      .catch(() => {
+        return { message: "error" };
       });
   }
 
@@ -36,9 +37,10 @@ export function updateState(
             pendingFriendsSent: v.data.pendingFriendsSent,
           })
         );
+        return v.data;
       })
-      .catch((e) => {
-        console.log(e);
+      .catch(() => {
+        return { message: "error" };
       });
   }
 
@@ -46,20 +48,22 @@ export function updateState(
     const fun = httpsCallable(functions, "manageUser-getCurrentUserInfo");
     return fun([], true)
       .then((v) => {
-        console.log(v);
         dispatch(
           updateProfile({
             name: v.data.users[0].name,
             email: v.data.users[0].email,
           })
         );
+        return v.data;
       })
-      .catch((e) => {
-        console.log(e);
+      .catch(() => {
+        return { message: "errorGetProfile" };
       });
   }
 
-  profile || getProfile();
-  subs || getSubs();
-  friends || getFriends();
+  return {
+    profile: profile && getProfile(),
+    subs: subs && getSubs(),
+    friends: friends && getFriends(),
+  };
 }
