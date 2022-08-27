@@ -9,6 +9,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import TextInput from "../../../components/StyledTextInput";
 import { updateState } from "../../../redux/stateUpdater";
+import { Text } from "react-native-paper";
 
 export default function FriendsListPage() {
   const friends = useSelector((state) => state.data.friends);

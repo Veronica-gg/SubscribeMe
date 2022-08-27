@@ -79,6 +79,17 @@ export default function ProfileScreen() {
         alignItems: "center",
       }}
     >
+      <View
+        style={{
+          textAlign: "left",
+          alignItems: "flex-start",
+          justifyContent: "flex-start",
+          flexDirection: "row",
+          width: "100%",
+        }}
+      >
+        <Text style={styles.mainTitle}>Profile</Text>
+      </View>
       <ScrollView
         style={{
           width: "100%",
@@ -563,6 +574,12 @@ const styles = StyleSheet.create({
   title: {
     marginTop: 20,
     fontWeight: "bold",
+  },
+  mainTitle: {
+    textAlign: "left",
+    fontSize: 30,
+    margin: 20,
+    marginBottom: 0,
   },
   surf: {
     justifyContent: "top",

@@ -115,6 +115,26 @@ export default function SubsListScreen() {
         alignItems: "center",
       }}
     >
+      <View
+        style={{
+          textAlign: "left",
+          alignItems: "flex-start",
+          justifyContent: "flex-start",
+          flexDirection: "row",
+          width: "100%",
+        }}
+      >
+        <Text
+          style={{
+            textAlign: "left",
+            fontSize: 30,
+            margin: 20,
+            marginBottom: 0,
+          }}
+        >
+          List of Subscriptions
+        </Text>
+      </View>
       <SectionList
         fadingEdgeLength={"5%"}
         contentContainerStyle={{
