@@ -84,7 +84,7 @@ function craftSubscriptionInfoResponse(sub, uid) {
 function parseInputSubData(sub, uid) {
   let members = [];
   for (const member of sub.members || []) {
-    members.push(member);
+    members.push(db.collection("users").doc(member));
   }
   return {
     name: sub.name || "other",
@@ -111,17 +111,26 @@ exports.setNewSubscription = functions
     return db
       .collection("subscriptions")
       .add(parseInputSubData(data, uid))
-      .then((ref) => {
-        return db
-          .collection("users")
-          .doc(uid)
-          .update({ subscriptions: admin.firestore.FieldValue.arrayUnion(ref) })
-          .then(() => {
-            return { message: "ok" };
-          })
-          .catch(() => {
-            return { message: "errorAddSubToUser" };
-          });
+      .then(async (ref) => {
+        let error = false;
+        for (const user of [
+          ...parseInputSubData(data, uid).members,
+          db.collection("users").doc(uid),
+        ]) {
+          console.log(user);
+          error |= await user
+            .update({
+              subscriptions: admin.firestore.FieldValue.arrayUnion(ref),
+            })
+            .then(() => {
+              return true;
+            })
+            .catch(() => {
+              return false;
+            });
+        }
+        console.log(error);
+        return error ? { message: "errorAddSubToUser" } : { message: "ok" };
       })
       .catch(() => {
         return { message: "errorSubNotAdded" };

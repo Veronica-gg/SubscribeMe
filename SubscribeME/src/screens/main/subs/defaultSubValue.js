@@ -5,6 +5,7 @@ const categoryList = [
   { label: "Tech", value: "tech" },
   { label: "Other", value: "other" },
 ];
+
 const nameList = [
   { label: "Netflix", value: "netflix" },
   { label: "Spotify", value: "spotify" },
@@ -14,6 +15,16 @@ const nameList = [
   { label: "Other", value: "other" },
 ];
 
+let namesDict = {};
+for (const element of nameList) {
+  namesDict[element.value] = element.label;
+}
+namesDict["other"] = null;
+
+function getCustomName(name) {
+  return namesDict[name];
+}
+
 const typeList = [
   { label: "Personal", value: "personal" },
   { label: "Family", value: "family" },
@@ -21,11 +32,15 @@ const typeList = [
   { label: "Other", value: "other" },
 ];
 
-const friendsList = [
-  { label: "Virginia", value: "virginia" },
-  { label: "Aldo", value: "aldo" },
-  { label: "Giovanna", value: "giovanna" },
-];
+let typeDict = {};
+for (const element of typeList) {
+  typeDict[element.value] = element.label;
+}
+typeDict["other"] = null;
+
+function getCustomType(type) {
+  return typeDict[type];
+}
 
 const repeatList = [
   { label: "Week", value: "week" },
@@ -40,4 +55,12 @@ const currencyList = [
   { label: "£", value: "gbp" },
 ];
 
-export { categoryList, nameList, typeList, repeatList, currencyList };
+export {
+  categoryList,
+  nameList,
+  typeList,
+  repeatList,
+  currencyList,
+  getCustomName,
+  getCustomType,
+};

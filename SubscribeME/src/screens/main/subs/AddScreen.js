@@ -21,6 +21,8 @@ import {
   typeList,
   repeatList,
   currencyList,
+  getCustomName,
+  getCustomType,
 } from "./defaultSubValue";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from "react-native-paper";
@@ -46,6 +48,7 @@ export default function AddScreen(props) {
   const [isEdit, setIsEdit] = useState(false);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
   const [inputDate, setInputDate] = useState(undefined);
+  const [friends, setFriends] = useState(String);
 
   const [logoutHeight, setLogoutHeight] = useState(0);
 
@@ -65,9 +68,22 @@ export default function AddScreen(props) {
     } else {
       fun = httpsCallable(functions, "manageSubscription-setNewSubscription");
     }
+    let parsedMembers = [];
+    for (const el of friends.split(",")) {
+      if (el && el.length > 0) parsedMembers.push(el);
+    }
     fun({
       name: name,
       price: Number(cost),
+      autoRenewal: isSwitchOn,
+      card: card,
+      currency: currency,
+      category: category,
+      customName: getCustomName(name) ? getCustomName(name) : customName,
+      customType: getCustomType(type) ? getCustomType(type) : customType,
+      renewalPeriod: repeat,
+      type: type,
+      members: parsedMembers,
       id: isEdit ? props.route.params.id : null,
     })
       .then((v) => {
@@ -247,7 +263,12 @@ export default function AddScreen(props) {
             justifyContent: "center",
           }}
         >
-          <MultiDropDown nameList={friendsList} labelID="Friends" />
+          <MultiDropDown
+            value={friends}
+            setValue={setFriends}
+            nameList={friendsList}
+            labelID="Friends"
+          />
         </View>
         <View style={styles.inputView}>
           <DatePick
