@@ -26,6 +26,7 @@ import {
   validateName,
 } from "../../utils/utils";
 import { useSelector, useDispatch } from "react-redux";
+import { updateProfile } from "../../redux/reducer";
 
 export default function Register({ navigation }) {
   const dispatch = useDispatch();
@@ -37,19 +38,21 @@ export default function Register({ navigation }) {
   const [showPasswordStrength, setShowPasswordStrength] = useState(false);
   const [name, setName] = useState("");
 
-  function setRemoteName(userName) {
+  function setRemoteName(userName, userEmail) {
     const fun = httpsCallable(functions, "manageUser-setName");
     fun({ name: userName })
       .then((v) => {
-        console.log("Name set: " + userName); //TODO -- set maximum length of name
         dispatch(
-          updateProfile({
-            name: name,
-            email: email,
-          })
+          updateProfile({ name: v.data.user.name, email: v.data.user.email })
         );
       })
       .catch((e) => console.log(e));
+    dispatch(
+      updateProfile({
+        name: userName,
+        email: userEmail,
+      })
+    );
   }
 
   const handleSignup = () => {

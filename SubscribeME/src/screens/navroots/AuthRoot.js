@@ -8,14 +8,11 @@ import Root from "./MainRoot";
 import LoadingScreen from "../LoadingScreen";
 import { StyleSheet } from "react-native";
 import { defaultTheme } from "../../../assets/theme";
-import { useDispatch } from "react-redux";
-import { updateState } from "../../redux/stateUpdater";
 
 const Stack = createNativeStackNavigator();
 const theme = defaultTheme;
 
 export default function AuthRoot() {
-  const dispatch = useDispatch();
   const [loaded, setLoaded] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
 
@@ -27,9 +24,6 @@ export default function AuthRoot() {
         setSignedIn(false);
       }
       if (!loaded) {
-        if (user) {
-          updateState(dispatch, true, true, false);
-        }
         setLoaded(true);
       }
     });

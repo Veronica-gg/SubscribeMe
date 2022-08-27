@@ -9,7 +9,7 @@ export default function HomeScreen() {
   const dispatch = useDispatch();
   const name = useSelector((state) => state.data.name);
   useEffect(() => {
-    updateState(dispatch);
+    updateState(dispatch, true, true, false);
   }, []);
   return (
     <SafeAreaView edges={["left", "right"]} style={styles.safe}>

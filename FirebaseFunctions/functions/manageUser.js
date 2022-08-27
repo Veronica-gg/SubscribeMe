@@ -10,11 +10,11 @@ exports.setName = functions
     return admin
       .auth()
       .updateUser(uid, { displayName: data.name })
-      .then(() => {
-        return { message: "ok" };
+      .then((v) => {
+        return { message: "ok", user: { name: v.displayName, email: v.email } };
       })
       .catch(() => {
-        return { message: "error" };
+        return { message: "error", user: { name: "User", email: "" } };
       }); //TODO -- check name validity
   });
 

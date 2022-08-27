@@ -14,6 +14,7 @@ import LineButton from "../../components/LineButton";
 import TextInput from "../../components/StyledTextInput";
 import { useSelector, useDispatch } from "react-redux";
 import { updateState } from "../../redux/stateUpdater";
+import { updateProfile } from "../../redux/reducer";
 
 export default function Login({ navigation }) {
   const dispatch = useDispatch();
@@ -23,7 +24,13 @@ export default function Login({ navigation }) {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        updateState(dispatch);
+        dispatch(
+          updateProfile({
+            name: user.displayName,
+            email: user.email,
+          })
+        );
+        updateState(dispatch, true, true, false);
       })
       .catch((error) => alert(error.message));
   };
