@@ -40,8 +40,8 @@ export default function ProfileScreen() {
   const [friendEmail, setFriendEmail] = useState("");
 
   function addFriend() {
-    const fun = httpsCallable(functions, "manageUser-addFriend");
-    fun({ email: newEmail })
+    const fun = httpsCallable(functions, "manageUser-addFriendRequest");
+    fun({ email: friendEmail })
       .then((v) => {
         console.log(v);
       })
