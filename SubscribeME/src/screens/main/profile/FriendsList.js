@@ -1,16 +1,6 @@
 import React from "react";
-import {
-  StyleSheet,
-  ScrollView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  SafeAreaView,
-  View,
-} from "react-native";
-import { Surface, Text } from "react-native-paper";
-import { useState } from "react";
+import { StyleSheet, ScrollView, SafeAreaView, View } from "react-native";
 import PaperTextInput from "../../../components/StyledTextInput";
-import SubmitButton from "../../../components/SubmitButton";
 
 export default function FriendsListPage() {
   return (

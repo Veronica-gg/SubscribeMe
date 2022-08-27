@@ -43,7 +43,8 @@
     "react-native-wheel-pick": "^1.2.0",
     "react-navigation": "^4.4.4",
     "react-redux": "^8.0.2",
-    "zxcvbn": "^4.4.2"
+    "zxcvbn": "^4.4.2",
+    "expo-linear-gradient": "~11.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
