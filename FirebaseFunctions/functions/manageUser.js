@@ -41,6 +41,17 @@ exports.addFriendRequest = functions
     if (uidLoadedDoc.data().friends.find((el) => el.isEqual(friendDoc))) {
       return { message: "errorAlreadyFriend" };
     }
+    if (
+      uidLoadedDoc.data().pendingFriendsRecv.find((el) => el.isEqual(friendDoc))
+    ) {
+      return answerFriendRequestAsync(
+        {
+          accepted: true,
+          friendReqUid: friendRecord.uid,
+        },
+        context
+      );
+    }
     return uidDoc
       .update({
         pendingFriendsSent: admin.firestore.FieldValue.arrayUnion(friendDoc),
@@ -62,71 +73,71 @@ exports.addFriendRequest = functions
       });
   });
 
+async function answerFriendRequestAsync(data, context) {
+  const accepted = data.accepted;
+  let uid = context.auth.uid;
+  let uidDoc = db.collection("users").doc(uid);
+  let friendReqDoc = db.collection("users").doc(data.friendReqUid);
+  let uidLoadedDoc = await uidDoc.get().catch(() => {
+    return { message: "errorInternalMyUid" };
+  });
+  let friendReqLoadedDoc = await friendReqDoc.get().catch(() => {
+    return { message: "errorInternalFriendUid" };
+  });
+  if (
+    !(
+      uidLoadedDoc
+        .data()
+        .pendingFriendsRecv.find((el) => el.isEqual(friendReqDoc)) &&
+      friendReqLoadedDoc
+        .data()
+        .pendingFriendsSent.find((el) => el.isEqual(uidDoc))
+    )
+  ) {
+    return { message: "errorNoSuchReq" };
+  }
+  return uidDoc
+    .update(
+      accepted
+        ? {
+            friends: admin.firestore.FieldValue.arrayUnion(friendReqDoc),
+            pendingFriendsRecv:
+              admin.firestore.FieldValue.arrayRemove(friendReqDoc),
+          }
+        : {
+            pendingFriendsRecv:
+              admin.firestore.FieldValue.arrayRemove(friendReqDoc),
+          }
+    )
+    .then(async () => {
+      try {
+        await friendReqDoc.update(
+          accepted
+            ? {
+                friends: admin.firestore.FieldValue.arrayUnion(uidDoc),
+                pendingFriendsSent:
+                  admin.firestore.FieldValue.arrayRemove(uidDoc),
+              }
+            : {
+                pendingFriendsSent:
+                  admin.firestore.FieldValue.arrayRemove(uidDoc),
+              }
+        );
+        return { message: "ok" };
+      } catch {
+        return { message: "errorUpdateFriend" };
+      }
+    })
+    .catch(() => {
+      return { message: "errorUpdateMe" };
+    });
+}
+
 exports.answerFriendRequest = functions // manage accepted or rejected friend request
   .region("europe-west1")
-  .https.onCall(async (data, context) => {
-    const accepted = data.accepted;
-    let error = false;
-    let uid = context.auth.uid;
-    let uidDoc = db.collection("users").doc(uid);
-    let friendReqDoc = db.collection("users").doc(data.friendReqUid);
-    let uidLoadedDoc = await uidDoc.get().catch(() => {
-      error = true;
-    });
-    let friendReqLoadedDoc = await friendReqDoc.get().catch(() => {
-      error = true;
-    });
-    if (error) return { message: "errorInternal" };
-    if (
-      !(
-        uidLoadedDoc
-          .data()
-          .pendingFriendsRecv.find((el) => el.isEqual(friendReqDoc)) &&
-        friendReqLoadedDoc
-          .data()
-          .pendingFriendsSent.find((el) => el.isEqual(uidDoc))
-      )
-    ) {
-      return { message: "errorNoSuchReq" };
-    }
-    return uidDoc
-      .update(
-        accepted
-          ? {
-              friends: admin.firestore.FieldValue.arrayUnion(friendDoc),
-              pendingFriendsRecv:
-                admin.firestore.FieldValue.arrayRemove(friendDoc),
-            }
-          : {
-              pendingFriendsRecv:
-                admin.firestore.FieldValue.arrayRemove(friendDoc),
-            }
-      )
-      .then(() => {
-        return friendDoc
-          .update(
-            accepted
-              ? {
-                  friends: admin.firestore.FieldValue.arrayUnion(uidDoc),
-                  pendingFriendsSent:
-                    admin.firestore.FieldValue.arrayRemove(uidDoc),
-                }
-              : {
-                  pendingFriendsSent:
-                    admin.firestore.FieldValue.arrayRemove(uidDoc),
-                }
-          )
-          .then(() => {
-            return { message: "ok" };
-          })
-          .catch(() => {
-            return { message: "errorUpdateFriend" };
-          });
-      })
-      .catch(() => {
-        return { message: "errorUpdateMe" };
-      });
-  });
+  .https.onCall(async (data, context) =>
+    answerFriendRequestAsync(data, context)
+  );
 
 exports.removeFriend = functions
   .region("europe-west1")
