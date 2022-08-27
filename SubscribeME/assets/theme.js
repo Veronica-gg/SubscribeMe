@@ -22,6 +22,7 @@ const defaultTheme = {
     secondary: "#CA4D57",
     background: "#FFF9F3",
     card: "#FFF9F3", // Navigation header and bottom bar bckgnd
+    profileCard: "#FFE4CA",
     accent: "#AF9408",
     border: "#FFFFFF",
     music: "rgba(255, 148, 40, 0.4)",

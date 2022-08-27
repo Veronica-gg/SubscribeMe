@@ -47,7 +47,7 @@ function addFieldsFilled(name, type, category, cost, currency, repeat, card) {
 }
 
 function validateCost(cost) {
-  var regex = /^[1-9]\d{0,}(,\d{0,})?$/;
+  var regex = /^[1-9]\d{0,}(,|.\d{0,})?$/;
   return cost.match(regex);
 }
 

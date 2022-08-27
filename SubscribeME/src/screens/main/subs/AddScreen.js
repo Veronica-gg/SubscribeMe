@@ -135,177 +135,172 @@ export default function AddScreen(props) {
       }}
     >
       <ScrollView
-        style={{ flexGrow: 1, width: "100%" }}
-        // contentContainerStyle={styles.contentContainer}
-        // showsVerticalScrollIndicator={true}
-        // persistentScrollbar={true}
+        style={{ width: "100%" }}
+        contentContainerStyle={styles.contentContainer}
+        automaticallyAdjustKeyboardInsets
+        keyboardShouldPersistTaps="handled"
       >
-        <KeyboardAvoidingView
-          style={styles.contentContainer}
-          behavior="padding"
+        <SingleDropDown
+          nameList={nameList}
+          labelID="Name of Subscription"
+          name={name}
+          setName={setName}
+        />
+        <View
+          style={[
+            styles.inputView,
+            { display: name == "other" ? "flex" : "none" },
+          ]}
         >
-          <SingleDropDown
-            nameList={nameList}
-            labelID="Name of Subscription"
-            name={name}
-            setName={setName}
+          <TextInput
+            autoCapitalize="words"
+            autoCorrect={false}
+            autoComplete="name"
+            keyboardType="default"
+            originalPlaceholder="Custom Name of Subscription"
+            value={customName}
+            onChangeText={(text) => setCustomName(text)}
           />
-          <View
-            style={[
-              styles.inputView,
-              { display: name == "other" ? "flex" : "none" },
-            ]}
-          >
+        </View>
+        <SingleDropDown
+          nameList={typeList}
+          name={type}
+          setName={setType}
+          labelID="Type of Subscription"
+        />
+        <View
+          style={[
+            styles.inputView,
+            { display: type == "other" ? "flex" : "none" },
+          ]}
+        >
+          <TextInput
+            autoCapitalize="words"
+            autoCorrect={false}
+            autoComplete="name"
+            keyboardType="default"
+            originalPlaceholder="Custom Type of Subscription"
+            value={customType}
+            onChangeText={(text) => setCustomType(text)}
+          />
+        </View>
+        <SingleDropDown
+          nameList={categoryList}
+          labelID="Category"
+          name={category}
+          setName={setCategory}
+        />
+        <View
+          style={[
+            styles.inputView,
+            {
+              height: isCostNotDigit ? 80 : 60,
+              width: "100%",
+            },
+          ]}
+        >
+          <View style={[styles.inputView, { marginBottom: 0 }]}>
             <TextInput
-              autoCapitalize="words"
+              autoCapitalize="none"
               autoCorrect={false}
-              autoComplete="name"
-              keyboardType="default"
-              originalPlaceholder="Custom Name of Subscription"
-              value={customName}
-              onChangeText={(text) => setCustomName(text)}
+              autoComplete="number"
+              keyboardType="numeric"
+              originalPlaceholder="Cost"
+              value={cost}
+              error={isCostNotDigit}
+              onChangeText={(text) => {
+                setCost(text);
+                // if (isCostDigit) {
+                setIsCostDigit(!validateCost(text));
+                // }
+              }}
+              onBlur={() => {
+                cost.length > 0
+                  ? setIsCostDigit(!validateCost(cost))
+                  : setIsCostDigit(false);
+              }}
             />
           </View>
-          <SingleDropDown
-            nameList={typeList}
-            name={type}
-            setName={setType}
-            labelID="Type of Subscription"
-          />
-          <View
-            style={[
-              styles.inputView,
-              { display: type == "other" ? "flex" : "none" },
-            ]}
-          >
+          <HelperText type="error" visible={isCostNotDigit}>
+            Cost must be provided in digits, with only 1 separator
+          </HelperText>
+        </View>
+        <SingleDropDown
+          nameList={currencyList}
+          labelID="Currency"
+          name={currency}
+          setName={setCurrency}
+        />
+        <SingleDropDown
+          nameList={repeatList}
+          labelID="Repeat every"
+          name={repeat}
+          setName={setRepeat}
+        />
+        <View
+          style={[
+            styles.inputView,
+            {
+              height: isCardWrong ? 80 : 60,
+              width: "100%",
+            },
+          ]}
+        >
+          <View style={[styles.inputView, { marginBottom: 0 }]}>
             <TextInput
-              autoCapitalize="words"
+              autoCapitalize="none"
               autoCorrect={false}
-              autoComplete="name"
-              keyboardType="default"
-              originalPlaceholder="Custom Type of Subscription"
-              value={customType}
-              onChangeText={(text) => setCustomType(text)}
+              autoComplete="number"
+              keyboardType="numeric"
+              originalPlaceholder="Card's last 4 digits"
+              value={card}
+              error={isCardWrong}
+              onChangeText={(text) => {
+                setCard(text);
+                setIsCardWrong(!validateCard(text));
+              }}
+              maxLength={4}
+              onBlur={() => {
+                card.length > 0
+                  ? setIsCardWrong(!validateCard(card))
+                  : setIsCardWrong(false);
+              }}
             />
           </View>
-          <SingleDropDown
-            nameList={categoryList}
-            labelID="Category"
-            name={category}
-            setName={setCategory}
-          />
-          <View
-            style={[
-              styles.inputView,
-              {
-                height: isCostNotDigit ? 80 : 60,
-                width: "100%",
-              },
-            ]}
-          >
-            <View style={[styles.inputView, { marginBottom: 0 }]}>
-              <TextInput
-                autoCapitalize="none"
-                autoCorrect={false}
-                autoComplete="number"
-                keyboardType="numeric"
-                originalPlaceholder="Cost"
-                value={cost}
-                error={isCostNotDigit}
-                onChangeText={(text) => {
-                  setCost(text);
-                  // if (isCostDigit) {
-                  setIsCostDigit(!validateCost(text));
-                  // }
-                }}
-                onBlur={() => {
-                  cost.length > 0
-                    ? setIsCostDigit(!validateCost(cost))
-                    : setIsCostDigit(false);
-                }}
-              />
-            </View>
-            <HelperText type="error" visible={isCostNotDigit}>
-              Cost must be provided in digits, with only 1 comma
-            </HelperText>
-          </View>
-          <SingleDropDown
-            nameList={currencyList}
-            labelID="Currency"
-            name={currency}
-            setName={setCurrency}
-          />
-          <SingleDropDown
-            nameList={repeatList}
-            labelID="Repeat every"
-            name={repeat}
-            setName={setRepeat}
-          />
-          <View
-            style={[
-              styles.inputView,
-              {
-                height: isCardWrong ? 80 : 60,
-                width: "100%",
-              },
-            ]}
-          >
-            <View style={[styles.inputView, { marginBottom: 0 }]}>
-              <TextInput
-                autoCapitalize="none"
-                autoCorrect={false}
-                autoComplete="number"
-                keyboardType="numeric"
-                originalPlaceholder="Card's last 4 digits"
-                value={card}
-                error={isCardWrong}
-                onChangeText={(text) => {
-                  setCard(text);
-                  setIsCardWrong(!validateCard(text));
-                }}
-                maxLength={4}
-                onBlur={() => {
-                  card.length > 0
-                    ? setIsCardWrong(!validateCard(card))
-                    : setIsCardWrong(false);
-                }}
-              />
-            </View>
-            <HelperText type="error" visible={isCardWrong}>
-              Must be exactly 4 digits
-            </HelperText>
-          </View>
+          <HelperText type="error" visible={isCardWrong}>
+            Must be exactly 4 digits
+          </HelperText>
+        </View>
+        <View
+          style={{
+            width: "100%",
+            height: 60,
+            margin: 10,
+            marginBottom: 25,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <MultiDropDown nameList={friendsList} labelID="Friends" />
+        </View>
+        <View style={styles.inputView}>
+          <DatePick />
+        </View>
+        <View style={styles.inputView}>
           <View
             style={{
-              width: "100%",
-              height: 60,
-              margin: 10,
-              marginBottom: 25,
-              alignItems: "center",
-              justifyContent: "center",
+              flex: 1,
+              flexDirection: "row",
             }}
           >
-            <MultiDropDown nameList={friendsList} labelID="Friends" />
+            <TextInput
+              mode="outlined"
+              isAuto
+              value="Automatic Payment"
+              disabled={true}
+            />
           </View>
-          <View style={styles.inputView}>
-            <DatePick />
-          </View>
-          <View style={styles.inputView}>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-              }}
-            >
-              <TextInput
-                mode="outlined"
-                isAuto
-                value="Automatic Payment"
-                disabled={true}
-              />
-            </View>
-          </View>
-        </KeyboardAvoidingView>
+        </View>
       </ScrollView>
       <SubmitButton
         textID="SAVE"
@@ -330,8 +325,11 @@ export default function AddScreen(props) {
 const styles = StyleSheet.create({
   contentContainer: {
     justifyContent: "top",
+    flexGrow: 1,
     //backgroundColor: "#FFF9F3",
     alignItems: "center",
+    justifyContent: "top",
+    flexDirection: "column",
   },
   inputView: {
     width: "90%",

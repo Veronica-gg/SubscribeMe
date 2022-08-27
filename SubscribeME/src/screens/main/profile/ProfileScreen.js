@@ -8,6 +8,8 @@ import { List, Surface, Text, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import PaperTextInput from "../../../components/StyledTextInput";
 import { LinearGradient } from "expo-linear-gradient";
+import PasswordStrengthBar from "../../../components/PasswordStrengthBar";
+import { minLength } from "../../../utils/utils";
 
 function logout() {
   auth
@@ -36,9 +38,11 @@ export default function ProfileScreen() {
 
   const [newEmail, setNewEmail] = useState("");
   const [newName, setNewName] = useState("");
+  const [oldPwd, setOldPwd] = useState("");
   const [newPwd, setNewPwd] = useState("");
+  const [passwordTooShort, setPasswordTooShort] = useState(false);
   const [friendEmail, setFriendEmail] = useState("");
-
+  const [showPasswordStrength, setShowPasswordStrength] = useState(false);
   function addFriend() {
     const fun = httpsCallable(functions, "manageUser-addFriend");
     fun({ email: newEmail })
@@ -53,7 +57,6 @@ export default function ProfileScreen() {
       style={{
         flex: 1,
         justifyContent: "top",
-        //backgroundColor: "#FFF9F3",
         alignItems: "center",
       }}
     >
@@ -65,7 +68,7 @@ export default function ProfileScreen() {
         automaticallyAdjustKeyboardInsets
         keyboardShouldPersistTaps="handled"
       >
-        <Surface style={styles.surf}>
+        <Surface style={[styles.surf, { backgroundColor: colors.profileCard }]}>
           <Text style={[styles.title, { marginBottom: 10 }]}>
             Manage Friends
           </Text>
@@ -73,14 +76,20 @@ export default function ProfileScreen() {
           <List.Section
             style={{
               width: "100%",
-              backgroundColor: "#FFE4CA",
+              backgroundColor: colors.profileCard,
               borderRadius: 0,
             }}
-            titleStyle={{ backgroundColor: "#FFE4CA", borderRadius: 0 }}
+            titleStyle={{
+              backgroundColor: colors.profileCard,
+              borderRadius: 0,
+            }}
           >
             <List.Accordion
               title="Add a friend"
-              style={styles.accordion}
+              style={[
+                styles.accordion,
+                { backgroundColor: colors.profileCard },
+              ]}
               left={(p) => <List.Icon {...p} icon="account-multiple-plus" />}
               expanded={expandedAdd}
               onPress={handleAddPress}
@@ -94,6 +103,7 @@ export default function ProfileScreen() {
                     padding: 0,
                     justifyContent: "center",
                     alignItems: "left",
+                    backgroundColor: colors.profileCard,
                   },
                 ]}
               >
@@ -115,7 +125,7 @@ export default function ProfileScreen() {
                   }}
                   textID="ADD FRIEND"
                   iconID="account-multiple-plus"
-                  style={{ justifyContent: "top", marginTop: 0 }}
+                  style={styles.submit}
                 />
               </Surface>
             </List.Accordion>
@@ -129,22 +139,34 @@ export default function ProfileScreen() {
             }}
           />
         </Surface>
-        <Surface style={{ ...styles.surf, marginBottom: logoutHeight * 1.2 }}>
+        <Surface
+          style={{
+            ...styles.surf,
+            backgroundColor: colors.profileCard,
+            marginBottom: logoutHeight * 1.2,
+          }}
+        >
           <Text style={[styles.title, { marginBottom: 10 }]}>
             Profile Settings
           </Text>
           <List.Section
             style={{
               width: "100%",
-              backgroundColor: "#FFE4CA",
+              backgroundColor: colors.profileCard,
               borderRadius: 0,
             }}
-            titleStyle={{ backgroundColor: "#FFE4CA", borderRadius: 0 }}
+            titleStyle={{
+              backgroundColor: colors.profileCard,
+              borderRadius: 0,
+            }}
           >
             <List.Accordion
               title="Name"
               description="Change and update name"
-              style={styles.accordion}
+              style={[
+                styles.accordion,
+                { backgroundColor: colors.profileCard },
+              ]}
               left={(p) => <List.Icon {...p} icon="account-details" />}
               expanded={expandedName}
               onPress={handleNamePress}
@@ -158,6 +180,7 @@ export default function ProfileScreen() {
                     padding: 0,
                     justifyContent: "center",
                     alignItems: "left",
+                    backgroundColor: colors.profileCard,
                   },
                 ]}
               >
@@ -178,7 +201,7 @@ export default function ProfileScreen() {
                   }}
                   textID="SAVE NEW NAME"
                   iconID="account-check"
-                  style={{ justifyContent: "top", marginTop: 0 }}
+                  style={styles.submit}
                 />
               </Surface>
             </List.Accordion>
@@ -186,15 +209,21 @@ export default function ProfileScreen() {
           <List.Section
             style={{
               width: "100%",
-              backgroundColor: "#FFE4CA",
+              backgroundColor: colors.profileCard,
               borderRadius: 0,
             }}
-            titleStyle={{ backgroundColor: "#FFE4CA", borderRadius: 0 }}
+            titleStyle={{
+              backgroundColor: colors.profileCard,
+              borderRadius: 0,
+            }}
           >
             <List.Accordion
               title="E-mail"
               description="Change and update e-mail"
-              style={styles.accordion}
+              style={[
+                styles.accordion,
+                { backgroundColor: colors.profileCard },
+              ]}
               descriptionStyle={styles.container}
               left={(p) => <List.Icon {...p} icon="email" />}
               expanded={expandedEmail}
@@ -209,9 +238,22 @@ export default function ProfileScreen() {
                     padding: 0,
                     justifyContent: "center",
                     alignItems: "left",
+                    backgroundColor: colors.profileCard,
                   },
                 ]}
               >
+                <Text style={styles.title}>Insert password</Text>
+                <View style={styles.inputView}>
+                  <PaperTextInput
+                    // autoCapitalize="none"
+                    autoCorrect={false}
+                    originalPlaceholder="Password"
+                    // backgroundColor="transparent"
+                    value={oldPwd}
+                    isPassword
+                    onChangeText={(text) => setOldPwd(text)}
+                  />
+                </View>
                 <Text style={styles.title}>Insert updated e-mail</Text>
                 <View style={styles.inputView}>
                   <PaperTextInput
@@ -231,7 +273,7 @@ export default function ProfileScreen() {
                   }}
                   textID="SAVE NEW E-MAIL"
                   iconID="email-check"
-                  style={{ justifyContent: "top", marginTop: 0 }}
+                  style={styles.submit}
                 />
               </Surface>
             </List.Accordion>
@@ -239,15 +281,21 @@ export default function ProfileScreen() {
           <List.Section
             style={{
               width: "100%",
-              backgroundColor: "#FFE4CA",
+              backgroundColor: colors.profileCard,
               borderRadius: 0,
             }}
-            titleStyle={{ backgroundColor: "#FFE4CA", borderRadius: 0 }}
+            titleStyle={{
+              backgroundColor: colors.profileCard,
+              borderRadius: 0,
+            }}
           >
             <List.Accordion
               title="Password"
               description="Change and update password"
-              style={styles.accordion}
+              style={[
+                styles.accordion,
+                { backgroundColor: colors.profileCard },
+              ]}
               left={(p) => <List.Icon {...p} icon="key-variant" />}
               expanded={expandedPwd}
               onPress={handlePwdPress}
@@ -261,9 +309,22 @@ export default function ProfileScreen() {
                     padding: 0,
                     justifyContent: "center",
                     alignItems: "left",
+                    backgroundColor: colors.profileCard,
                   },
                 ]}
               >
+                <Text style={styles.title}>Insert old password</Text>
+                <View style={styles.inputView}>
+                  <PaperTextInput
+                    // autoCapitalize="none"
+                    autoCorrect={false}
+                    originalPlaceholder="Old Password"
+                    // backgroundColor="transparent"
+                    value={oldPwd}
+                    isPassword
+                    onChangeText={(text) => setOldPwd(text)}
+                  />
+                </View>
                 <Text style={styles.title}>Insert updated password</Text>
                 <View style={styles.inputView}>
                   <PaperTextInput
@@ -272,7 +333,37 @@ export default function ProfileScreen() {
                     originalPlaceholder="Updated Password"
                     // backgroundColor="transparent"
                     value={newPwd}
-                    onChangeText={(text) => setNewPwd(text)}
+                    error={passwordTooShort}
+                    isPassword
+                    onChangeText={(text) => {
+                      setNewPwd(text);
+                      if (!showPasswordStrength) {
+                        setShowPasswordStrength(text.length > 0);
+                      }
+                      if (passwordTooShort || newPwd.length > text.length) {
+                        setPasswordTooShort(
+                          text.length < minLength && text.length > 0
+                        );
+                      }
+                    }}
+                    onBlur={() => {
+                      setPasswordTooShort(
+                        newPwd.length < minLength && newPwd.length > 0
+                      );
+                      setShowPasswordStrength(newPwd.length > 0);
+                    }}
+                  />
+                </View>
+                <View
+                  style={[
+                    showPasswordStrength ? { height: "7%" } : { height: 0 },
+                    styles.PasswordStrengthBar,
+                  ]}
+                >
+                  <PasswordStrengthBar
+                    password={newPwd}
+                    error={passwordTooShort}
+                    show={showPasswordStrength}
                   />
                 </View>
                 <SubmitButton
@@ -281,7 +372,8 @@ export default function ProfileScreen() {
                   }}
                   textID="SAVE NEW PWD"
                   iconID="lock-check"
-                  style={{ justifyContent: "top", marginTop: 0 }}
+                  style={styles.submit}
+                  disabled={newPwd.length < minLength}
                 />
               </Surface>
             </List.Accordion>
@@ -312,7 +404,7 @@ export default function ProfileScreen() {
           style={{
             // flex: 1,
             justifyContent: "flex-end",
-            backgroundColor: "#CA4D57",
+            backgroundColor: colors.secondary,
             marginTop: 0,
           }}
         />
@@ -344,7 +436,7 @@ const styles = StyleSheet.create({
     justifyContent: "top",
     width: "95%",
     alignItems: "center",
-    backgroundColor: "#FFE4CA",
+    // backgroundColor: "#FFE4CA",
     borderRadius: 16,
     marginVertical: 20,
   },
@@ -356,6 +448,11 @@ const styles = StyleSheet.create({
   },
   accordion: {
     width: "100%",
-    backgroundColor: "#FFE4CA",
+  },
+  submit: { justifyContent: "top", marginTop: 0, width: "90%" },
+
+  PasswordStrengthBar: {
+    width: "90%",
+    marginBottom: 20,
   },
 });
