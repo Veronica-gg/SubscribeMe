@@ -1,32 +1,76 @@
-function computeStatsCategories(subs) {
+let jsonStatic = require("../../assets/exchangejson.json");
+
+function computeStatsCategories(subs, baseCurrency = "USD", round = true) {
   if (!subs) return;
   let subPerCategory = {};
-  let costPerCategory = {};
+  let monthlyCostPerCategory = {};
+  let yearlyCostPerCategory = {};
   for (const s of subs) {
+    let currencyFactor =
+      jsonStatic.rates[baseCurrency.toUpperCase()] /
+      jsonStatic.rates[s.currency.toUpperCase()];
     if (s.category in subPerCategory) {
       subPerCategory[s.category]++;
-      costPerCategory[s.category] += computeMonthDiscount(
+      monthlyCostPerCategory[s.category] += computeMonthDiscount(
+        currencyFactor,
         s.price,
-        s.renewalPeriod
+        s.renewalPeriod,
+        round
+      );
+      yearlyCostPerCategory[s.category] += computeYearDiscount(
+        currencyFactor,
+        s.price,
+        s.renewalPeriod,
+        round
       );
     } else {
       subPerCategory[s.category] = 1;
-      costPerCategory[s.category] = computeMonthDiscount(
+      monthlyCostPerCategory[s.category] = computeMonthDiscount(
+        currencyFactor,
         s.price,
-        s.renewalPeriod
+        s.renewalPeriod,
+        round
+      );
+      yearlyCostPerCategory[s.category] = computeYearDiscount(
+        currencyFactor,
+        s.price,
+        s.renewalPeriod,
+        round
       );
     }
   }
-  return { subPerCategory: subPerCategory, costPerCategory: costPerCategory };
+  return {
+    subPerCategory: subPerCategory,
+    monthlyCostPerCategory: monthlyCostPerCategory,
+    yearlyCostPerCategory: yearlyCostPerCategory,
+  };
 }
 
-function computeMonthDiscount(cost, period) {
+function computeMonthDiscount(currencyFactor, cost, period, round) {
   if (period === "month" || period === "none") {
-    return Math.round(cost);
+    return round ? Math.round(cost * currencyFactor) : cost * currencyFactor;
   } else if (period === "week") {
-    return Math.round(cost * 4.35);
+    return round
+      ? Math.round(cost * currencyFactor * 4.35)
+      : cost * currencyFactor * 4.35;
   } else if (period === "year") {
-    return Math.round(cost / 12);
+    return round
+      ? Math.round((cost * currencyFactor) / 12)
+      : (cost * currencyFactor) / 12.0;
+  }
+}
+
+function computeYearDiscount(currencyFactor, cost, period, round) {
+  if (period === "month" || period === "none") {
+    return round
+      ? Math.round(cost * currencyFactor * 12)
+      : cost * currencyFactor * 12;
+  } else if (period === "week") {
+    return round
+      ? Math.round(cost * currencyFactor * 52)
+      : cost * currencyFactor * 52;
+  } else if (period === "year") {
+    return round ? Math.round(cost * currencyFactor) : cost * currencyFactor;
   }
 }
 

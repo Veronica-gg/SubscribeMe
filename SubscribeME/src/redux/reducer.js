@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { sortSubsArrayByDate } from "../utils/dateUtils";
 
 const initialState = {
   name: "",
@@ -14,7 +15,7 @@ const stateSlice = createSlice({
   initialState,
   reducers: {
     updateSubs: (state, action) => {
-      state.subs = action.payload.subs;
+      state.subs = sortSubsArrayByDate(action.payload.subs);
     },
     updateFriends: (state, action) => {
       state.friends = action.payload.friends;
@@ -27,9 +28,11 @@ const stateSlice = createSlice({
       }
       state.email = action.payload.email;
     },
+    reset: () => initialState,
   },
 });
 
-export const { updateSubs, updateFriends, updateProfile } = stateSlice.actions;
+export const { updateSubs, updateFriends, updateProfile, reset } =
+  stateSlice.actions;
 
 export default stateSlice.reducer;

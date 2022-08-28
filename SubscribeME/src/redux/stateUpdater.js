@@ -1,4 +1,3 @@
-import { useSelector, useDispatch } from "react-redux";
 import { updateSubs, updateFriends, updateProfile } from "./reducer";
 import { functions } from "../utils/firebase";
 import { httpsCallable } from "firebase/functions";

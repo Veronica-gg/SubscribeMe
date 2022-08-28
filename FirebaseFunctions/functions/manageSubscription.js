@@ -215,9 +215,14 @@ exports.removeMember = functions
     let error = false;
     const uid = context.auth.uid;
     const subRef = db.collection("subscriptions").doc(data.subscription);
-    const subInfo = await subRef.get().catch(() => {
-      error = true;
-    });
+    const subInfo = await subRef
+      .get()
+      .then((res) => {
+        return res;
+      })
+      .catch(() => {
+        error = true;
+      });
     if (
       error ||
       !this.allowedToChangeMembers(
@@ -227,18 +232,20 @@ exports.removeMember = functions
       )
     )
       return { message: "errorNotAllowed" };
-    const uidToDelete = this.checkSubOwnership(uid, subInfo.data().owner)
+    const uidToDelete = this.checkSubOwnership(uid, subInfo.data().owner.id)
       ? data.userToRemove
       : uid;
-    const refUidToDelete = db.collection(uid).doc(uidToDelete);
-    return removeSubFromMember(subRef, refUidToDelete).then((isRemoved) => {
-      if (isRemoved) {
-        return removeMemberFromSub(subRef, refUidToDelete).then((res) => {
-          if (res) return { message: "ok" };
-          else return { message: "errorRemoveMemberFromSub" };
-        });
-      } else return { message: "errorRemoveSubFromMember" };
-    });
+    const refUidToDelete = db.collection("users").doc(uidToDelete);
+    return this.removeSubFromMember(subRef, refUidToDelete).then(
+      (isRemoved) => {
+        if (isRemoved) {
+          return removeMemberFromSub(subRef, refUidToDelete).then((res) => {
+            if (res) return { message: "ok" };
+            else return { message: "errorRemoveMemberFromSub" };
+          });
+        } else return { message: "errorRemoveSubFromMember" };
+      }
+    );
   });
 
 exports.deleteSubscription = functions
@@ -275,9 +282,9 @@ exports.allowedToChangeMembers = function allowedToChangeMembers(
   owner,
   members
 ) {
-  if (checkSubOwnership(uid, owner)) return true;
+  if (this.checkSubOwnership(uid, owner)) return true;
   for (const member of members) {
-    if (checkSubOwnership(uid, member)) return true;
+    if (this.checkSubOwnership(uid, member.id)) return true;
   }
   return false;
 };

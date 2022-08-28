@@ -16,7 +16,7 @@ const BarChartPrice = ({ data, accessor, absolute }) => {
           backgroundColor: "#FF9428",
           backgroundGradientFrom: "#FF9428",
           backgroundGradientTo: "#CA4D57",
-          decimalPlaces: 2, // optional, defaults to 2dp
+          decimalPlaces: 0, // optional, defaults to 2dp
           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           style: {

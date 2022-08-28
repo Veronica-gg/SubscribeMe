@@ -8,7 +8,9 @@ const TextInput = (props) => {
   const isFriend = props.isFriend === true;
   const isPending = props.isPending === true;
   const [showPassword, setShowPassword] = useState(false);
-  const [focus, setFocus] = useState(false);
+  const [focus, setFocus] = useState(props.edit || false);
+  const onDeleteFriend = props.onDeleteFriend;
+  const onAcceptFriend = props.onAcceptFriend;
   return (
     <PaperTextInput
       placeholder={focus ? null : props.originalPlaceholder}
@@ -23,16 +25,7 @@ const TextInput = (props) => {
       }
       left={
         isPending ? (
-          <PaperTextInput.Icon
-            icon="account-check"
-            onPress={() => {
-              Alert.alert(
-                "Request Accepted",
-                "You have accepted the pending request.",
-                [{ text: "OK", onPress: () => {} }]
-              );
-            }}
-          />
+          <PaperTextInput.Icon icon="account-check" onPress={onAcceptFriend} />
         ) : null
       }
       right={
@@ -54,41 +47,9 @@ const TextInput = (props) => {
             }
           />
         ) : isFriend ? (
-          <PaperTextInput.Icon
-            icon="delete"
-            onPress={() => {
-              Alert.alert(
-                "Delete",
-                "Are you sure you want to remove your friend?",
-                [
-                  {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  { text: "OK", onPress: () => {} },
-                ]
-              );
-            }}
-          />
+          <PaperTextInput.Icon icon="delete" onPress={onDeleteFriend} />
         ) : isPending ? (
-          <PaperTextInput.Icon
-            icon="delete"
-            onPress={() => {
-              Alert.alert(
-                "Delete",
-                "Are you sure you want to delete the pending request?",
-                [
-                  {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  { text: "OK", onPress: () => {} },
-                ]
-              );
-            }}
-          />
+          <PaperTextInput.Icon icon="delete" onPress={onDeleteFriend} />
         ) : null
       }
       secureTextEntry={isPassword && !showPassword}

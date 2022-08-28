@@ -152,7 +152,6 @@ exports.answerFriendRequest = functions // manage accepted or rejected friend re
 exports.removeFriend = functions
   .region("europe-west1")
   .https.onCall(async (data, context) => {
-    let error = false;
     let uid = context.auth.uid;
     let uidDoc = db.collection("users").doc(uid);
     let friendDoc = db.collection("users").doc(data.friendUid);

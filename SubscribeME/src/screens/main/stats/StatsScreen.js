@@ -1,14 +1,31 @@
-import { useEffect } from "react";
-import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { useCallback, useEffect, useState } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 import { Surface } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import BarChartPrice from "../../../components/BarChartPrice";
 import PieCategory from "../../../components/PieCategory";
+import { updateState } from "../../../redux/stateUpdater";
 import { computeStatsCategories } from "../../../utils/statsCalculator";
-import { categoryList, getDisplayCategory } from "../subs/defaultSubValue";
+import { categoryList } from "../subs/defaultSubValue";
 
 export default function StatsScreen() {
+  const [refreshing, setRefreshing] = useState(false);
+  const dispatch = useDispatch();
+  const onRefresh = useCallback(() => {
+    // Manages pull to refresh
+    setRefreshing(true);
+    updateState(dispatch, true, false, false).subs.then((promise) => {
+      setRefreshing(false);
+    });
+  }, []);
+
   const chartConfig = {
     backgroundGradientFrom: "#1E2923",
     backgroundGradientFromOpacity: 0,
@@ -23,7 +40,7 @@ export default function StatsScreen() {
   const subs = useSelector((state) => state.data.subs);
   let stats = computeStatsCategories(subs);
   let counter = stats.subPerCategory;
-  let cost = stats.costPerCategory;
+  let cost = stats.monthlyCostPerCategory;
   let data = { labels: [], datasets: [{ data: [] }] };
   for (const category of categoryList) {
     data.labels.push(category.label);
@@ -33,7 +50,7 @@ export default function StatsScreen() {
   useEffect(() => {
     stats = computeStatsCategories(subs);
     counter = stats.subPerCategory;
-    cost = stats.costPerCategory;
+    cost = stats.monthlyCostPerCategory;
     data = { labels: [], datasets: [{ data: [] }] };
     for (const category of categoryList) {
       data.labels.push(category.label);
@@ -106,6 +123,9 @@ export default function StatsScreen() {
           justifyContent: "top",
           alignItems: "center",
         }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         <View
           style={{

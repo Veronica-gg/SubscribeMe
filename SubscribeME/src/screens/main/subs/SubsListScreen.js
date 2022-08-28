@@ -3,19 +3,12 @@ import SubsItem from "../../../components/SubsItem";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useCallback } from "react";
 import LoadingIndicator from "../../../components/LoadingIndicator";
-import {
-  RefreshControl,
-  FlatList,
-  Alert,
-  SectionList,
-  View,
-} from "react-native";
+import { RefreshControl, Alert, SectionList, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { updateState } from "../../../redux/stateUpdater";
 import { useTheme, Text } from "react-native-paper";
 import SubmitButton from "../../../components/SubmitButton";
 import { LinearGradient } from "expo-linear-gradient";
-import { nextDeadline } from "../../../utils/dateUtils";
 
 export default function SubsListScreen() {
   const subsState = useSelector((state) => state.data.subs);
@@ -99,10 +92,7 @@ export default function SubsListScreen() {
             ? "card-account-details"
             : item.name
         }
-        dateID={
-          nextDeadline(item.renewalDate, item.renewalPeriod, item.renewalEach)
-            .days
-        }
+        dateID={item.days}
         category={item.category}
         onPressID={() => {
           navigation.navigate("Description", { ...item });
