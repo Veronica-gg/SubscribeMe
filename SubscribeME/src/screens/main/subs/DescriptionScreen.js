@@ -9,6 +9,7 @@ import { getDisplayCategory, getDisplayRepeat } from "./defaultSubValue";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
 import { formatDate, nextDeadline } from "../../../utils/dateUtils";
+import LoadingIndicator from "../../../components/LoadingIndicator";
 
 export default function DescriptionScreen(props) {
   const { colors } = useTheme();
@@ -16,6 +17,7 @@ export default function DescriptionScreen(props) {
   const [logoutHeight, setLogoutHeight] = useState(0);
 
   const notOwner = !props.route.params.owner;
+  const [disablePage, setDisablePage] = useState(false);
 
   const currencySymbol = {
     eur: "€",
@@ -42,8 +44,10 @@ export default function DescriptionScreen(props) {
     const fun = notOwner
       ? httpsCallable(functions, "manageSubscription-removeMember")
       : httpsCallable(functions, "manageSubscription-deleteSubscription");
+    setDisablePage(true);
     return fun({ subscription: id })
       .then((v) => {
+        setDisablePage(false);
         if (v.data.message === "ok") {
           Alert.alert(
             "Subscription deleted",
@@ -71,6 +75,7 @@ export default function DescriptionScreen(props) {
         }
       })
       .catch(() => {
+        setDisablePage(false);
         Alert.alert("Error", "Could not delete subscription.", [
           {
             text: "OK",
@@ -100,9 +105,10 @@ export default function DescriptionScreen(props) {
       edges={["left", "right"]}
       style={{
         flex: 1,
-        // justifyContent: "center",
-        // alignItems: "center",
+        justifyContent: "center",
+        alignItems: "center",
       }}
+      pointerEvents={disablePage ? "none" : "auto"}
     >
       <ScrollView
         style={{ flexGrow: 1, width: "100%" }}
@@ -388,6 +394,12 @@ export default function DescriptionScreen(props) {
           />
         </View>
       </View>
+      {disablePage && (
+        <LoadingIndicator
+          size="large"
+          style={{ position: "absolute", bottom: "50%" }}
+        />
+      )}
     </SafeAreaView>
   );
 }

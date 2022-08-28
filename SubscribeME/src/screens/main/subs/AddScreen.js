@@ -96,6 +96,7 @@ export default function AddScreen(props) {
 
   function saveSub(isEdit) {
     let fun;
+    setDisablePage(true);
     if (isEdit) {
       fun = httpsCallable(functions, "manageSubscription-editSubscription");
     } else {
@@ -151,6 +152,7 @@ export default function AddScreen(props) {
         }
       })
       .catch((e) => {
+        setDisablePage(false);
         Alert.alert("Error", "An error occurred :( Please try again", [
           {
             text: "OK",
@@ -398,7 +400,6 @@ export default function AddScreen(props) {
               : true
           }
           onPressID={() => {
-            setDisablePage(true);
             saveSub(isEdit);
           }}
         />

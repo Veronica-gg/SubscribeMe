@@ -14,11 +14,14 @@ import { Text } from "react-native-paper";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "../../../utils/firebase";
 import { useIsFocused } from "@react-navigation/native";
+import LoadingIndicator from "../../../components/LoadingIndicator";
 
 export default function FriendsListPage() {
   const friends = useSelector((state) => state.data.friends);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+
+  const [disablePage, setDisablePage] = useState(false);
 
   useEffect(() => {
     if (!isFocused) return;
@@ -35,9 +38,11 @@ export default function FriendsListPage() {
   }, []);
 
   function deleteCurrentFriend(friendUid) {
+    setDisablePage(true);
     const fun = httpsCallable(functions, "manageUser-removeFriend");
     return fun({ friendUid: friendUid })
       .then((v) => {
+        setDisablePage(false);
         console.log(v);
         Alert.alert("Deleted", "You have successfully delete your friend.", [
           {
@@ -49,6 +54,7 @@ export default function FriendsListPage() {
         ]);
       })
       .catch((e) => {
+        setDisablePage(false);
         console.log(e);
       });
   }
@@ -78,7 +84,16 @@ export default function FriendsListPage() {
     );
   }
   return (
-    <SafeAreaView edges={["left", "right", "top"]} style={styles.safe}>
+    <SafeAreaView
+      edges={["left", "right", "top"]}
+      style={{
+        ...styles.safe,
+        flex: 1,
+        justifyContent: "top",
+        alignItems: "center",
+      }}
+      pointerEvents={disablePage ? "none" : "auto"}
+    >
       <FlatList
         fadingEdgeLength={"5%"}
         contentContainerStyle={{
@@ -109,6 +124,12 @@ export default function FriendsListPage() {
           </View>
         }
       />
+      {disablePage && (
+        <LoadingIndicator
+          size="large"
+          style={{ position: "absolute", bottom: "50%" }}
+        />
+      )}
     </SafeAreaView>
   );
 }

@@ -136,9 +136,20 @@ export default function StatsScreen() {
         >
           <Surface style={styles.surf}>
             <Text style={styles.title}>Your Category Shares</Text>
-            <View>
-              <PieCategory data={chartData} accessor="total" absolute={false} />
-            </View>
+            {subs.length > 0 && (
+              <View>
+                <PieCategory
+                  data={chartData}
+                  accessor="total"
+                  absolute={false}
+                />
+              </View>
+            )}
+            {subs.length == 0 && (
+              <View>
+                <Text style={styles.title}>You have no subscriptions.</Text>
+              </View>
+            )}
           </Surface>
 
           <Surface

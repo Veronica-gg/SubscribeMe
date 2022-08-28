@@ -18,6 +18,7 @@ import {
 import { updateState } from "../../../redux/stateUpdater";
 import { useDispatch } from "react-redux";
 import { reset } from "../../../redux/reducer";
+import LoadingIndicator from "../../../components/LoadingIndicator";
 
 export default function ProfileScreen() {
   const { colors } = useTheme();
@@ -65,13 +66,52 @@ export default function ProfileScreen() {
   const [passwordTooShort, setPasswordTooShort] = useState(false);
   const [friendEmail, setFriendEmail] = useState("");
   const [showPasswordStrength, setShowPasswordStrength] = useState(false);
-  function addFriend() {
+
+  const [disablePage, setDisablePage] = useState(false);
+
+  function addFriend(friendEmail) {
+    setDisablePage(true);
     const fun = httpsCallable(functions, "manageUser-addFriendRequest");
     fun({ email: friendEmail })
       .then((v) => {
-        console.log(v);
+        setDisablePage(false);
+        console.log(v.data);
+        if (v.data.message === "ok") {
+          Alert.alert(
+            "Request sent",
+            "You have successfully sent a request to add a friend.",
+            [{ text: "OK", onPress: () => {} }]
+          );
+        } else if (
+          v.data.message === "errorNotExists" ||
+          v.data.message === "errorNoOwnFriend" ||
+          v.data.message === "errorAlreadyFriend"
+        ) {
+          Alert.alert("Error", "Cannot add this user as a friend.", [
+            { text: "OK", onPress: () => {} },
+          ]);
+        } else {
+          Alert.alert("Error", "A network error occurred :( Please try again", [
+            {
+              text: "OK",
+              onPress: () => {},
+              style: "cancel",
+            },
+          ]);
+        }
+        // console.log(v);
       })
-      .catch((e) => console.log(e));
+      .catch(() => {
+        // console.log(e);
+        setDisablePage(false);
+        Alert.alert("Error", "An error occurred :( Please try again", [
+          {
+            text: "OK",
+            onPress: () => {},
+            style: "cancel",
+          },
+        ]);
+      });
   }
   return (
     <SafeAreaView
@@ -81,6 +121,7 @@ export default function ProfileScreen() {
         justifyContent: "top",
         alignItems: "center",
       }}
+      pointerEvents={disablePage ? "none" : "auto"}
     >
       <View
         style={{
@@ -140,7 +181,7 @@ export default function ProfileScreen() {
                   },
                 ]}
               >
-                <Text style={styles.title}>Insert Friend's e-mail</Text>
+                <Text style={styles.title}>Insert Friend's E-mail</Text>
                 <View style={[styles.inputView, { marginBottom: 0 }]}>
                   <PaperTextInput
                     autoCapitalize="none"
@@ -173,12 +214,8 @@ export default function ProfileScreen() {
                 </HelperText>
                 <SubmitButton
                   onPressID={() => {
-                    addFriend();
-                    Alert.alert(
-                      "Request sent",
-                      "You have successfully sent a request to add a friend.",
-                      [{ text: "OK", onPress: () => {} }]
-                    );
+                    addFriend(friendEmail);
+                    setFriendEmail("");
                     Keyboard.dismiss();
                   }}
                   textID="ADD FRIEND"
@@ -289,6 +326,7 @@ export default function ProfileScreen() {
                       "You have successfully updated your name.",
                       [{ text: "OK", onPress: () => {} }]
                     );
+                    Keyboard.dismiss();
                   }}
                   textID="SAVE NEW NAME"
                   iconID="account-check"
@@ -401,6 +439,7 @@ export default function ProfileScreen() {
                 <SubmitButton
                   onPressID={() => {
                     // addFriend();
+                    Keyboard.dismiss();
                   }}
                   textID="SAVE NEW E-MAIL"
                   iconID="email-check"
@@ -515,6 +554,7 @@ export default function ProfileScreen() {
                 <SubmitButton
                   onPressID={() => {
                     // addFriend();
+                    Keyboard.dismiss();
                   }}
                   textID="SAVE NEW PWD"
                   iconID="lock-check"
@@ -555,6 +595,12 @@ export default function ProfileScreen() {
           }}
         />
       </View>
+      {disablePage && (
+        <LoadingIndicator
+          size="large"
+          style={{ position: "absolute", bottom: "50%" }}
+        />
+      )}
     </SafeAreaView>
   );
 }

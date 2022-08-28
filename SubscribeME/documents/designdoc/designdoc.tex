@@ -277,19 +277,22 @@ At the bottom of the Subscription List Page there is a button `Add New'. This is
 A `Logout' button brings the user back to the authentication page.
 
 \subsubsection{Component Diagrams}
-\subsubsection{Runtime View}
 
 \subsection{Firebase}
-gestire automaticam auth: manages registration e invio mail recupero, verifica mail
+The application requires authentication to be used, so that the application can properly store each individual's memberships and details. There is also some sensible data, such as the card's last four digits, so it is recommended to register with a strong password. Indeed, there is a `Password Strength Bar' that helps the user realize whether the typed password is good enough for them.
 
-easy to one endpoint (interface)
+The authentication per se is handled with Google Firebase, which has a simple interface that allows to automatically manage the registration (with the verification e-mail) and, if needed, the password retrieval e-mail (with the link for a safe reset of the password). The registration requires a chosen name, the e-mail and a password. Firebase already checks that the information provided is compatible with the wanted data. Nevertheless, we implemented some client-side input verifications as well, in order to allow only:
+\begin{enumerate}
+    \item names with alpha-numeric values and less than ten characters. The name is not unique, but is used by friends to easily recognize each other when adding them to shared subscriptions. Since the same name can be used by different users, the e-mail is always shown as well, to avoid any ambiguity.
+    \item e-mails correctly formatted;
+    \item passwords with at least six characters.
+\end{enumerate}
 
-verifica input messa da noi client oltre che firebase auth (mail e pwd)
-
-quando ti registri hai anche nome in authentication
-utilizzato per amici (riconoscerli facilmente) no username (no univoco), uid per user e' mail
+In order to improve the user's experience, the logged user will keep access in the future, with no need of further authentication every time he opens the application. Only in case of manual logout, the user needs to access again through the login page.
 
 \subsection{Cloud Functions}
+
+
 cloud functions = node.js backend logic ci sono librerie di firebase che ti permettono di accedere a firestore db dalle cloud functions
 https requests, firebase verifica che siano davvero generate da application
 controllano che chi chiama funz abbia permessi necessari
@@ -341,7 +344,8 @@ Some possible improvements and further implementations could be:
 The tools that we used are:
 \begin{itemize}
     \item \LaTeX\ for the document editing;
-    \item diagrams
-    \item libraries
+    \item \textit{starUML} for the use case diagram;
+    \item \textit{draw.io} for the navigation tree diagram;
+    \item libraries.
 \end{itemize}
 \end{document}

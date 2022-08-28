@@ -14,11 +14,13 @@ import { updateState } from "../../../redux/stateUpdater";
 import { httpsCallable } from "firebase/functions";
 import { functions } from "../../../utils/firebase";
 import { useIsFocused } from "@react-navigation/native";
+import LoadingIndicator from "../../../components/LoadingIndicator";
 
 export default function PendingRequests() {
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
   const isFocused = useIsFocused();
+  const [disablePage, setDisablePage] = useState(false);
 
   useEffect(() => {
     if (!isFocused) return;
@@ -43,9 +45,11 @@ export default function PendingRequests() {
     },
   ];
   function answerFriendRequest(friendUid, accepted) {
+    setDisablePage(true);
     const fun = httpsCallable(functions, "manageUser-answerFriendRequest");
     return fun({ friendReqUid: friendUid, accepted: accepted })
       .then((v) => {
+        setDisablePage(false);
         console.log(v);
         Alert.alert(
           accepted ? "Request Accepted" : "Deleted",
@@ -62,7 +66,9 @@ export default function PendingRequests() {
           ]
         );
       })
-      .catch((e) => {});
+      .catch((e) => {
+        setDisablePage(false);
+      });
   }
 
   function onDeleteFriend(friendUid) {
@@ -104,7 +110,16 @@ export default function PendingRequests() {
   }
 
   return (
-    <SafeAreaView edges={["left", "right", "top"]} style={styles.safe}>
+    <SafeAreaView
+      edges={["left", "right", "top"]}
+      style={{
+        ...styles.safe,
+        flex: 1,
+        justifyContent: "top",
+        alignItems: "center",
+      }}
+      pointerEvents={disablePage ? "none" : "auto"}
+    >
       <SectionList
         fadingEdgeLength={"5%"}
         contentContainerStyle={{
@@ -143,6 +158,12 @@ export default function PendingRequests() {
           return null;
         }}
       />
+      {disablePage && (
+        <LoadingIndicator
+          size="large"
+          style={{ position: "absolute", bottom: "50%" }}
+        />
+      )}
     </SafeAreaView>
   );
 }

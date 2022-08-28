@@ -83,7 +83,11 @@ export default function HomeScreen() {
           <Text style={{ color: "#FFF9F3", marginBottom: 15 }}>
             These are your next payments due:
           </Text>
-          {previewSubs && previewSubs.length === 0 && <Text>No Subs</Text>}
+          {previewSubs && previewSubs.length === 0 && (
+            <Text style={{ color: "#FFF9F3", marginBottom: 15 }}>
+              No Subscriptions
+            </Text>
+          )}
           {previewSubs && previewSubs.length > 0 && (
             <Surface style={styles.daysLeft}>
               <Text style={[styles.textReminder]}>
