@@ -56,7 +56,7 @@ export default function AddScreen(props) {
   const [isCardWrong, setIsCardWrong] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
-  const [inputDate, setInputDate] = useState(undefined);
+  const [inputDate, setInputDate] = useState(new Date(Date.now()));
   const [friends, setFriends] = useState(String);
 
   const [disablePage, setDisablePage] = useState(false);

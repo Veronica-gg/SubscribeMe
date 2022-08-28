@@ -83,4 +83,15 @@ function wordDeclination(numberOfDays) {
   return result + (negative ? " ago" : "");
 }
 
-export { datePickInputFormatter, nextDeadline, wordDeclination };
+function formatDate(newDate) {
+  const formattedDate = new Date(newDate);
+  return (
+    formattedDate.toLocaleString("default", { month: "long" }) +
+    " " +
+    formattedDate.getDate() +
+    ", " +
+    formattedDate.getFullYear()
+  );
+}
+
+export { datePickInputFormatter, nextDeadline, wordDeclination, formatDate };

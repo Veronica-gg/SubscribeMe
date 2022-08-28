@@ -19,7 +19,7 @@ export default function SubsItem(props) {
         right={(p) => (
           <View>
             {/* <List.Icon {...p} icon={props.dateID} style={styles.icon} /> */}
-            <Paragraph style={styles.date}>{props.dateID}</Paragraph>
+            <Paragraph style={styles.date}>{Math.abs(props.dateID)}</Paragraph>
             <Paragraph style={styles.date}>
               {wordDeclination(props.dateID)}
             </Paragraph>

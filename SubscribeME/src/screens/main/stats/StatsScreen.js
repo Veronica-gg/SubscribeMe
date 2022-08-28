@@ -1,8 +1,12 @@
+import { useEffect } from "react";
 import { Text, View, StyleSheet, ScrollView } from "react-native";
 import { Surface } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
 import BarChartPrice from "../../../components/BarChartPrice";
 import PieCategory from "../../../components/PieCategory";
+import { computeStatsCategories } from "../../../utils/statsCalculator";
+import { categoryList, getDisplayCategory } from "../subs/defaultSubValue";
 
 export default function StatsScreen() {
   const chartConfig = {
@@ -16,52 +20,64 @@ export default function StatsScreen() {
     useShadowColorFromDataset: false, // optional
   };
 
+  const subs = useSelector((state) => state.data.subs);
+  let stats = computeStatsCategories(subs);
+  let counter = stats.subPerCategory;
+  let cost = stats.costPerCategory;
+  let data = { labels: [], datasets: [{ data: [] }] };
+  for (const category of categoryList) {
+    data.labels.push(category.label);
+    data.datasets[0].data.push(cost[category.value] || 0);
+  }
+
+  useEffect(() => {
+    stats = computeStatsCategories(subs);
+    counter = stats.subPerCategory;
+    cost = stats.costPerCategory;
+    data = { labels: [], datasets: [{ data: [] }] };
+    for (const category of categoryList) {
+      data.labels.push(category.label);
+      data.datasets[0].data.push(cost[category.value] || 0);
+    }
+  }, [subs]);
+
   const chartData = [
     {
       name: "Shopping",
-      total: 10000,
+      total: counter.shopping || 0,
       color: "#3E3384",
       legendFontColor: "#7F7F7F",
       legendFontSize: 15,
     },
     {
       name: "Movies & TV",
-      total: 50000,
+      total: counter.movies || 0,
       color: "#3098FF",
       legendFontColor: "#7F7F7F",
       legendFontSize: 15,
     },
     {
       name: "Music",
-      total: 90000,
+      total: counter.music || 0,
       color: "#FF9428",
       legendFontColor: "#7F7F7F",
       legendFontSize: 15,
     },
     {
       name: "Tech",
-      total: 80000,
+      total: counter.tech || 0,
       color: "#CA4D57",
       legendFontColor: "#7F7F7F",
       legendFontSize: 15,
     },
     {
       name: "Other",
-      total: 4000,
+      total: counter.other || 0,
       color: "#FFDAB5",
       legendFontColor: "#7F7F7F",
       legendFontSize: 15,
     },
   ];
-
-  const data = {
-    labels: ["Shopping", "Movies/TV", "Music", "Tech", "Other"],
-    datasets: [
-      {
-        data: [20, 45, 28, 80, 90],
-      },
-    ],
-  };
 
   return (
     <SafeAreaView

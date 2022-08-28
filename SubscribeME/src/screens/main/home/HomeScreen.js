@@ -5,10 +5,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { Surface, Text } from "react-native-paper";
 import { updateState } from "../../../redux/stateUpdater";
 import { useIsFocused } from "@react-navigation/native";
+import { nextDeadline } from "../../../utils/dateUtils";
+import { auth } from "../../../utils/firebase";
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
-  const name = useSelector((state) => state.data.name);
+  const name =
+    useSelector((state) => state.data.name) || auth.currentUser.displayName;
   const isFocused = useIsFocused();
   const [firstRender, setFirstRender] = useState(true);
 

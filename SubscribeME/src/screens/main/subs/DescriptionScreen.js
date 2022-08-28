@@ -8,6 +8,7 @@ import SubmitButton from "../../../components/SubmitButton";
 import { getDisplayCategory, getDisplayRepeat } from "./defaultSubValue";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
+import { formatDate, nextDeadline } from "../../../utils/dateUtils";
 
 export default function DescriptionScreen(props) {
   const { colors } = useTheme();
@@ -20,6 +21,18 @@ export default function DescriptionScreen(props) {
     eur: "€",
     usd: "$",
     gbp: "£",
+  };
+
+  const renewal = () => {
+    const deadline = nextDeadline(
+      props.route.params.renewalDate,
+      props.route.params.renewalPeriod,
+      props.route.params.renewalEach
+    );
+    if (deadline.days < 0) return "-";
+    else {
+      return formatDate(deadline.renewalDate);
+    }
   };
 
   function deleteSub(id) {
@@ -103,8 +116,22 @@ export default function DescriptionScreen(props) {
                 },
               ]}
             >
-              <Text style={styles.title}>Renewal Date</Text>
-              <Text style={styles.info}>{props.route.params.renewalDate}</Text>
+              <Text style={styles.title}>Next payment</Text>
+              <Text style={styles.info}>{renewal()}</Text>
+            </Surface>
+            <Surface
+              style={[
+                styles.container,
+                {
+                  backgroundColor:
+                    colors[props.route.params.category] || colors.background,
+                },
+              ]}
+            >
+              <Text style={styles.title}>Subscribed on</Text>
+              <Text style={styles.info}>
+                {formatDate(props.route.params.renewalDate)}
+              </Text>
             </Surface>
             <Surface
               style={[
