@@ -24,6 +24,7 @@ import {
   updateEmail,
   updatePassword,
 } from "firebase/auth";
+import LoadingIndicator from "../../../components/LoadingIndicator";
 
 export default function ProfileScreen() {
   const { colors } = useTheme();
@@ -41,10 +42,57 @@ export default function ProfileScreen() {
       .catch(() => {});
   }
 
+  const [disablePage, setDisablePage] = useState(false);
+
+  function addFriend(friendEmail) {
+    setDisablePage(true);
+    const fun = httpsCallable(functions, "manageUser-addFriendRequest");
+    fun({ email: friendEmail })
+      .then((v) => {
+        setDisablePage(false);
+        console.log(v.data);
+        if (v.data.message === "ok") {
+          Alert.alert(
+            "Request sent",
+            "You have successfully sent a request to add a friend.",
+            [{ text: "OK", onPress: () => {} }]
+          );
+        } else if (
+          v.data.message === "errorNotExists" ||
+          v.data.message === "errorNoOwnFriend" ||
+          v.data.message === "errorAlreadyFriend"
+        ) {
+          Alert.alert("Error", "Cannot add this user as a friend.", [
+            { text: "OK", onPress: () => {} },
+          ]);
+        } else {
+          Alert.alert("Error", "A network error occurred :( Please try again", [
+            {
+              text: "OK",
+              onPress: () => {},
+              style: "cancel",
+            },
+          ]);
+        }
+      })
+      .catch(() => {
+        setDisablePage(false);
+        Alert.alert("Error", "An error occurred :( Please try again", [
+          {
+            text: "OK",
+            onPress: () => {},
+            style: "cancel",
+          },
+        ]);
+      });
+  }
+
   function setRemoteName(userName) {
+    setDisablePage(true);
     const fun = httpsCallable(functions, "manageUser-setName");
     fun({ name: userName })
       .then((v) => {
+        setDisablePage(false);
         if (v.data.message === "ok") {
           dispatch(
             updateProfile({ name: v.data.user.name, email: v.data.user.email })
@@ -60,8 +108,8 @@ export default function ProfileScreen() {
           ]);
         }
       })
-      .catch((e) => {
-        console.log(e);
+      .catch(() => {
+        setDisablePage(false);
         Alert.alert("Error", "A network error occurred :( Please try again", [
           { text: "OK", onPress: () => {} },
         ]);
@@ -69,11 +117,13 @@ export default function ProfileScreen() {
   }
 
   function changeEmailOrPassword(currentPassword, updatedField, isPassword) {
+    setDisablePage(true);
     reauthenticateWithCredential(
       auth.currentUser,
       EmailAuthProvider.credential(auth.currentUser.email, currentPassword)
     )
       .then((res) => {
+        setDisablePage(false);
         if (isPassword) {
           updatePassword(res.user, updatedField)
             .then(() => {
@@ -113,6 +163,7 @@ export default function ProfileScreen() {
         }
       })
       .catch(() => {
+        setDisablePage(false);
         Alert.alert("Error", "Wrong password!", [
           { text: "OK", onPress: () => {} },
         ]);
@@ -150,53 +201,6 @@ export default function ProfileScreen() {
   const [passwordTooShort, setPasswordTooShort] = useState(false);
   const [friendEmail, setFriendEmail] = useState("");
   const [showPasswordStrength, setShowPasswordStrength] = useState(false);
-
-  const [disablePage, setDisablePage] = useState(false);
-
-  function addFriend(friendEmail) {
-    setDisablePage(true);
-    const fun = httpsCallable(functions, "manageUser-addFriendRequest");
-    fun({ email: friendEmail })
-      .then((v) => {
-        setDisablePage(false);
-        console.log(v.data);
-        if (v.data.message === "ok") {
-          Alert.alert(
-            "Request sent",
-            "You have successfully sent a request to add a friend.",
-            [{ text: "OK", onPress: () => {} }]
-          );
-        } else if (
-          v.data.message === "errorNotExists" ||
-          v.data.message === "errorNoOwnFriend" ||
-          v.data.message === "errorAlreadyFriend"
-        ) {
-          Alert.alert("Error", "Cannot add this user as a friend.", [
-            { text: "OK", onPress: () => {} },
-          ]);
-        } else {
-          Alert.alert("Error", "A network error occurred :( Please try again", [
-            {
-              text: "OK",
-              onPress: () => {},
-              style: "cancel",
-            },
-          ]);
-        }
-        // console.log(v);
-      })
-      .catch(() => {
-        // console.log(e);
-        setDisablePage(false);
-        Alert.alert("Error", "An error occurred :( Please try again", [
-          {
-            text: "OK",
-            onPress: () => {},
-            style: "cancel",
-          },
-        ]);
-      });
-  }
   return (
     <SafeAreaView
       edges={["left", "right", "top"]}

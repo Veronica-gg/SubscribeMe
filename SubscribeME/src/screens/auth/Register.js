@@ -27,6 +27,7 @@ import {
 } from "../../utils/utils";
 import { useSelector, useDispatch } from "react-redux";
 import { updateProfile } from "../../redux/reducer";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Register({ navigation }) {
   const dispatch = useDispatch();
@@ -70,134 +71,144 @@ export default function Register({ navigation }) {
       .catch((error) => console.log(error.message));
   };
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <Image
-          style={styles.image}
-          source={require("../../../assets/subscription-model.png")}
-        />
-        <View
-          style={[
-            styles.inputView,
-            {
-              height: name.length > maxLength || isNameWrong ? 80 : 60,
-              width: "100%",
-            },
-          ]}
-        >
-          <View style={[styles.inputView, { marginBottom: 0 }]}>
-            <TextInput
-              originalPlaceholder="Name"
-              value={name}
-              onChangeText={(text) => {
-                setName(text);
-                setIsNameWrong(!validateName(text));
-              }}
-              error={name.length > maxLength || isNameWrong}
-              onBlur={() => {
-                name.length > 0
-                  ? setIsNameWrong(!validateName(name))
-                  : setIsNameWrong(false);
-              }}
-            />
-          </View>
-          <HelperText
-            type="error"
-            visible={name.length > maxLength || isNameWrong}
+    <SafeAreaView edges={["left", "right", "bottom"]} style={styles.safe}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
+          <Image
+            style={styles.image}
+            source={require("../../../assets/subscription-model.png")}
+          />
+          <View
+            style={[
+              styles.inputView,
+              {
+                height: name.length > maxLength || isNameWrong ? 80 : 60,
+                width: "100%",
+              },
+            ]}
           >
-            Name must be {"<"} 10 char and alphanumeric
-          </HelperText>
-        </View>
-        <View
-          style={[
-            styles.inputView,
-            { height: isEmailWrong ? 80 : 60, width: "100%" },
-          ]}
-        >
-          <View style={[styles.inputView, { marginBottom: 0 }]}>
+            <View style={[styles.inputView, { marginBottom: 0 }]}>
+              <TextInput
+                originalPlaceholder="Name"
+                value={name}
+                onChangeText={(text) => {
+                  setName(text);
+                  setIsNameWrong(!validateName(text));
+                }}
+                error={name.length > maxLength || isNameWrong}
+                onBlur={() => {
+                  name.length > 0
+                    ? setIsNameWrong(!validateName(name))
+                    : setIsNameWrong(false);
+                }}
+              />
+            </View>
+            <HelperText
+              type="error"
+              visible={name.length > maxLength || isNameWrong}
+            >
+              Name must be {"<"} 10 char and alphanumeric
+            </HelperText>
+          </View>
+          <View
+            style={[
+              styles.inputView,
+              { height: isEmailWrong ? 80 : 60, width: "100%" },
+            ]}
+          >
+            <View style={[styles.inputView, { marginBottom: 0 }]}>
+              <TextInput
+                autoCapitalize="none"
+                autoCorrect={false}
+                autoComplete="email"
+                keyboardType="email-address"
+                originalPlaceholder="E-mail"
+                value={email}
+                error={isEmailWrong}
+                onChangeText={(text) => {
+                  setEmail(text);
+                  if (isEmailWrong) {
+                    setIsEmailWrong(!validateEmail(text));
+                  }
+                }}
+                onBlur={() => {
+                  email.length > 0
+                    ? setIsEmailWrong(!validateEmail(email))
+                    : setIsEmailWrong(false);
+                }}
+              />
+            </View>
+            <HelperText type="error" visible={isEmailWrong}>
+              Wrong e-mail format
+            </HelperText>
+          </View>
+
+          <View style={styles.inputView}>
             <TextInput
-              autoCapitalize="none"
-              autoCorrect={false}
-              autoComplete="email"
-              keyboardType="email-address"
-              originalPlaceholder="E-mail"
-              value={email}
-              error={isEmailWrong}
+              originalPlaceholder="Password"
+              value={password}
+              isPassword
+              error={passwordTooShort}
               onChangeText={(text) => {
-                setEmail(text);
-                if (isEmailWrong) {
-                  setIsEmailWrong(!validateEmail(text));
+                setPassword(text);
+                if (!showPasswordStrength) {
+                  setShowPasswordStrength(text.length > 0);
+                }
+                if (passwordTooShort || password.length > text.length) {
+                  setPasswordTooShort(
+                    text.length < minLength && text.length > 0
+                  );
                 }
               }}
               onBlur={() => {
-                email.length > 0
-                  ? setIsEmailWrong(!validateEmail(email))
-                  : setIsEmailWrong(false);
+                setPasswordTooShort(
+                  password.length < minLength && password.length > 0
+                );
+                setShowPasswordStrength(password.length > 0);
               }}
             />
           </View>
-          <HelperText type="error" visible={isEmailWrong}>
-            Wrong e-mail format
-          </HelperText>
-        </View>
-
-        <View style={styles.inputView}>
-          <TextInput
-            originalPlaceholder="Password"
-            value={password}
-            isPassword
-            error={passwordTooShort}
-            onChangeText={(text) => {
-              setPassword(text);
-              if (!showPasswordStrength) {
-                setShowPasswordStrength(text.length > 0);
-              }
-              if (passwordTooShort || password.length > text.length) {
-                setPasswordTooShort(text.length < minLength && text.length > 0);
-              }
-            }}
-            onBlur={() => {
-              setPasswordTooShort(
-                password.length < minLength && password.length > 0
-              );
-              setShowPasswordStrength(password.length > 0);
+          <View
+            style={[
+              showPasswordStrength ? { height: "7%" } : { height: 0 },
+              styles.PasswordStrengthBar,
+            ]}
+          >
+            <PasswordStrengthBar
+              password={password}
+              error={passwordTooShort}
+              show={showPasswordStrength}
+            />
+          </View>
+          <SubmitButton
+            textID="REGISTER"
+            onPressID={handleSignup}
+            iconID="account-plus"
+            disabled={
+              !correctRegistrationFields(name, email, password) ||
+              isEmailWrong ||
+              isNameWrong
+            }
+          ></SubmitButton>
+          <LineButton
+            textID="Already have an account? Login"
+            onPressID={() => {
+              navigation.navigate("Login");
             }}
           />
-        </View>
-        <View
-          style={[
-            showPasswordStrength ? { height: "7%" } : { height: 0 },
-            styles.PasswordStrengthBar,
-          ]}
-        >
-          <PasswordStrengthBar
-            password={password}
-            error={passwordTooShort}
-            show={showPasswordStrength}
-          />
-        </View>
-        <SubmitButton
-          textID="REGISTER"
-          onPressID={handleSignup}
-          iconID="account-plus"
-          disabled={
-            !correctRegistrationFields(name, email, password) ||
-            isEmailWrong ||
-            isNameWrong
-          }
-        ></SubmitButton>
-        <LineButton
-          textID="Already have an account? Login"
-          onPressID={() => {
-            navigation.navigate("Login");
-          }}
-        />
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    //backgroundColor: "#FFF9F3",
+    justifyContent: "center",
+  },
+
   container: {
     flex: 1,
     width: "100%",
