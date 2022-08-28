@@ -15,6 +15,7 @@ import { updateState } from "../../../redux/stateUpdater";
 import { useTheme, Text } from "react-native-paper";
 import SubmitButton from "../../../components/SubmitButton";
 import { LinearGradient } from "expo-linear-gradient";
+import { nextDeadline } from "../../../utils/dateUtils";
 
 export default function SubsListScreen() {
   const subsState = useSelector((state) => state.data.subs);
@@ -98,7 +99,10 @@ export default function SubsListScreen() {
             ? "card-account-details"
             : item.name
         }
-        dateID={require("../../../../assets/days/" + 9 + ".png")}
+        dateID={
+          nextDeadline(item.renewalDate, item.renewalPeriod, item.renewalEach)
+            .days
+        }
         category={item.category}
         onPressID={() => {
           navigation.navigate("Description", { ...item });
@@ -183,13 +187,15 @@ export default function SubsListScreen() {
               </View>
             );
           } else if (section.title == "Shared with me") {
-            <View
-              style={{
-                width: "95%",
-                alignSelf: "center",
-                marginBottom: addHeight * 1.2,
-              }}
-            />;
+            return (
+              <View
+                style={{
+                  width: "95%",
+                  alignSelf: "center",
+                  height: addHeight * 1.2,
+                }}
+              />
+            );
           }
           return null;
         }}

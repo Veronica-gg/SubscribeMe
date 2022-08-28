@@ -2,6 +2,7 @@ import * as React from "react";
 import { List, Paragraph, Surface, Text } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
 import { useTheme } from "react-native-paper";
+import { wordDeclination } from "../utils/dateUtils";
 
 export default function SubsItem(props) {
   const { colors } = useTheme();
@@ -17,8 +18,11 @@ export default function SubsItem(props) {
         left={(p) => <List.Icon {...p} icon={props.iconID} />}
         right={(p) => (
           <View>
-            <List.Icon {...p} icon={props.dateID} style={styles.icon} />
-            <Paragraph style={styles.date}>days</Paragraph>
+            {/* <List.Icon {...p} icon={props.dateID} style={styles.icon} /> */}
+            <Paragraph style={styles.date}>{props.dateID}</Paragraph>
+            <Paragraph style={styles.date}>
+              {wordDeclination(props.dateID)}
+            </Paragraph>
           </View>
         )}
         onPress={props.onPressID}

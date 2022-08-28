@@ -114,7 +114,7 @@ export default function AddScreen(props) {
       category: category,
       customName: getCustomName(name) ? getCustomName(name) : customName,
       customType: getCustomType(type) ? getCustomType(type) : customType,
-      date: new Date(inputDate.setUTCHours(0)).toISOString(),
+      date: new Date(inputDate).toISOString(),
       renewalPeriod: repeat,
       renewalEach: 1,
       type: type,
