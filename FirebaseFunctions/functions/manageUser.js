@@ -159,7 +159,7 @@ exports.removeFriend = functions
       .update({ friends: admin.firestore.FieldValue.arrayRemove(friendDoc) })
       .then(() => {
         return friendDoc
-          .update({ friends: admin.firestore.FieldValue.arrayRemove(uid) })
+          .update({ friends: admin.firestore.FieldValue.arrayRemove(uidDoc) })
           .then(() => {
             return { message: "ok" };
           })

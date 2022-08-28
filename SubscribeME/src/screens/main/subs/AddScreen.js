@@ -107,7 +107,7 @@ export default function AddScreen(props) {
     }
     fun({
       name: name,
-      price: Number(cost),
+      price: Number(cost.replace(",", ".")),
       autoRenewal: isSwitchOn,
       card: card,
       currency: currency,
@@ -123,23 +123,42 @@ export default function AddScreen(props) {
     })
       .then((v) => {
         setDisablePage(false);
-        Alert.alert(
-          isEdit ? "Subscription edited!" : "Subscription added!",
-          "",
-          [
+        console.log(v.data);
+        if (v.data.message === "ok") {
+          Alert.alert(
+            isEdit ? "Subscription edited!" : "Subscription added!",
+            "",
+            [
+              {
+                text: "OK",
+                onPress: () => {
+                  if (isEdit) {
+                    navigation.navigate("Description", { ...v.data.subs });
+                  } else navigation.navigate("SubsList");
+                },
+                style: "cancel",
+              },
+            ]
+          );
+        } else {
+          Alert.alert("Error", "A network error occurred :( Please try again", [
             {
               text: "OK",
-              onPress: () => {
-                if (isEdit) {
-                  navigation.navigate("Description", { ...v.data.subs });
-                } else navigation.navigate("SubsList");
-              },
+              onPress: () => {},
               style: "cancel",
             },
-          ]
-        );
+          ]);
+        }
       })
-      .catch((e) => console.log(e));
+      .catch((e) => {
+        Alert.alert("Error", "An error occurred :( Please try again", [
+          {
+            text: "OK",
+            onPress: () => {},
+            style: "cancel",
+          },
+        ]);
+      });
   }
 
   return (

@@ -36,6 +36,11 @@ export default function HomeScreen() {
       setMonthlyCost(sumValues(stats.monthlyCostPerCategory).toFixed(2));
       setSubNumber(sumValues(stats.subPerCategory));
       setPreviewSubs(subs.filter((el) => el.days >= 0));
+    } else {
+      setYearlyCost((0).toFixed(2));
+      setMonthlyCost((0).toFixed(2));
+      setSubNumber(0);
+      setPreviewSubs([]);
     }
   }, [subs]);
 
@@ -79,7 +84,7 @@ export default function HomeScreen() {
             These are your next payments due:
           </Text>
           {previewSubs && previewSubs.length === 0 && <Text>No Subs</Text>}
-          {previewSubs && previewSubs.length > 1 && (
+          {previewSubs && previewSubs.length > 0 && (
             <Surface style={styles.daysLeft}>
               <Text style={[styles.textReminder]}>
                 {previewSubs[0].customName}
@@ -89,7 +94,7 @@ export default function HomeScreen() {
               </Text>
             </Surface>
           )}
-          {previewSubs && previewSubs.length > 2 && (
+          {previewSubs && previewSubs.length > 1 && (
             <Surface style={styles.daysLeft}>
               <Text style={[styles.textReminder]}>
                 {previewSubs[1].customName}

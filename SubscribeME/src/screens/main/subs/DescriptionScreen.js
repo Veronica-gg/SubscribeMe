@@ -44,12 +44,42 @@ export default function DescriptionScreen(props) {
       : httpsCallable(functions, "manageSubscription-deleteSubscription");
     return fun({ subscription: id })
       .then((v) => {
-        console.log(v.data);
-        if (v.data.message != "ok");
-        //TODO manage if no subs available and/or show error message
+        if (v.data.message === "ok") {
+          Alert.alert(
+            "Subscription deleted",
+            "The subscription was successfully deleted.",
+            [
+              {
+                text: "OK",
+                onPress: () => {
+                  navigation.navigate("SubsList");
+                },
+                style: "cancel",
+              },
+            ]
+          );
+        } else {
+          Alert.alert("Error", "A network error occurred :( Please try again", [
+            {
+              text: "OK",
+              onPress: () => {
+                navigation.navigate("SubsList");
+              },
+              style: "cancel",
+            },
+          ]);
+        }
       })
       .catch(() => {
-        Alert.alert("Error", "Could not delete subscription.");
+        Alert.alert("Error", "Could not delete subscription.", [
+          {
+            text: "OK",
+            onPress: () => {
+              navigation.navigate("SubsList");
+            },
+            style: "cancel",
+          },
+        ]);
       });
   }
 
@@ -59,6 +89,12 @@ export default function DescriptionScreen(props) {
       ...props.route.params,
     });
   }
+
+  let membersName = "";
+  for (const member of props.route.params.members.users) {
+    membersName += member.name + ", ";
+  }
+  membersName = membersName.slice(0, membersName.length - 2);
   return (
     <SafeAreaView
       edges={["left", "right"]}
@@ -207,13 +243,28 @@ export default function DescriptionScreen(props) {
               ]}
             >
               <View style={styles.titleView}>
-                <Text style={styles.title}>Friends</Text>
+                <Text style={styles.title}>Members</Text>
               </View>
-              <Text style={styles.info}>
-                {/* {props.route.params.members.users} */}
-                PLACEHOLDER
-              </Text>
+              <Text style={styles.info}>{membersName}</Text>
             </Surface>
+            {!props.route.params.owner && (
+              <Surface
+                style={[
+                  styles.container,
+                  {
+                    backgroundColor:
+                      colors[props.route.params.category] || colors.background,
+                  },
+                ]}
+              >
+                <View style={styles.titleView}>
+                  <Text style={styles.title}>Owner</Text>
+                </View>
+                <Text style={styles.info}>
+                  {props.route.params.ownerInfo.name}
+                </Text>
+              </Surface>
+            )}
             <Surface
               style={[
                 styles.container,
@@ -305,7 +356,6 @@ export default function DescriptionScreen(props) {
                     text: "OK",
                     onPress: () => {
                       deleteSub(props.route.params.id);
-                      navigation.navigate("SubsList");
                     },
                   },
                 ]

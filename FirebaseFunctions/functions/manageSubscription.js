@@ -45,12 +45,16 @@ async function getSubscriptionsInfo(subs, uid) {
     });
     if (!getError && subInfo.exists) {
       let membersInfo = await getUsersInfo(subInfo.data().members);
+      let ownerInfo = await getUsersInfo([subInfo.data().owner]);
+      if (!(membersInfo.message === "ok" && ownerInfo.message === "ok"))
+        return { message: "errorFetchingMembers", subs: [] };
       infos.push(
         craftSubscriptionInfoResponse(
           {
             ...subInfo.data(),
             id: subInfo.id,
             members: membersInfo,
+            ownerInfo: ownerInfo.users[0],
           },
           uid
         )
@@ -59,7 +63,7 @@ async function getSubscriptionsInfo(subs, uid) {
       error = true;
     }
   }
-  return { message: error ? "fetchingSubError" : "ok", subs: infos };
+  return { message: error ? "errorFetchingSub" : "ok", subs: infos };
 }
 
 function craftSubscriptionInfoResponse(sub, uid) {
@@ -73,6 +77,7 @@ function craftSubscriptionInfoResponse(sub, uid) {
     customType: sub.customType,
     name: sub.name,
     owner: sub.owner.id === uid,
+    ownerInfo: sub.ownerInfo,
     price: sub.price,
     renewalDate: sub.renewalDate,
     renewalEach: sub.renewalEach,
@@ -124,13 +129,12 @@ exports.setNewSubscription = functions
               subscriptions: admin.firestore.FieldValue.arrayUnion(ref),
             })
             .then(() => {
-              return true;
+              return false;
             })
             .catch(() => {
-              return false;
+              return true;
             });
         }
-        console.log(error);
         return error ? { message: "errorAddSubToUser" } : { message: "ok" };
       })
       .catch(() => {
