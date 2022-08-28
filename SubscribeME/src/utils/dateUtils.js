@@ -8,6 +8,7 @@ import {
   differenceInCalendarWeeks,
   differenceInMonths,
   differenceInYears,
+  parseISO,
 } from "date-fns";
 
 function datePickInputFormatter(str) {
@@ -25,7 +26,7 @@ function nextDeadline(renewalDateString, renewalPeriod, renewalEach = 1) {
   const renewalDate = new Date(renewalDateString);
   if (isAfter(renewalDate, nowLocal) || isSameDay(renewalDate, nowLocal)) {
     return {
-      renewalDate: renewalDate.toISOString(),
+      renewalNextDate: renewalDate.toISOString(),
       days: differenceInCalendarDays(renewalDate, nowLocal),
     };
   } else {
@@ -41,7 +42,7 @@ function findNextDate(now, renewal, period, each) {
       let addedMonths = addMonths(renewal, i + difference);
       if (isAfter(addedMonths, now) || isSameDay(addedMonths, now)) {
         return {
-          renewalDate: addedMonths.toISOString(),
+          renewalNextDate: addedMonths.toISOString(),
           days: differenceInCalendarDays(addedMonths, now),
         };
       }
@@ -52,7 +53,7 @@ function findNextDate(now, renewal, period, each) {
       let addedWeeks = addWeeks(renewal, i + difference);
       if (isAfter(addedWeeks, now) || isSameDay(addedWeeks, now)) {
         return {
-          renewalDate: addedWeeks.toISOString(),
+          renewalNextDate: addedWeeks.toISOString(),
           days: differenceInCalendarDays(addedWeeks, now),
         };
       }
@@ -63,14 +64,14 @@ function findNextDate(now, renewal, period, each) {
       let addedYears = addYears(renewal, i + difference);
       if (isAfter(addedYears, now) || isSameDay(addedYears, now)) {
         return {
-          renewalDate: addedYears.toISOString(),
+          renewalNextDate: addedYears.toISOString(),
           days: differenceInCalendarDays(addedYears, now),
         };
       }
     }
   } else {
     return {
-      renewalDate: renewal.toISOString(),
+      renewalNextDate: renewal.toISOString(),
       days: differenceInCalendarDays(renewal, now),
     };
   }
@@ -81,6 +82,17 @@ function wordDeclination(numberOfDays) {
   numberOfDays = Math.abs(numberOfDays);
   let result = numberOfDays === 1 ? "day" : "days";
   return result + (negative ? " ago" : "");
+}
+
+function daysName(numberOfDays) {
+  switch (numberOfDays) {
+    case 0:
+      return "Today";
+    case 1:
+      return "Tomorrow";
+    default:
+      return numberOfDays + " " + wordDeclination(numberOfDays);
+  }
 }
 
 function formatDate(newDate) {
@@ -94,4 +106,23 @@ function formatDate(newDate) {
   );
 }
 
-export { datePickInputFormatter, nextDeadline, wordDeclination, formatDate };
+function sortSubsArrayByDate(subs) {
+  let newSubs = [];
+  for (const sub of subs) {
+    newSubs.push({
+      ...sub,
+      ...nextDeadline(sub.renewalDate, sub.renewalPeriod, sub.renewalEach),
+    });
+  }
+  newSubs.sort((e1, e2) => e1.days - e2.days);
+  return newSubs;
+}
+
+export {
+  datePickInputFormatter,
+  nextDeadline,
+  wordDeclination,
+  daysName,
+  formatDate,
+  sortSubsArrayByDate,
+};

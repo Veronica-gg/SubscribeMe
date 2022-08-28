@@ -7,14 +7,16 @@ import { updateState } from "../../../redux/stateUpdater";
 import { useIsFocused } from "@react-navigation/native";
 import { auth } from "../../../utils/firebase";
 import { computeStatsCategories } from "../../../utils/statsCalculator";
+import { daysName, wordDeclination } from "../../../utils/dateUtils";
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
   const name =
     useSelector((state) => state.data.name) || auth.currentUser.displayName;
-  const isFocused = useIsFocused() || true;
+  const isFocused = useIsFocused() || firstRender;
   const [firstRender, setFirstRender] = useState(true);
   const subs = useSelector((state) => state.data.subs);
+  const [previewSubs, setPreviewSubs] = useState([]);
   const [yearlyCost, setYearlyCost] = useState("0");
   const [monthlyCost, setMonthlyCost] = useState("0");
   const [subNumber, setSubNumber] = useState("0");
@@ -33,6 +35,7 @@ export default function HomeScreen() {
       setYearlyCost(sumValues(stats.yearlyCostPerCategory).toFixed(2));
       setMonthlyCost(sumValues(stats.monthlyCostPerCategory).toFixed(2));
       setSubNumber(sumValues(stats.subPerCategory));
+      setPreviewSubs(subs.filter((el) => el.days >= 0));
     }
   }, [subs]);
 
@@ -75,14 +78,27 @@ export default function HomeScreen() {
           <Text style={{ color: "#FFF9F3", marginBottom: 15 }}>
             These are your next payments due:
           </Text>
-          <Surface style={styles.daysLeft}>
-            <Text style={[styles.textReminder]}>NETFLIX</Text>
-            <Text style={[styles.textReminder]}>5 days</Text>
-          </Surface>
-          <Surface style={styles.daysLeft}>
-            <Text style={styles.textReminder}>SPOTIFY</Text>
-            <Text style={styles.textReminder}>3 days</Text>
-          </Surface>
+          {previewSubs && previewSubs.length === 0 && <Text>No Subs</Text>}
+          {previewSubs && previewSubs.length > 1 && (
+            <Surface style={styles.daysLeft}>
+              <Text style={[styles.textReminder]}>
+                {previewSubs[0].customName}
+              </Text>
+              <Text style={[styles.textReminder]}>
+                {daysName(previewSubs[0].days)}
+              </Text>
+            </Surface>
+          )}
+          {previewSubs && previewSubs.length > 2 && (
+            <Surface style={styles.daysLeft}>
+              <Text style={[styles.textReminder]}>
+                {previewSubs[1].customName}
+              </Text>
+              <Text style={[styles.textReminder]}>
+                {daysName(previewSubs[1].days)}
+              </Text>
+            </Surface>
+          )}
         </Surface>
       </View>
     </SafeAreaView>

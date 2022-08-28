@@ -24,23 +24,24 @@ export default function DescriptionScreen(props) {
   };
 
   const renewal = () => {
-    const deadline = nextDeadline(
-      props.route.params.renewalDate,
-      props.route.params.renewalPeriod,
-      props.route.params.renewalEach
-    );
-    if (deadline.days < 0) return "-";
+    if (props.route.params.days < 0) return "-";
     else {
-      return formatDate(deadline.renewalDate);
+      return formatDate(
+        props.route.params.renewalNextDate ||
+          nextDeadline(
+            props.route.params.renewalDate,
+            props.route.params.renewalPeriod,
+            props.route.params.renewalEach
+          ).renewalNextDate
+      );
     }
   };
 
   function deleteSub(id) {
     // Async call to remote subscriptions
-    const fun = httpsCallable(
-      functions,
-      "manageSubscription-deleteSubscription"
-    );
+    const fun = notOwner
+      ? httpsCallable(functions, "manageSubscription-removeMember")
+      : httpsCallable(functions, "manageSubscription-deleteSubscription");
     return fun({ subscription: id })
       .then((v) => {
         console.log(v.data);

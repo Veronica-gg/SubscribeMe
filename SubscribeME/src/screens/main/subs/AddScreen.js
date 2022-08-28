@@ -220,6 +220,7 @@ export default function AddScreen(props) {
         >
           <View style={[styles.inputView, { marginBottom: 0 }]}>
             <TextInput
+              edit
               autoCapitalize="none"
               autoCorrect={false}
               autoComplete="number"

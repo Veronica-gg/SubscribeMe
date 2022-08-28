@@ -1,19 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   FlatList,
   SafeAreaView,
   View,
   RefreshControl,
+  Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import TextInput from "../../../components/StyledTextInput";
 import { updateState } from "../../../redux/stateUpdater";
 import { Text } from "react-native-paper";
+import { httpsCallable } from "firebase/functions";
+import { functions } from "../../../utils/firebase";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function FriendsListPage() {
   const friends = useSelector((state) => state.data.friends);
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (!isFocused) return;
+    updateState(dispatch, false, true, true);
+  }, [isFocused]);
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = React.useCallback(() => {
@@ -24,6 +34,36 @@ export default function FriendsListPage() {
     });
   }, []);
 
+  function deleteCurrentFriend(friendUid) {
+    const fun = httpsCallable(functions, "manageUser-removeFriend");
+    return fun({ friendUid: friendUid })
+      .then((v) => {
+        console.log(v);
+        Alert.alert("Deleted", "You have successfully delete your friend.", [
+          {
+            text: "OK",
+            onPress: () => {
+              updateState(dispatch, false, true, false);
+            },
+          },
+        ]);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  function onDeleteFriend(friendUid) {
+    Alert.alert("Delete", "Are you sure you want to remove your friend?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "OK", onPress: () => deleteCurrentFriend(friendUid) },
+    ]);
+  }
+
   function renderItem({ item }) {
     return (
       <View style={styles.inputView}>
@@ -31,6 +71,7 @@ export default function FriendsListPage() {
           disabled={true}
           value={item.name}
           isFriend
+          onDeleteFriend={() => onDeleteFriend(item.id)}
           style={{ width: "90%" }}
         />
       </View>

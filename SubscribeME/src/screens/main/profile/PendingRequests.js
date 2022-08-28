@@ -1,19 +1,29 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   StyleSheet,
   SafeAreaView,
   View,
   SectionList,
   RefreshControl,
+  Alert,
 } from "react-native";
-import PaperTextInput from "../../../components/StyledTextInput";
+import TextInput from "../../../components/StyledTextInput";
 import { Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import { updateState } from "../../../redux/stateUpdater";
+import { httpsCallable } from "firebase/functions";
+import { functions } from "../../../utils/firebase";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function PendingRequests() {
   const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (!isFocused) return;
+    updateState(dispatch, false, true, true);
+  }, [isFocused]);
 
   const onRefresh = useCallback(() => {
     // Manages pull to refresh
@@ -25,20 +35,68 @@ export default function PendingRequests() {
   const requests = [
     {
       title: "Inbox",
-      data: useSelector((state) => state.data.pendingFriendsRecv),
+      data: useSelector((state) => state.data.pendingFriendsRecv) || [],
     },
     {
       title: "Sent",
-      data: useSelector((state) => state.data.pendingFriendsSent),
+      data: useSelector((state) => state.data.pendingFriendsSent) || [],
     },
   ];
+  function answerFriendRequest(friendUid, accepted) {
+    const fun = httpsCallable(functions, "manageUser-answerFriendRequest");
+    return fun({ friendReqUid: friendUid, accepted: accepted })
+      .then((v) => {
+        console.log(v);
+        Alert.alert(
+          accepted ? "Request Accepted" : "Deleted",
+          accepted
+            ? "You have accepted the pending request."
+            : "You have deleted the pending request.",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                updateState(dispatch, false, true, false);
+              },
+            },
+          ]
+        );
+      })
+      .catch((e) => {});
+  }
+
+  function onDeleteFriend(friendUid) {
+    Alert.alert(
+      "Delete",
+      "Are you sure you want to delete the pending request?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: () => {
+            answerFriendRequest(friendUid, false);
+          },
+        },
+      ]
+    );
+  }
+  function onAcceptFriend(friendUid) {
+    answerFriendRequest(friendUid, true);
+  }
+
   function renderItem({ item }) {
     return (
       <View style={styles.inputView}>
-        <PaperTextInput
+        <TextInput
           disabled={true}
           value={item.name + " - " + item.email}
           isPending
+          onDeleteFriend={() => onDeleteFriend(item.id)}
+          onAcceptFriend={() => onAcceptFriend(item.id)}
           style={{ textAlign: "center", width: "90%" }}
         />
       </View>
