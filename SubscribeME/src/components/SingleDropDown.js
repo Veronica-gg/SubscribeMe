@@ -1,23 +1,26 @@
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { View, StyleSheet, Keyboard } from "react-native";
 import DropDown from "react-native-paper-dropdown";
 
 function SingleDropDown(props) {
   const [showDropDown, setShowDropDown] = useState(false);
 
   return (
-    <SafeAreaView style={styles.safeContainerStyle}>
+    <View style={styles.safeContainerStyle}>
       <DropDown
         label={props.labelID}
         mode={"outlined"}
         visible={showDropDown}
-        showDropDown={() => setShowDropDown(true)}
+        showDropDown={() => {
+          setShowDropDown(true);
+          Keyboard.dismiss();
+        }}
         onDismiss={() => setShowDropDown(false)}
         value={props.name}
         setValue={props.setName}
         list={props.nameList}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 

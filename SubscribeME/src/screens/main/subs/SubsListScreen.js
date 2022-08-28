@@ -148,7 +148,7 @@ export default function SubsListScreen() {
                 <Text style={{ marginHorizontal: 10 }}>
                   Nothing here :{"("}{" "}
                   {section.title == "My subscriptions"
-                    ? "Why don't you add one below?"
+                    ? "Why don't you add a new subscription?"
                     : ""}
                 </Text>
               </View>
