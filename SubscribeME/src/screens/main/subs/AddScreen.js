@@ -28,6 +28,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from "react-native-paper";
 import { useSelector } from "react-redux";
 import { datePickInputFormatter } from "../../../utils/dateUtils";
+import LoadingIndicator from "../../../components/LoadingIndicator";
 
 export default function AddScreen(props) {
   const { colors } = useTheme();
@@ -58,7 +59,9 @@ export default function AddScreen(props) {
   const [inputDate, setInputDate] = useState(undefined);
   const [friends, setFriends] = useState(String);
 
-  const [logoutHeight, setLogoutHeight] = useState(0);
+  const [disablePage, setDisablePage] = useState(false);
+
+  const [saveHeight, setSaveHeight] = useState(0);
 
   useEffect(() => {
     if (props.route.params && props.route.params.edit) {
@@ -119,7 +122,7 @@ export default function AddScreen(props) {
       id: isEdit ? props.route.params.id : null,
     })
       .then((v) => {
-        console.log(v);
+        setDisablePage(false);
         Alert.alert(
           isEdit ? "Subscription edited!" : "Subscription added!",
           "",
@@ -148,6 +151,7 @@ export default function AddScreen(props) {
         alignItems: "center",
         marginTop: 10,
       }}
+      pointerEvents={disablePage ? "none" : "auto"}
     >
       <ScrollView
         style={{ width: "100%" }}
@@ -315,7 +319,7 @@ export default function AddScreen(props) {
           style={{
             ...styles.inputView,
             backgroundColor: colors.backgroundColor,
-            marginBottom: logoutHeight * 1.2,
+            marginBottom: saveHeight * 1.2,
           }}
         >
           <View
@@ -356,7 +360,7 @@ export default function AddScreen(props) {
           backgroundColor: "transparent",
         }}
         onLayout={(e) => {
-          setLogoutHeight(e.nativeEvent.layout.height);
+          setSaveHeight(e.nativeEvent.layout.height);
         }}
       >
         <SubmitButton
@@ -373,9 +377,18 @@ export default function AddScreen(props) {
               ? false
               : true
           }
-          onPressID={() => saveSub(isEdit)}
+          onPressID={() => {
+            setDisablePage(true);
+            saveSub(isEdit);
+          }}
         />
       </View>
+      {disablePage && (
+        <LoadingIndicator
+          size="large"
+          style={{ position: "absolute", bottom: "50%" }}
+        />
+      )}
     </SafeAreaView>
   );
 }

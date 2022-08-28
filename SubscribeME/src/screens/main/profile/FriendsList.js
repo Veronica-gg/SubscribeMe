@@ -9,6 +9,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import TextInput from "../../../components/StyledTextInput";
 import { updateState } from "../../../redux/stateUpdater";
+import { Text } from "react-native-paper";
 
 export default function FriendsListPage() {
   const friends = useSelector((state) => state.data.friends);
@@ -52,6 +53,19 @@ export default function FriendsListPage() {
         renderItem={renderItem}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        ListEmptyComponent={
+          <View
+            style={{
+              width: "95%",
+              alignSelf: "center",
+              margin: 10,
+            }}
+          >
+            <Text style={{ marginHorizontal: 10 }}>
+              No friends added yet :{"("}
+            </Text>
+          </View>
         }
       />
     </SafeAreaView>

@@ -14,11 +14,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateState } from "../../../redux/stateUpdater";
 import { useTheme, Text } from "react-native-paper";
 import SubmitButton from "../../../components/SubmitButton";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function SubsListScreen() {
   const subsState = useSelector((state) => state.data.subs);
   const dispatch = useDispatch();
-
+  const [addHeight, setAddHeight] = useState(0);
   const { colors } = useTheme();
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
@@ -115,6 +116,26 @@ export default function SubsListScreen() {
         alignItems: "center",
       }}
     >
+      <View
+        style={{
+          textAlign: "left",
+          alignItems: "flex-start",
+          justifyContent: "flex-start",
+          flexDirection: "row",
+          width: "100%",
+        }}
+      >
+        <Text
+          style={{
+            textAlign: "left",
+            fontSize: 30,
+            margin: 20,
+            marginBottom: 0,
+          }}
+        >
+          List of Subscriptions
+        </Text>
+      </View>
       <SectionList
         fadingEdgeLength={"5%"}
         contentContainerStyle={{
@@ -128,7 +149,14 @@ export default function SubsListScreen() {
         }}
         sections={subs}
         renderSectionHeader={({ section: { title } }) => (
-          <Text style={{ fontSize: 20, fontWeight: "bold", padding: 20 }}>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "bold",
+              padding: 20,
+              backgroundColor: colors.background,
+            }}
+          >
             {title}
           </Text>
         )}
@@ -143,6 +171,7 @@ export default function SubsListScreen() {
                 style={{
                   width: "95%",
                   alignSelf: "center",
+                  marginBottom: addHeight * 1.2,
                 }}
               >
                 <Text style={{ marginHorizontal: 10 }}>
@@ -153,24 +182,55 @@ export default function SubsListScreen() {
                 </Text>
               </View>
             );
+          } else if (section.title == "Shared with me") {
+            <View
+              style={{
+                width: "95%",
+                alignSelf: "center",
+                marginBottom: addHeight * 1.2,
+              }}
+            />;
           }
           return null;
         }}
       />
-      <SubmitButton
+      <LinearGradient
         style={{
-          // flex: 1,
-          justifyContent: "flex-end",
-          backgroundColor: colors.primary,
-          marginTop: 0,
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          height: 100,
         }}
-        iconID="plus-circle-multiple-outline"
-        textID="ADD NEW"
-        // margin="16"
-        onPressID={() => {
-          navigation.navigate("Add");
-        }}
+        colors={[colors.background + "00", colors.background]}
+        pointerEvents={"none"}
       />
+      <View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          alignItems: "center",
+          backgroundColor: "transparent",
+        }}
+        onLayout={(e) => {
+          setAddHeight(e.nativeEvent.layout.height);
+        }}
+      >
+        <SubmitButton
+          style={{
+            // flex: 1,
+            justifyContent: "flex-end",
+            backgroundColor: colors.primary,
+            marginTop: 0,
+          }}
+          iconID="plus-circle-multiple-outline"
+          textID="ADD NEW"
+          // margin="16"
+          onPressID={() => {
+            navigation.navigate("Add");
+          }}
+        />
+      </View>
       {loading && (
         <LoadingIndicator
           size="large"

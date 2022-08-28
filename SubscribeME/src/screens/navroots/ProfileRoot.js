@@ -22,6 +22,7 @@ export default function SubsListRoot() {
         component={FriendsListPage}
         options={{
           title: "List of Friends",
+          headerShown: true,
         }}
       />
       <Stack.Screen
@@ -29,6 +30,7 @@ export default function SubsListRoot() {
         component={PendingRequests}
         options={{
           title: "Pending Requests",
+          headerShown: true,
         }}
       />
     </Stack.Navigator>
