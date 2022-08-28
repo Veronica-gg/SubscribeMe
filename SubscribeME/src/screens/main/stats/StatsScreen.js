@@ -128,7 +128,7 @@ export default function StatsScreen() {
             ]}
           >
             <Text style={[styles.title, { color: "#FFF9F3" }]}>
-              $$ for each category
+              Money spent a month for each category (approx)
             </Text>
             <BarChartPrice data={data} />
           </Surface>
@@ -141,7 +141,9 @@ export default function StatsScreen() {
 const styles = StyleSheet.create({
   title: {
     marginTop: 20,
-    fontWeight: "bold",
+    fontSize: 18,
+    textAlign: "center",
+    // fontWeight: "bold",
   },
   mainTitle: {
     textAlign: "left",

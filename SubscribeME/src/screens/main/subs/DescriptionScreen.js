@@ -63,23 +63,23 @@ export default function DescriptionScreen(props) {
       edges={["left", "right"]}
       style={{
         flex: 1,
-        justifyContent: "top",
-        alignItems: "center",
+        // justifyContent: "center",
+        // alignItems: "center",
       }}
     >
       <ScrollView
         style={{ flexGrow: 1, width: "100%" }}
         contentContainerStyle={{
           justifyContent: "center",
-          alignItems: "center",
+          // alignItems: "center",
         }}
       >
         <View
           style={{
             flex: 1,
             flexDirection: "row",
-            // flexWrap: "wrap",
-            // justifyContent: "top",
+            flexWrap: "wrap",
+            justifyContent: "center",
             marginBottom: logoutHeight * 0.8,
           }}
         >
@@ -88,7 +88,8 @@ export default function DescriptionScreen(props) {
               flex: 1,
               flexDirection: "column",
               flexWrap: "wrap",
-              justifyContent: "flex-start",
+              justifyContent: "space-around",
+              alignItems: "center",
               // marginBottom: logoutHeight * 0.8,
             }}
           >
@@ -101,7 +102,9 @@ export default function DescriptionScreen(props) {
                 },
               ]}
             >
-              <Text style={styles.title}>Cost</Text>
+              <View style={styles.titleView}>
+                <Text style={styles.title}>Cost</Text>
+              </View>
               <Text style={styles.info}>
                 {currencySymbol[props.route.params.currency]}
                 {props.route.params.price}
@@ -116,7 +119,9 @@ export default function DescriptionScreen(props) {
                 },
               ]}
             >
-              <Text style={styles.title}>Next payment</Text>
+              <View style={styles.titleView}>
+                <Text style={styles.title}>Next payment</Text>
+              </View>
               <Text style={styles.info}>{renewal()}</Text>
             </Surface>
             <Surface
@@ -128,7 +133,9 @@ export default function DescriptionScreen(props) {
                 },
               ]}
             >
-              <Text style={styles.title}>Subscribed on</Text>
+              <View style={styles.titleView}>
+                <Text style={styles.title}>Subscribed on</Text>
+              </View>
               <Text style={styles.info}>
                 {formatDate(props.route.params.renewalDate)}
               </Text>
@@ -142,7 +149,9 @@ export default function DescriptionScreen(props) {
                 },
               ]}
             >
-              <Text style={styles.title}>Repeat every</Text>
+              <View style={styles.titleView}>
+                <Text style={styles.title}>Repeat every</Text>
+              </View>
               <Text style={styles.info}>
                 {getDisplayRepeat(props.route.params.renewalPeriod)}
               </Text>
@@ -156,7 +165,9 @@ export default function DescriptionScreen(props) {
                 },
               ]}
             >
-              <Text style={styles.title}>Type</Text>
+              <View style={styles.titleView}>
+                <Text style={styles.title}>Type</Text>
+              </View>
               <Text style={styles.info}>{props.route.params.customType}</Text>
             </Surface>
           </View>
@@ -166,6 +177,8 @@ export default function DescriptionScreen(props) {
               flexDirection: "column",
               flexWrap: "wrap",
               justifyContent: "space-around",
+              alignItems: "center",
+
               // marginBottom: logoutHeight * 0.8,
             }}
           >
@@ -178,7 +191,9 @@ export default function DescriptionScreen(props) {
                 },
               ]}
             >
-              <Text style={styles.title}>Card</Text>
+              <View style={styles.titleView}>
+                <Text style={styles.title}>Card</Text>
+              </View>
               <Text style={styles.info}>{props.route.params.card}</Text>
             </Surface>
             <Surface
@@ -190,7 +205,9 @@ export default function DescriptionScreen(props) {
                 },
               ]}
             >
-              <Text style={styles.title}>Friends</Text>
+              <View style={styles.titleView}>
+                <Text style={styles.title}>Friends</Text>
+              </View>
               <Text style={styles.info}>
                 {/* {props.route.params.members.users} */}
                 PLACEHOLDER
@@ -205,7 +222,9 @@ export default function DescriptionScreen(props) {
                 },
               ]}
             >
-              <Text style={styles.title}>Automatic Payment</Text>
+              <View style={styles.titleView}>
+                <Text style={styles.title}>Automatic Payment</Text>
+              </View>
               <Text style={styles.info}>
                 {props.route.params.autoRenewal ? "YES" : "NO"}
               </Text>
@@ -219,7 +238,9 @@ export default function DescriptionScreen(props) {
                 },
               ]}
             >
-              <Text style={styles.title}>Category</Text>
+              <View style={styles.titleView}>
+                <Text style={styles.title}>Category</Text>
+              </View>
               <Text style={styles.info}>
                 {getDisplayCategory(props.route.params.category)}
               </Text>
@@ -327,7 +348,7 @@ const styles = StyleSheet.create({
     width: "90%",
     borderRadius: 16,
     padding: 15,
-    margin: 10,
+    margin: 5,
     alignSelf: "flex-start",
   },
   info: {
@@ -337,8 +358,12 @@ const styles = StyleSheet.create({
   },
   title: {
     // color: "#FFF9F3",
-    fontSize: 18,
+    fontSize: 20,
     paddingBottom: 5,
-    // fontWeight: "bold",
+  },
+  titleView: {
+    borderBottomColor: "black",
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    marginBottom: 5,
   },
 });

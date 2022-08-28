@@ -152,6 +152,21 @@ There are five main features in the \textit{SubscribeME} app:
 \section{User Characteristics}\label{sec:char}
 The target population is anyone who has multiple subscriptions active at the same time, who wants some help in keeping track of the costs and of the deadlines. Most importantly, it is useful for people who tend to activate memberships and then forget about them, so that they do not waste any money in unused perks.
 
+\subsection{Use case Diagram}
+Figure \ref{fig:usecase} shows the use case diagram from the point of view of the typical user. Every action can be performed only upon registration and, the following times, upon login. The available features involve handling the subscriptions, visualize the statistics and future deadlines and to manage friends.
+
+Going into further detail, a subscription must be added in order to be able to modify it, delete it and to see the related statistics and future deadlines.
+
+\noindent Concerning the management of friends, they can be added providing the friend's registration e-mail. The second user can then accept the request or deny it; once accepted, the friend can also be removed.
+
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=0.9\textwidth, trim={0 0.1cm 0 0.2cm},, clip]{../../assets/usecaseDiagram.PNG}
+    \end{center}
+    \caption{Use Case diagram}
+    \label{fig:usecase}
+\end{figure}
+
 \subsection{Scenarios}\label{sub:scenarios}
 \subsubsection{Reminder of the payment for a subscription}
 Arya activated a monthly Apple plan, as an additional warranty for her devices. She wants to be sure to be covered, because these devices are fundamental for her job. She is also very busy and she can get distracted, so she uploaded the information about this subscription on \textit{SubscribeME} and then totally forgot. Luckily, at the time of the renewal of the offer, she sees on the app that she needs to pay for the plan.
@@ -167,10 +182,139 @@ Amber and Luc are twins and they want to activate the Spotify family plan, to sp
 
 \newpage
 \section{Design Overview}\label{sec:design}
+\subsection{Architectural Design Overview}
+The \textit{SubscribeMe} application is based on the client-server paradigm. The user connects via the mobile app (the client) to the services provided in the server, such as the application logic (backend) and the database. Overall, the implementation structure can be described as a Model-View-Controller pattern. On one hand, the client contains the View and some input verification (part of the Controller); the server, on the other hand, has additional checks (the rest of the Controller) and the whole application Model.
+
+The platform employed to implement the server architecture is Google Firebase, an out-of-the-box solution to manage the backend, as well as all the authentication functions and the data storage (Firestore).
+
+\noindent In order to keep an updated and coherent state of the whole application, the Redux Toolkit library has been used. The Toolkit version is the latest release of the Redux code and it is meant to simplify and shorten the Redux configuration and code.
+
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=\textwidth, clip]{../../assets/highLevel.png}
+    \end{center}
+    \caption{High Level Architecture Diagram}
+    \label{fig:highLevel}
+\end{figure}
+
+In Figure \ref{fig:highLevel}, it is possible to better understand the structure of the entire application.
+The application on the user's device interacts directly with Redux Toolkit and, through internet, with the application own APIs and the Firebase Authentication API. The former has access to the Cloud Functions stored in Firebase, while the latter uses the Authentication Functions from the Firebase own authentication provider. The Cloud Functions need access to the data stored in the Firestore database.
+
+\subsection{Client Application}
+The technology used to implement the application is React Native. This allowed a faster, cleaner and, most of all, single code base that can at the same time render an iOS and an Android app. The framework uses JavaScript as underlying programming language.
+
+The client side contains mainly the View of the MVC pattern. Its structure is presented in Figure \ref{fig:navigationTree} and in is divided in two main branches, in order to keep every domain separated from the others and allow the user to better navigate from one section to the other, both logically and physically in the frontend implementation.
+
+In particular, the `main application', as stated in Figure \ref{fig:navigationTree}, is implemented as a bottom tabular navigation, for a fast switch from page to page. The other links are stack navigation links, one for each domain, so that the history of one stack does not influence or negatively impacts the other stacks.
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=\textwidth, clip]{../../assets/navigationTree.drawio.png}
+    \end{center}
+    \caption{Application Navigation Tree: the structure of all the pages the user can navigate to.}
+    \label{fig:navigationTree}
+\end{figure}
+
+\subsubsection{Application Pages}
+{\scshape{Home Page}}
+\vspace{0.2cm}
+
+\noindent The Home Page's function is to summarize the useful data that the user can later analyze more in detail in other sections. Specifically, there is a greeting message and two boxes that display: \begin{itemize}
+    \item the financial information: how much money the user is spending a year/a month and how many subscriptions they subscribed to;
+    \item the payment reminders: which are the next two subscriptions that need to be renewed and payed and in how many days.
+\end{itemize}
+
+\vspace{0.5cm}
+\noindent{\scshape{Subscription List Page}}
+\vspace{0.2cm}
+
+\noindent The Subscription List Page shows two separate lists of plans: \begin{itemize}
+    \item `My Subscriptions': are all of the offers that the users activated on their own behalf and, optionally, for other friends. They are the owners of the subscription and the only ones who can edit it.
+    \item `Shared with me': vice versa, these are the plans that a friend activated and shared with the user. In this case, the only possible action is to delete the plan and to rescind the offer.
+\end{itemize}
+
+Clicking on the subscription item opens a Detail Page, where the user can review all the information about the membership. There is the possibility to remove it and possibly edit it (if the user is the owner).
+
+At the bottom of the Subscription List Page there is a button `Add New'. This is for inserting in the database a new membership, and the form requires many fields to fill in all the data that can be useful to the user.
+
+\vspace{0.5cm}
+\noindent{\scshape{Statistics Page}}
+\vspace{0.2cm}
+
+\noindent The Statistics Page renders some graphs, in order to visualize the aggregated data about the memberships. The plans can be flagged with only one of the following categories:
+\begin{itemize}
+    \item[--] Movies \& TV,
+    \item[--] Shopping,
+    \item[--] Music,
+    \item[--] Tech,
+    \item[--] Other.
+\end{itemize}
+
+\noindent There are two main graphs: \begin{enumerate}
+    \item `Your Category Shares': it is a pie chart to show the percentage of plans active in each category.
+    \item `Money spent a month for each category': the sum of the money spent in each category thanks to an approximation computed on a monthly basis.
+\end{enumerate}
+
+\vspace{0.5cm}
+\noindent{\scshape{Profile Page}}
+\vspace{0.2cm}
+
+\noindent The Profile Page provides some settings, both in friends and profile management: \begin{itemize}
+    \item `Manage Friends':
+          \begin{itemize}
+              \item `Add a friend': provides the basic instructions to add a friend (by inserting the friend's e-mail)
+              \item `Pending Requests': allows the navigation to a new page, that shows all the requests not yet accepted nor rejected, both in the Inbox and Sent.
+              \item `List of Friends': shows in a new screen the list of friends and allows the user to delete them.
+          \end{itemize}
+    \item `Profile Settings': editable account information
+          \begin{itemize}
+              \item `Name': the account name, used for friends to easily recognize each other (non-unique information);
+              \item `E-mail': unique identifier, can be changed upon insertion of the profile password;
+              \item `Password': profile password necessary for the login, can be changed upon correct insertion of the old one.
+          \end{itemize}
+\end{itemize}
+
+A `Logout' button brings the user back to the authentication page.
+
+\subsubsection{Component Diagrams}
+\subsubsection{Runtime View}
+
+\subsection{Firebase}
+gestire automaticam auth: manages registration e invio mail recupero, verifica mail
+
+easy to one endpoint (interface)
+
+verifica input messa da noi client oltre che firebase auth (mail e pwd)
+
+quando ti registri hai anche nome in authentication
+utilizzato per amici (riconoscerli facilmente) no username (no univoco), uid per user e' mail
+
+\subsection{Cloud Functions}
+cloud functions = node.js backend logic ci sono librerie di firebase che ti permettono di accedere a firestore db dalle cloud functions
+https requests, firebase verifica che siano davvero generate da application
+controllano che chi chiama funz abbia permessi necessari
+solo owner puo modificare subs
+possibile implementare trigger per db per mantenere stato consistente
+messaggi di errore specifici come risposte
+utili per debug e per visualizzazione frontend
+
+\subsection{Firestore database}
+collection of documents
+dati sono semplici nop complex structure, this solution allows for a more agile solution
+
+firestore db settato per essere inaccessibile da esterno
+solo admin puo effettuare modifiche - protezione db da richieste esterne
+tutte funz di manipolaz dati salvaraggio e data retrieval tramite cloud functions
+
+\subsection{Redux Toolkit}
+redux toolkit latest version of redux
+managed workflow (vedi sito)
+redux has state aggiornato ogni cambio pagina in background, cosi user experience ottimale
+centralizzata, permette di avere stato coerente in varie schermate di application
+
 
 \newpage
 \section{User Interface Design}\label{sec:ui}
-\subsection{Flow Graphs}
 
 \subsection{Screenshots}
 \subsubsection{Smartphone Application}
