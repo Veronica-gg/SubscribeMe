@@ -16,15 +16,21 @@ import {
   validateName,
 } from "../../../utils/utils";
 import { updateState } from "../../../redux/stateUpdater";
-import { useDispatch } from "react-redux";
-import { reset } from "../../../redux/reducer";
-import LoadingIndicator from "../../../components/LoadingIndicator";
+import { useDispatch, useSelector } from "react-redux";
+import { reset, updateProfile } from "../../../redux/reducer";
+import {
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updateEmail,
+  updatePassword,
+} from "firebase/auth";
 
 export default function ProfileScreen() {
   const { colors } = useTheme();
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const myEmail = useSelector((state) => state.data.email);
 
   function logout() {
     auth
@@ -33,6 +39,84 @@ export default function ProfileScreen() {
         dispatch(reset());
       })
       .catch(() => {});
+  }
+
+  function setRemoteName(userName) {
+    const fun = httpsCallable(functions, "manageUser-setName");
+    fun({ name: userName })
+      .then((v) => {
+        if (v.data.message === "ok") {
+          dispatch(
+            updateProfile({ name: v.data.user.name, email: v.data.user.email })
+          );
+          Alert.alert(
+            "Name correctly saved",
+            "You have successfully updated your name.",
+            [{ text: "OK", onPress: () => {} }]
+          );
+        } else {
+          Alert.alert("Error", "A network error occurred :( Please try again", [
+            { text: "OK", onPress: () => {} },
+          ]);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        Alert.alert("Error", "A network error occurred :( Please try again", [
+          { text: "OK", onPress: () => {} },
+        ]);
+      });
+  }
+
+  function changeEmailOrPassword(currentPassword, updatedField, isPassword) {
+    reauthenticateWithCredential(
+      auth.currentUser,
+      EmailAuthProvider.credential(auth.currentUser.email, currentPassword)
+    )
+      .then((res) => {
+        if (isPassword) {
+          updatePassword(res.user, updatedField)
+            .then(() => {
+              Alert.alert(
+                "Password updated",
+                "You have successfully updated your password.",
+                [{ text: "OK", onPress: () => {} }]
+              );
+              setOldPwd("");
+              setNewPwd("");
+              setShowPasswordStrength(false);
+            })
+            .catch(() => {
+              Alert.alert("Error", "Could not update password. Try again.", [
+                { text: "OK", onPress: () => {} },
+              ]);
+            });
+        } else {
+          updateEmail(res.user, updatedField)
+            .then(() => {
+              dispatch(
+                updateProfile({
+                  email: updatedField,
+                })
+              );
+              Alert.alert(
+                "E-mail updated",
+                "You have successfully updated your e-mail.",
+                [{ text: "OK", onPress: () => {} }]
+              );
+            })
+            .catch(() => {
+              Alert.alert("Error", "Could not update e-mail. Try again.", [
+                { text: "OK", onPress: () => {} },
+              ]);
+            });
+        }
+      })
+      .catch(() => {
+        Alert.alert("Error", "Wrong password!", [
+          { text: "OK", onPress: () => {} },
+        ]);
+      });
   }
 
   useEffect(() => {
@@ -295,9 +379,7 @@ export default function ProfileScreen() {
                     value={newName}
                     onChangeText={(text) => {
                       setNewName(text);
-                      // if (isNameWrong) {
                       setIsNameWrong(!validateName(text));
-                      // }
                     }}
                     error={newName.length > maxLength || isNameWrong}
                     onBlur={() => {
@@ -320,12 +402,7 @@ export default function ProfileScreen() {
                 </HelperText>
                 <SubmitButton
                   onPressID={() => {
-                    // addFriend();
-                    Alert.alert(
-                      "Name correctly saved",
-                      "You have successfully updated your name.",
-                      [{ text: "OK", onPress: () => {} }]
-                    );
+                    setRemoteName(newName);
                     Keyboard.dismiss();
                   }}
                   textID="SAVE NEW NAME"
@@ -379,7 +456,7 @@ export default function ProfileScreen() {
                 <Text style={styles.title}>This is your current e-mail</Text>
                 <View style={styles.inputView}>
                   <PaperTextInput
-                    value={oldEmail}
+                    value={myEmail}
                     disabled={true}
                     theme={{
                       colors: {
@@ -438,7 +515,7 @@ export default function ProfileScreen() {
                 </View>
                 <SubmitButton
                   onPressID={() => {
-                    // addFriend();
+                    changeEmailOrPassword(pwd, newEmail, false);
                     Keyboard.dismiss();
                   }}
                   textID="SAVE NEW E-MAIL"
@@ -553,7 +630,7 @@ export default function ProfileScreen() {
                 </View>
                 <SubmitButton
                   onPressID={() => {
-                    // addFriend();
+                    changeEmailOrPassword(oldPwd, newPwd, true);
                     Keyboard.dismiss();
                   }}
                   textID="SAVE NEW PWD"

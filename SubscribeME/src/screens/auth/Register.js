@@ -91,9 +91,7 @@ export default function Register({ navigation }) {
               value={name}
               onChangeText={(text) => {
                 setName(text);
-                // if (isNameWrong) {
                 setIsNameWrong(!validateName(text));
-                // }
               }}
               error={name.length > maxLength || isNameWrong}
               onBlur={() => {
