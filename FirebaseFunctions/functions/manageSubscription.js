@@ -78,6 +78,7 @@ function craftSubscriptionInfoResponse(sub, uid) {
     renewalEach: sub.renewalEach,
     renewalPeriod: sub.renewalPeriod,
     type: sub.type,
+    members: sub.members,
   };
 }
 
@@ -139,19 +140,21 @@ exports.setNewSubscription = functions
 
 exports.editSubscription = functions
   .region("europe-west1")
-  .https.onCall((data, context) => {
+  .https.onCall(async (data, context) => {
     const uid = context.auth.uid;
-    const subscription = db.collection("subscriptions").doc(data.id); // TODO -- check owner
+    const subscription = db.collection("subscriptions").doc(data.id);
+    const owner = await subscription
+      .get()
+      .then((res) => {
+        return res.data().owner;
+      })
+      .catch(() => {
+        return false;
+      });
+    if (!this.checkSubOwnership(uid, owner.id))
+      return { message: "errorInternal" };
     return subscription
-      .set(
-        {
-          name: data.name,
-          price: data.price,
-          owner: db.collection("users").doc(uid),
-          members: [db.collection("users").doc(uid)], // adding myself as member? For now useful to debug, then TODO
-        },
-        { merge: true }
-      )
+      .set(parseInputSubData(data, uid), { merge: true })
       .then(() => {
         return subscription
           .get()

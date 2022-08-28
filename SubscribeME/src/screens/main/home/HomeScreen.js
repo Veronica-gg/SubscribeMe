@@ -30,16 +30,10 @@ export default function HomeScreen() {
         }}
       >
         <Text style={styles.title}>
-          Hi, {name && name.length > 0 ? name : "User"}!
+          Hi{name && name.length > 0 ? ", " + name : ""}!
         </Text>
       </View>
       <View style={styles.view}>
-        {/* <Button
-          title="Dummy"
-          onPress={() => {
-            dispatch(updateProfile({ name: "aaaa", email: "email" }));
-          }}
-        ></Button> */}
         <Surface
           style={[
             styles.reminder,

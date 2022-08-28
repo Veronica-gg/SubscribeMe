@@ -27,6 +27,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useTheme } from "react-native-paper";
 import { useSelector } from "react-redux";
+import { datePickInputFormatter } from "../../../utils/dateUtils";
 import LoadingIndicator from "../../../components/LoadingIndicator";
 
 export default function AddScreen(props) {
@@ -34,6 +35,13 @@ export default function AddScreen(props) {
   const navigation = useNavigation();
 
   const friendsList = useSelector((state) => state.data.friends);
+  let friendsListCopy = [...friendsList];
+  if (props.route.params && props.route.params.edit) {
+    for (const friend of props.route.params.members.users) {
+      if (friendsListCopy.filter((el) => el.id === friend.id).length === 0)
+        friendsListCopy.push(friend);
+    }
+  }
 
   const [name, setName] = useState("");
   const [customName, setCustomName] = useState("");
@@ -60,6 +68,28 @@ export default function AddScreen(props) {
       navigation.setOptions({ title: "Edit subscription" });
       setCost(String(props.route.params.price));
       setName(props.route.params.name);
+      setCustomName(
+        getCustomName(props.route.params.name)
+          ? ""
+          : props.route.params.customName
+      );
+      setType(props.route.params.type);
+      setCustomType(
+        getCustomType(props.route.params.type)
+          ? ""
+          : props.route.params.customType
+      );
+      setCard(props.route.params.card);
+      setRepeat(props.route.params.renewalPeriod);
+      setCurrency(props.route.params.currency);
+      setCategory(props.route.params.category);
+      setInputDate(datePickInputFormatter(props.route.params.renewalDate));
+      let friendStringBuilder = ",";
+      for (const el of props.route.params.members.users) {
+        friendStringBuilder += el.id + ",";
+      }
+
+      setFriends(friendStringBuilder.slice(0, friendStringBuilder.length - 1));
       setIsEdit(true);
     }
   }, []);
@@ -84,7 +114,9 @@ export default function AddScreen(props) {
       category: category,
       customName: getCustomName(name) ? getCustomName(name) : customName,
       customType: getCustomType(type) ? getCustomType(type) : customType,
+      date: new Date(inputDate).toISOString(),
       renewalPeriod: repeat,
+      renewalEach: 1,
       type: type,
       members: parsedMembers,
       id: isEdit ? props.route.params.id : null,
@@ -125,7 +157,7 @@ export default function AddScreen(props) {
         style={{ width: "100%" }}
         contentContainerStyle={styles.contentContainer}
         automaticallyAdjustKeyboardInsets
-        // keyboardShouldPersistTaps="handled"
+        keyboardShouldPersistTaps="handled"
       >
         <SingleDropDown
           nameList={nameList}
@@ -271,7 +303,7 @@ export default function AddScreen(props) {
           <MultiDropDown
             value={friends}
             setValue={setFriends}
-            nameList={friendsList}
+            nameList={friendsListCopy}
             labelID="Friends"
           />
         </View>
