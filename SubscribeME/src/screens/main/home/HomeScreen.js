@@ -17,9 +17,9 @@ export default function HomeScreen() {
   const [firstRender, setFirstRender] = useState(true);
   const subs = useSelector((state) => state.data.subs);
   const [previewSubs, setPreviewSubs] = useState([]);
-  const [yearlyCost, setYearlyCost] = useState("0");
-  const [monthlyCost, setMonthlyCost] = useState("0");
-  const [subNumber, setSubNumber] = useState("0");
+  const [yearlyCost, setYearlyCost] = useState(0);
+  const [monthlyCost, setMonthlyCost] = useState(0);
+  const [subNumber, setSubNumber] = useState(0);
 
   useEffect(() => {
     if (!isFocused) return;

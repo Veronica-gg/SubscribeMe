@@ -17,19 +17,22 @@ import {
 } from "../../../utils/utils";
 import { updateState } from "../../../redux/stateUpdater";
 import { useDispatch } from "react-redux";
-
-function logout() {
-  auth
-    .signOut()
-    // .then(alert("Signed out!"))
-    .catch((error) => alert(error));
-}
+import { reset } from "../../../redux/reducer";
 
 export default function ProfileScreen() {
   const { colors } = useTheme();
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+
+  function logout() {
+    auth
+      .signOut()
+      .then(() => {
+        dispatch(reset());
+      })
+      .catch(() => {});
+  }
 
   useEffect(() => {
     if (!isFocused) return;

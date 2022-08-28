@@ -28,9 +28,11 @@ const stateSlice = createSlice({
       }
       state.email = action.payload.email;
     },
+    reset: () => initialState,
   },
 });
 
-export const { updateSubs, updateFriends, updateProfile } = stateSlice.actions;
+export const { updateSubs, updateFriends, updateProfile, reset } =
+  stateSlice.actions;
 
 export default stateSlice.reducer;
