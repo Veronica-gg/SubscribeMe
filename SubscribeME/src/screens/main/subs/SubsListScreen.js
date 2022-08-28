@@ -2,7 +2,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import SubsItem from "../../../components/SubsItem";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useCallback } from "react";
-import LoadingIndicator from "../../../components/LoadingIndicator";
 import { RefreshControl, Alert, SectionList, View } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { updateState } from "../../../redux/stateUpdater";
@@ -16,9 +15,7 @@ export default function SubsListScreen() {
   const [addHeight, setAddHeight] = useState(0);
   const { colors } = useTheme();
   const navigation = useNavigation();
-  const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [tryAgain, setTryAgain] = useState(false);
   const isFocused = useIsFocused();
   const [subs, setSubs] = useState([
     { title: "My subscriptions", data: [] },
@@ -36,48 +33,23 @@ export default function SubsListScreen() {
     setSubs(subsRes);
   }, [subsState]);
 
-  const tryAgainAlert = () =>
-    Alert.alert("Error", "Could not fetch data. Check your connection.", [
-      { text: "Dismiss", style: "cancel" },
-      {
-        text: "Try Again",
-        onPress: () => {
-          setTryAgain(!tryAgain);
-        },
-      },
-    ]);
-
   const onRefresh = useCallback(() => {
     // Manages pull to refresh
     setRefreshing(true);
-    setLoading(false);
-    updateState(dispatch, true, false, false).subs.then((promise) => {
-      setRefreshing(false);
-    });
+    updateState(dispatch, true, false, false)
+      .subs.then((promise) => {
+        setRefreshing(false);
+      })
+      .catch(() => {
+        setRefreshing(false);
+      });
   }, []);
 
   useEffect(() => {
-    // Manages first call of update and further calls on tryAgain press
     if (!isFocused) return;
-    let isMounted = true;
-    if (isMounted) {
-      setLoading(tryAgain || subs.length === 0);
-      const updatePromise = updateState(dispatch, true, false, false).subs;
-      if (updatePromise)
-        updatePromise
-          .then((res) => {
-            if (res.message != "ok" && subs.length === 0) {
-              console.log(res);
-              tryAgainAlert();
-            }
-            setLoading(false);
-          })
-          .catch((e) => console.log(e));
-    }
-    return () => {
-      isMounted = false;
-    };
-  }, [tryAgain || isFocused]);
+    updateState(dispatch, true, false, false);
+    return () => {};
+  }, [isFocused]);
 
   function renderItem({ item }) {
     return (
@@ -227,12 +199,6 @@ export default function SubsListScreen() {
           }}
         />
       </View>
-      {loading && (
-        <LoadingIndicator
-          size="large"
-          style={{ position: "absolute", bottom: "50%" }}
-        />
-      )}
     </SafeAreaView>
   );
 }

@@ -43,7 +43,6 @@ export default function FriendsListPage() {
     return fun({ friendUid: friendUid })
       .then((v) => {
         setDisablePage(false);
-        console.log(v);
         Alert.alert("Deleted", "You have successfully delete your friend.", [
           {
             text: "OK",
@@ -55,7 +54,6 @@ export default function FriendsListPage() {
       })
       .catch((e) => {
         setDisablePage(false);
-        console.log(e);
       });
   }
 
@@ -63,7 +61,7 @@ export default function FriendsListPage() {
     Alert.alert("Delete", "Are you sure you want to remove your friend?", [
       {
         text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
+        onPress: () => {},
         style: "cancel",
       },
       { text: "OK", onPress: () => deleteCurrentFriend(friendUid) },

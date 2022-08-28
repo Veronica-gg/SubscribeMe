@@ -39,7 +39,7 @@ export default function Login({ navigation }) {
         );
         updateState(dispatch, true, true, false);
       })
-      .catch((error) => alert(error.message));
+      .catch(() => Alert.alert("Error", "Invalid credentials"));
   };
 
   function handleRecovery(email) {

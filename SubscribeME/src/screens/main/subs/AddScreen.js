@@ -124,7 +124,6 @@ export default function AddScreen(props) {
     })
       .then((v) => {
         setDisablePage(false);
-        console.log(v.data);
         if (v.data.message === "ok") {
           Alert.alert(
             isEdit ? "Subscription edited!" : "Subscription added!",

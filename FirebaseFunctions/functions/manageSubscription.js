@@ -178,7 +178,7 @@ exports.editSubscription = functions
           })
           .catch(() => {
             return { message: "errorCouldNotEdit" };
-          }); // TODO IMPORTANT, trigger to change members
+          });
       })
       .catch(() => {
         return { message: "errorCouldNotEdit" };

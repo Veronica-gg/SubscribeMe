@@ -50,13 +50,13 @@ export default function ProfileScreen() {
     fun({ email: friendEmail })
       .then((v) => {
         setDisablePage(false);
-        console.log(v.data);
         if (v.data.message === "ok") {
           Alert.alert(
             "Request sent",
             "You have successfully sent a request to add a friend.",
             [{ text: "OK", onPress: () => {} }]
           );
+          setFriendEmail("");
         } else if (
           v.data.message === "errorNotExists" ||
           v.data.message === "errorNoOwnFriend" ||
@@ -102,6 +102,7 @@ export default function ProfileScreen() {
             "You have successfully updated your name.",
             [{ text: "OK", onPress: () => {} }]
           );
+          setNewName("");
         } else {
           Alert.alert("Error", "A network error occurred :( Please try again", [
             { text: "OK", onPress: () => {} },
@@ -154,6 +155,8 @@ export default function ProfileScreen() {
                 "You have successfully updated your e-mail.",
                 [{ text: "OK", onPress: () => {} }]
               );
+              setPwd("");
+              setNewEmail("");
             })
             .catch(() => {
               Alert.alert("Error", "Could not update e-mail. Try again.", [
@@ -303,7 +306,6 @@ export default function ProfileScreen() {
                 <SubmitButton
                   onPressID={() => {
                     addFriend(friendEmail);
-                    setFriendEmail("");
                     Keyboard.dismiss();
                   }}
                   textID="ADD FRIEND"
