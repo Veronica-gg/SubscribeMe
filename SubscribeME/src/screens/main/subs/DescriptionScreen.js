@@ -65,116 +65,139 @@ export default function DescriptionScreen(props) {
           style={{
             flex: 1,
             flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "space-around",
+            // flexWrap: "wrap",
+            // justifyContent: "top",
             marginBottom: logoutHeight * 0.8,
           }}
         >
-          <Surface
-            style={[
-              styles.container,
-              {
-                backgroundColor:
-                  colors[props.route.params.category] || colors.background,
-              },
-            ]}
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "column",
+              flexWrap: "wrap",
+              justifyContent: "flex-start",
+              // marginBottom: logoutHeight * 0.8,
+            }}
           >
-            <Text style={styles.title}>Cost</Text>
-            <Text style={styles.info}>
-              {currencySymbol[props.route.params.currency]}
-              {props.route.params.price}
-            </Text>
-          </Surface>
-          <Surface
-            style={[
-              styles.container,
-              {
-                backgroundColor:
-                  colors[props.route.params.category] || colors.background,
-              },
-            ]}
+            <Surface
+              style={[
+                styles.container,
+                {
+                  backgroundColor:
+                    colors[props.route.params.category] || colors.background,
+                },
+              ]}
+            >
+              <Text style={styles.title}>Cost</Text>
+              <Text style={styles.info}>
+                {currencySymbol[props.route.params.currency]}
+                {props.route.params.price}
+              </Text>
+            </Surface>
+            <Surface
+              style={[
+                styles.container,
+                {
+                  backgroundColor:
+                    colors[props.route.params.category] || colors.background,
+                },
+              ]}
+            >
+              <Text style={styles.title}>Renewal Date</Text>
+              <Text style={styles.info}>{props.route.params.renewalDate}</Text>
+            </Surface>
+            <Surface
+              style={[
+                styles.container,
+                {
+                  backgroundColor:
+                    colors[props.route.params.category] || colors.background,
+                },
+              ]}
+            >
+              <Text style={styles.title}>Repeat every</Text>
+              <Text style={styles.info}>
+                {getDisplayRepeat(props.route.params.renewalPeriod)}
+              </Text>
+            </Surface>
+            <Surface
+              style={[
+                styles.container,
+                {
+                  backgroundColor:
+                    colors[props.route.params.category] || colors.background,
+                },
+              ]}
+            >
+              <Text style={styles.title}>Type</Text>
+              <Text style={styles.info}>{props.route.params.customType}</Text>
+            </Surface>
+          </View>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "column",
+              flexWrap: "wrap",
+              justifyContent: "space-around",
+              // marginBottom: logoutHeight * 0.8,
+            }}
           >
-            <Text style={styles.title}>Renewal Date</Text>
-            <Text style={styles.info}>{props.route.params.renewalDate}</Text>
-          </Surface>
-          <Surface
-            style={[
-              styles.container,
-              {
-                backgroundColor:
-                  colors[props.route.params.category] || colors.background,
-              },
-            ]}
-          >
-            <Text style={styles.title}>Repeat every</Text>
-            <Text style={styles.info}>
-              {getDisplayRepeat(props.route.params.renewalPeriod)}
-            </Text>
-          </Surface>
-          <Surface
-            style={[
-              styles.container,
-              {
-                backgroundColor:
-                  colors[props.route.params.category] || colors.background,
-              },
-            ]}
-          >
-            <Text style={styles.title}>Type</Text>
-            <Text style={styles.info}>{props.route.params.customType}</Text>
-          </Surface>
-          <Surface
-            style={[
-              styles.container,
-              {
-                backgroundColor:
-                  colors[props.route.params.category] || colors.background,
-              },
-            ]}
-          >
-            <Text style={styles.title}>Card</Text>
-            <Text style={styles.info}>{props.route.params.card}</Text>
-          </Surface>
-          <Surface
-            style={[
-              styles.container,
-              {
-                backgroundColor:
-                  colors[props.route.params.category] || colors.background,
-              },
-            ]}
-          >
-            <Text style={styles.title}>Friends</Text>
-            <Text style={styles.info}>"PLACEHOLDER"</Text>
-          </Surface>
-          <Surface
-            style={[
-              styles.container,
-              {
-                backgroundColor:
-                  colors[props.route.params.category] || colors.background,
-              },
-            ]}
-          >
-            <Text style={styles.title}>Automatic Payment</Text>
-            <Text style={styles.info}>
-              {props.route.params.autoRenewal ? "YES" : "NO"}
-            </Text>
-          </Surface>
-          <Surface
-            style={[
-              styles.container,
-              {
-                backgroundColor:
-                  colors[props.route.params.category] || colors.background,
-              },
-            ]}
-          >
-            <Text style={styles.title}>Category</Text>
-            <Text style={styles.info}>
-              {getDisplayCategory(props.route.params.category)}
-            </Text>
-          </Surface>
+            <Surface
+              style={[
+                styles.container,
+                {
+                  backgroundColor:
+                    colors[props.route.params.category] || colors.background,
+                },
+              ]}
+            >
+              <Text style={styles.title}>Card</Text>
+              <Text style={styles.info}>{props.route.params.card}</Text>
+            </Surface>
+            <Surface
+              style={[
+                styles.container,
+                {
+                  backgroundColor:
+                    colors[props.route.params.category] || colors.background,
+                },
+              ]}
+            >
+              <Text style={styles.title}>Friends</Text>
+              <Text style={styles.info}>
+                {/* {props.route.params.members.users} */}
+                PLACEHOLDER
+              </Text>
+            </Surface>
+            <Surface
+              style={[
+                styles.container,
+                {
+                  backgroundColor:
+                    colors[props.route.params.category] || colors.background,
+                },
+              ]}
+            >
+              <Text style={styles.title}>Automatic Payment</Text>
+              <Text style={styles.info}>
+                {props.route.params.autoRenewal ? "YES" : "NO"}
+              </Text>
+            </Surface>
+            <Surface
+              style={[
+                styles.container,
+                {
+                  backgroundColor:
+                    colors[props.route.params.category] || colors.background,
+                },
+              ]}
+            >
+              <Text style={styles.title}>Category</Text>
+              <Text style={styles.info}>
+                {getDisplayCategory(props.route.params.category)}
+              </Text>
+            </Surface>
+          </View>
         </View>
       </ScrollView>
       <LinearGradient
@@ -274,7 +297,7 @@ const styles = StyleSheet.create({
   container: {
     // flex: 1,
     // justifyContent: "center",
-    width: "43%",
+    width: "90%",
     borderRadius: 16,
     padding: 15,
     margin: 10,
@@ -288,7 +311,7 @@ const styles = StyleSheet.create({
   title: {
     // color: "#FFF9F3",
     fontSize: 18,
-
+    paddingBottom: 5,
     // fontWeight: "bold",
   },
 });

@@ -131,37 +131,39 @@ The document is structured in eight sections:
 There are five main features in the \textit{SubscribeME} app:
 \begin{itemize}
     \item the \textbf{Login/Signup} function: the users need to signup and login to be able to use the application. There is a persistent layer for each user and all the information is saved in the Data Base.
-    \item the \textbf{Home page}: a sum-up is provided, with the amount of money that the user is spending at that moment on subscriptions. There is also the reminder to pay for the membership with the closest deadline.
+    \item the \textbf{Home page}: a sum-up is provided, with the amount of money that the user is spending at that moment on subscriptions. There is also the reminder to pay for the memberships with the closest deadline.
     \item the \textbf{Subscriptions List}: the user should be able to add, modify and delete their subscriptions on the app.
           In order to add a membership, the user must provide the following details:
           \begin{itemize}
               \item[-] the name of the membership,
-              \item[-] the renewal date,
+              \item[-] the date when they subscribed to the plan,
               \item[-] how often does the subscription activates,
               \item[-] the amount of money due,
               \item[-] which card is being currently used to pay for it,
               \item[-] whether the payment is automatic or not,
-              \item[-] if they are sharing the subscription with any friend.
+              \item[-] if they are sharing the subscription with any friends.
           \end{itemize}
-          In this last case, the user knows they owe money to a friend, even if the subscription may not be in their name.
+          In this last case, the user knows they owe money to a friend, even if the subscription may not be in their name. In particular, if the user is not the `owner' of the subscription, they cannot edit it, but only withdrawing from the offer.
     \item the \textbf{Statistics page}: offers them the opportunity of analyzing first hand their expenses, seeing how many subscriptions per category (Music, Movies \& TV, Shopping, Tech or Other) they activated and how much money they spend on each of them.
-    \item the \textbf{Profile section}: it contains the Friends list and the feature to add new friends. Also there are some settings that are customizable and a system of notifications and reminders can be set up to help the user be aware of what they should manually pay and what is automatically renewed.
+    \item the \textbf{Profile section}: it contains the Friends list and the feature to add new friends. Also there are some settings.
 \end{itemize}
 
 \newpage
 \section{User Characteristics}\label{sec:char}
-The target population is anyone who has multiple subscriptions active, who wants some help in keeping track of the costs and of the deadlines. Most importantly, it is useful for people who tend to activate memberships and then forget about them, so that they do not waste any money in unused perks.
+The target population is anyone who has multiple subscriptions active at the same time, who wants some help in keeping track of the costs and of the deadlines. Most importantly, it is useful for people who tend to activate memberships and then forget about them, so that they do not waste any money in unused perks.
 
 \subsection{Scenarios}\label{sub:scenarios}
-\subsubsection{Add subscription}
+\subsubsection{Reminder of the payment for a subscription}
+Arya activated a monthly Apple plan, as an additional warranty for her devices. She wants to be sure to be covered, because these devices are fundamental for her job. She is also very busy and she can get distracted, so she uploaded the information about this subscription on \textit{SubscribeME} and then totally forgot. Luckily, at the time of the renewal of the offer, she sees on the app that she needs to pay for the plan.
 
-\subsubsection{Reminder of the manual payment for a subscription}
+\subsubsection{Keeping track of the subscriptions}
+John loves subscribing for every free-trial he puts his eyes on. He cannot miss any opportunities. He often registers with all of his personal and card information. He receives a notification from the bank, his account is empty: he check the billing transcript and he realizes that he had forgotten to unsubscribe from the trials and he has been paying for months for offers he did not even use. He now wants to keep track of every subscription he activates, so he downloads \textit{SubscribeME} to help him monitor his memberships and finances.
 
 \subsubsection{Monitoring the Statistics}
+Mary is a university student and is on a budget, since she does not have a job yet. With the recent price increases and inflation, she cannot afford to waste any money. That is why she decides to use \textit{SubscribeME}: she adds all of her subscriptions, she goes to the `Statistics' page and she realizes that she is definitely spending much more than she was aware of. The majority of her subscriptions are for `Movies \& TV': she does not need all of them.
 
-\subsubsection{Share a subscription with a friend}
-
-\subsection{Use Cases}\label{sub:usecases}
+\subsubsection{Share a subscription}
+Amber and Luc are twins and they want to activate the Spotify family plan, to split the money of the subscription. However, Amber does not trust Luc to be honest with her about the price and to keep his end of the deal, so they both use \textit{SubscribeME} in order to keep track of the deadlines and the money that they are spending. Both see the information about the plan and can monitor it.
 
 \newpage
 \section{Design Overview}\label{sec:design}
