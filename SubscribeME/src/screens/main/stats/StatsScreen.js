@@ -23,7 +23,7 @@ export default function StatsScreen() {
   const subs = useSelector((state) => state.data.subs);
   let stats = computeStatsCategories(subs);
   let counter = stats.subPerCategory;
-  let cost = stats.costPerCategory;
+  let cost = stats.monthlyCostPerCategory;
   let data = { labels: [], datasets: [{ data: [] }] };
   for (const category of categoryList) {
     data.labels.push(category.label);
@@ -33,7 +33,7 @@ export default function StatsScreen() {
   useEffect(() => {
     stats = computeStatsCategories(subs);
     counter = stats.subPerCategory;
-    cost = stats.costPerCategory;
+    cost = stats.monthlyCostPerCategory;
     data = { labels: [], datasets: [{ data: [] }] };
     for (const category of categoryList) {
       data.labels.push(category.label);

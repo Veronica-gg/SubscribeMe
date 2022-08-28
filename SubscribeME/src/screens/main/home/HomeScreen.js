@@ -5,15 +5,19 @@ import { useSelector, useDispatch } from "react-redux";
 import { Surface, Text } from "react-native-paper";
 import { updateState } from "../../../redux/stateUpdater";
 import { useIsFocused } from "@react-navigation/native";
-import { nextDeadline } from "../../../utils/dateUtils";
 import { auth } from "../../../utils/firebase";
+import { computeStatsCategories } from "../../../utils/statsCalculator";
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
   const name =
     useSelector((state) => state.data.name) || auth.currentUser.displayName;
-  const isFocused = useIsFocused();
+  const isFocused = useIsFocused() || true;
   const [firstRender, setFirstRender] = useState(true);
+  const subs = useSelector((state) => state.data.subs);
+  const [yearlyCost, setYearlyCost] = useState("0");
+  const [monthlyCost, setMonthlyCost] = useState("0");
+  const [subNumber, setSubNumber] = useState("0");
 
   useEffect(() => {
     if (!isFocused) return;
@@ -21,6 +25,16 @@ export default function HomeScreen() {
     firstRender && setFirstRender(false);
     updateState(dispatch, true, true, isName);
   }, [isFocused]);
+  const sumValues = (obj) => Object.values(obj).reduce((a, b) => a + b);
+
+  useEffect(() => {
+    if (subs.length > 0) {
+      let stats = computeStatsCategories(subs, "USD", false);
+      setYearlyCost(sumValues(stats.yearlyCostPerCategory).toFixed(2));
+      setMonthlyCost(sumValues(stats.monthlyCostPerCategory).toFixed(2));
+      setSubNumber(sumValues(stats.subPerCategory));
+    }
+  }, [subs]);
 
   return (
     <SafeAreaView edges={["left", "right", "top"]} style={styles.safe}>
@@ -45,14 +59,16 @@ export default function HomeScreen() {
         >
           <Text style={styles.textReminder}>You are spending</Text>
           <Surface style={styles.price}>
-            <Text style={styles.num}>$35,99</Text>
+            <Text style={styles.num}>${monthlyCost}</Text>
             <Text style={styles.text}>a month</Text>
           </Surface>
           <Surface style={styles.price}>
-            <Text style={styles.num}>$320</Text>
+            <Text style={styles.num}>${yearlyCost}</Text>
             <Text style={styles.text}>a year</Text>
           </Surface>
-          <Text style={styles.textReminder}>in subscriptions</Text>
+          <Text style={styles.textReminder}>
+            in {subNumber} {subNumber > 0 ? "subscriptions" : "subscription"}
+          </Text>
         </Surface>
         <Surface style={styles.reminder}>
           <Text style={styles.textReminder}>REMINDER</Text>
