@@ -2,14 +2,22 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import SubsItem from "../../../components/SubsItem";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useCallback } from "react";
-import { RefreshControl, Alert, SectionList, View } from "react-native";
+import {
+  RefreshControl,
+  Alert,
+  SectionList,
+  View,
+  FlatList,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { updateState } from "../../../redux/stateUpdater";
 import { useTheme, Text } from "react-native-paper";
 import SubmitButton from "../../../components/SubmitButton";
 import { LinearGradient } from "expo-linear-gradient";
+import useOrientation from "../../../components/Orientation";
 
 export default function SubsListScreen() {
+  const orientation = useOrientation();
   const subsState = useSelector((state) => state.data.subs);
   const dispatch = useDispatch();
   const [addHeight, setAddHeight] = useState(0);
@@ -75,7 +83,7 @@ export default function SubsListScreen() {
 
   return (
     <SafeAreaView
-      edges={["left", "right", "top"]}
+      edges={["left", "top"]}
       style={{
         flex: 1,
         justifyContent: "top",
@@ -102,66 +110,145 @@ export default function SubsListScreen() {
           List of Subscriptions
         </Text>
       </View>
-      <SectionList
-        fadingEdgeLength={"5%"}
-        contentContainerStyle={{
-          width: "100%",
-          flexGrow: 1,
-        }}
+      <View
         style={{
-          flexGrow: 1,
+          flex: 1,
+          flexDirection: orientation.isPortrait ? "column" : "row",
+          flexWrap: orientation.isPortrait ? "nowrap" : "wrap",
           width: "100%",
-          alignContent: "center",
+          borderWidth: 3,
         }}
-        sections={subs}
-        renderSectionHeader={({ section: { title } }) => (
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: "bold",
-              padding: 20,
-              backgroundColor: colors.background,
+      >
+        <View style={{ width: orientation.isPortrait ? "100%" : "50%" }}>
+          <SectionList
+            fadingEdgeLength={"5%"}
+            contentContainerStyle={{
+              width: "100%",
+              flexGrow: 1,
             }}
-          >
-            {title}
-          </Text>
-        )}
-        renderItem={renderItem}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        renderSectionFooter={({ section }) => {
-          if (section.data.length == 0) {
-            return (
-              <View
+            style={{
+              flexGrow: 1,
+              width: "100%",
+              alignContent: "center",
+            }}
+            sections={orientation.isPortrait ? subs : [subs[0]]}
+            renderSectionHeader={({ section: { title } }) => (
+              <Text
                 style={{
-                  width: "95%",
-                  alignSelf: "center",
-                  marginBottom: addHeight * 1.2,
+                  width: "100%",
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  padding: 20,
+                  backgroundColor: "transparent",
                 }}
               >
-                <Text style={{ marginHorizontal: 10 }}>
-                  Nothing here :{"("}{" "}
-                  {section.title == "My subscriptions"
-                    ? "Why don't you add a new subscription?"
-                    : ""}
+                {title}
+              </Text>
+            )}
+            renderItem={renderItem}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            renderSectionFooter={({ section }) => {
+              if (section.data.length == 0) {
+                return (
+                  <View
+                    style={{
+                      width: "95%",
+                      alignSelf: "center",
+                      marginBottom: addHeight * 1.2,
+                    }}
+                  >
+                    <Text style={{ marginHorizontal: 10 }}>
+                      Nothing here :{"("}{" "}
+                      {section.title == "My subscriptions"
+                        ? "Why don't you add a new subscription?"
+                        : ""}
+                    </Text>
+                  </View>
+                );
+              } else if (section.title == "Shared with me") {
+                return (
+                  <View
+                    style={{
+                      width: "95%",
+                      alignSelf: "center",
+                      height: addHeight * 1.2,
+                    }}
+                  />
+                );
+              }
+              return null;
+            }}
+          />
+        </View>
+        {!orientation.isPortrait && (
+          <View style={{ width: "50%" }}>
+            <SectionList
+              fadingEdgeLength={"5%"}
+              contentContainerStyle={{
+                width: "100%",
+                flexGrow: 1,
+              }}
+              style={{
+                flexGrow: 1,
+                width: "100%",
+                alignContent: "center",
+              }}
+              sections={[subs[1]]}
+              renderSectionHeader={({ section: { title } }) => (
+                <Text
+                  style={{
+                    width: "100%",
+                    fontSize: 20,
+                    fontWeight: "bold",
+                    padding: 20,
+                    backgroundColor: "transparent",
+                  }}
+                >
+                  {title}
                 </Text>
-              </View>
-            );
-          } else if (section.title == "Shared with me") {
-            return (
-              <View
-                style={{
-                  width: "95%",
-                  alignSelf: "center",
-                  height: addHeight * 1.2,
-                }}
-              />
-            );
-          }
-          return null;
-        }}
-      />
+              )}
+              renderItem={renderItem}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+              renderSectionFooter={({ section }) => {
+                if (section.data.length == 0) {
+                  return (
+                    <View
+                      style={{
+                        width: "95%",
+                        alignSelf: "center",
+                        marginBottom: addHeight * 1.2,
+                      }}
+                    >
+                      <Text style={{ marginHorizontal: 10 }}>
+                        Nothing here :{"("}{" "}
+                        {section.title == "My subscriptions"
+                          ? "Why don't you add a new subscription?"
+                          : ""}
+                      </Text>
+                    </View>
+                  );
+                } else if (section.title == "Shared with me") {
+                  return (
+                    <View
+                      style={{
+                        width: "95%",
+                        alignSelf: "center",
+                        height: addHeight * 1.2,
+                      }}
+                    />
+                  );
+                }
+                return null;
+              }}
+            />
+          </View>
+        )}
+      </View>
+
       <LinearGradient
         style={{
           position: "absolute",

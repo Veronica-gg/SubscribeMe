@@ -27,6 +27,8 @@ function nextDeadline(
   renewalEach = 1,
   nowLocal = now
 ) {
+  if (!renewalDateString || !renewalPeriod || !renewalEach || !nowLocal)
+    return false;
   nowLocal.setHours(0, 0, 0, 0);
   const renewalDate = new Date(renewalDateString);
   if (isAfter(renewalDate, nowLocal) || isSameDay(renewalDate, nowLocal)) {
