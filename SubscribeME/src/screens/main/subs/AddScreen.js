@@ -56,7 +56,9 @@ export default function AddScreen(props) {
   const [isCardWrong, setIsCardWrong] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isSwitchOn, setIsSwitchOn] = useState(false);
-  const [inputDate, setInputDate] = useState(new Date(Date.now()));
+  const [inputDate, setInputDate] = useState(
+    new Date(new Date(Date.now()).setHours(0, 0, 0, 0))
+  );
   const [friends, setFriends] = useState(String);
 
   const [disablePage, setDisablePage] = useState(false);
@@ -115,7 +117,7 @@ export default function AddScreen(props) {
       category: category,
       customName: getCustomName(name) ? getCustomName(name) : customName,
       customType: getCustomType(type) ? getCustomType(type) : customType,
-      date: new Date(inputDate).toISOString(),
+      date: new Date(new Date(inputDate).setHours(0, 0, 0, 0)).toISOString(),
       renewalPeriod: repeat,
       renewalEach: 1,
       type: type,

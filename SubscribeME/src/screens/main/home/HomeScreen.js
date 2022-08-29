@@ -1,15 +1,17 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Surface, Text } from "react-native-paper";
 import { updateState } from "../../../redux/stateUpdater";
 import { useIsFocused } from "@react-navigation/native";
 import { auth } from "../../../utils/firebase";
 import { computeStatsCategories } from "../../../utils/statsCalculator";
-import { daysName, wordDeclination } from "../../../utils/dateUtils";
+import { daysName } from "../../../utils/dateUtils";
+import useOrientation from "../../../components/Orientation";
 
 export default function HomeScreen() {
+  const orientation = useOrientation();
   const dispatch = useDispatch();
   const name =
     useSelector((state) => state.data.name) || auth.currentUser.displayName;
@@ -20,6 +22,14 @@ export default function HomeScreen() {
   const [yearlyCost, setYearlyCost] = useState(0);
   const [monthlyCost, setMonthlyCost] = useState(0);
   const [subNumber, setSubNumber] = useState(0);
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(() => {
+    // Manages pull to refresh
+    setRefreshing(true);
+    updateState(dispatch, true, false, false).subs.then((promise) => {
+      setRefreshing(false);
+    });
+  }, []);
 
   useEffect(() => {
     if (!isFocused) return;
@@ -54,62 +64,92 @@ export default function HomeScreen() {
           flexDirection: "row",
         }}
       >
-        <Text style={styles.title}>
+        <Text
+          style={
+            orientation.isPortrait
+              ? styles.title
+              : { ...styles.title, marginBottom: 0 }
+          }
+        >
           Hi{name && name.length > 0 ? ", " + name : ""}!
         </Text>
       </View>
-      <View style={styles.view}>
-        <Surface
-          style={[
-            styles.reminder,
-            { backgroundColor: "rgba(62, 51, 132, 0.8)" },
-          ]}
+      <ScrollView
+        style={{ flexGrow: 1, width: "100%" }}
+        contentContainerStyle={{
+          flex: 1,
+          justifyContent: "center",
+          //alignItems: "center",
+        }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <View
+          style={
+            orientation.isPortrait
+              ? styles.view
+              : { ...styles.view, flexDirection: "row", flexWrap: "wrap" }
+          }
         >
-          <Text style={styles.textReminder}>You are spending</Text>
-          <Surface style={styles.price}>
-            <Text style={styles.num}>${monthlyCost}</Text>
-            <Text style={styles.text}>a month</Text>
-          </Surface>
-          <Surface style={styles.price}>
-            <Text style={styles.num}>${yearlyCost}</Text>
-            <Text style={styles.text}>a year</Text>
-          </Surface>
-          <Text style={styles.textReminder}>
-            in {subNumber} {subNumber > 0 ? "subscriptions" : "subscription"}
-          </Text>
-        </Surface>
-        <Surface style={styles.reminder}>
-          <Text style={styles.textReminder}>REMINDER</Text>
-          <Text style={{ color: "#FFF9F3", marginBottom: 15 }}>
-            These are your next payments due:
-          </Text>
-          {previewSubs && previewSubs.length === 0 && (
-            <Text style={{ color: "#FFF9F3", marginBottom: 15 }}>
-              No Subscriptions
+          <Surface
+            style={{
+              ...styles.reminder,
+              backgroundColor: "rgba(62, 51, 132, 0.8)",
+              width: orientation.isPortrait ? "90%" : "45%",
+            }}
+          >
+            <Text style={styles.textReminder}>You are spending</Text>
+            <Surface style={styles.price}>
+              <Text style={styles.num}>${monthlyCost}</Text>
+              <Text style={styles.text}>a month</Text>
+            </Surface>
+            <Surface style={styles.price}>
+              <Text style={styles.num}>${yearlyCost}</Text>
+              <Text style={styles.text}>a year</Text>
+            </Surface>
+            <Text style={styles.textReminder}>
+              in {subNumber} {subNumber > 0 ? "subscriptions" : "subscription"}
             </Text>
-          )}
-          {previewSubs && previewSubs.length > 0 && (
-            <Surface style={styles.daysLeft}>
-              <Text style={[styles.textReminder]}>
-                {previewSubs[0].customName}
+          </Surface>
+          <Surface
+            style={{
+              ...styles.reminder,
+              width: orientation.isPortrait ? "90%" : "45%",
+            }}
+          >
+            <Text style={styles.textReminder}>REMINDER</Text>
+            <Text style={{ color: "#FFF9F3", marginBottom: 15 }}>
+              These are your next payments due:
+            </Text>
+            {previewSubs && previewSubs.length === 0 && (
+              <Text style={{ color: "#FFF9F3", marginBottom: 15 }}>
+                No Subscriptions
               </Text>
-              <Text style={[styles.textReminder]}>
-                {daysName(previewSubs[0].days)}
-              </Text>
-            </Surface>
-          )}
-          {previewSubs && previewSubs.length > 1 && (
-            <Surface style={styles.daysLeft}>
-              <Text style={[styles.textReminder]}>
-                {previewSubs[1].customName}
-              </Text>
-              <Text style={[styles.textReminder]}>
-                {daysName(previewSubs[1].days)}
-              </Text>
-            </Surface>
-          )}
-        </Surface>
-      </View>
+            )}
+            {previewSubs && previewSubs.length > 0 && (
+              <Surface style={styles.daysLeft}>
+                <Text style={[styles.textReminder]}>
+                  {previewSubs[0].customName}
+                </Text>
+                <Text style={[styles.textReminder]}>
+                  {daysName(previewSubs[0].days)}
+                </Text>
+              </Surface>
+            )}
+            {previewSubs && previewSubs.length > 1 && (
+              <Surface style={styles.daysLeft}>
+                <Text style={[styles.textReminder]}>
+                  {previewSubs[1].customName}
+                </Text>
+                <Text style={[styles.textReminder]}>
+                  {daysName(previewSubs[1].days)}
+                </Text>
+              </Surface>
+            )}
+          </Surface>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -118,7 +158,7 @@ const styles = StyleSheet.create({
   safe: {
     flex: 1,
     //backgroundColor: "#FFF9F3",
-    justifyContent: "top",
+    justifyContent: "center",
   },
   view: {
     flex: 1,
