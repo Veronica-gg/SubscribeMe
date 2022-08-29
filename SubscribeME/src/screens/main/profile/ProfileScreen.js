@@ -409,6 +409,7 @@ export default function ProfileScreen() {
                 <SubmitButton
                   onPressID={() => {
                     setRemoteName(newName);
+                    setNewName("");
                     Keyboard.dismiss();
                   }}
                   textID="SAVE NEW NAME"
@@ -522,6 +523,8 @@ export default function ProfileScreen() {
                 <SubmitButton
                   onPressID={() => {
                     changeEmailOrPassword(pwd, newEmail, false);
+                    setNewEmail("");
+                    setPwd("");
                     Keyboard.dismiss();
                   }}
                   textID="SAVE NEW E-MAIL"
@@ -637,6 +640,8 @@ export default function ProfileScreen() {
                 <SubmitButton
                   onPressID={() => {
                     changeEmailOrPassword(oldPwd, newPwd, true);
+                    setOldPwd("");
+                    setNewPwd("");
                     Keyboard.dismiss();
                   }}
                   textID="SAVE NEW PWD"

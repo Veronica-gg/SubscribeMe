@@ -216,19 +216,19 @@ In particular, the `main application', as stated in Figure \ref{fig:navigationTr
 \end{figure}
 
 \subsubsection{Application Pages}
-{\scshape{Home Page}}
+{\scshape{Home Screen}}
 \vspace{0.2cm}
 
-\noindent The Home Page's function is to summarize the useful data that the user can later analyze more in detail in other sections. Specifically, there is a greeting message and two boxes that display: \begin{itemize}
+\noindent The Home Screen's function is to summarize the useful data that the user can later analyze more in detail in other sections. Specifically, there is a greeting message and two boxes that display: \begin{itemize}
     \item the financial information: how much money the user is spending a year/a month and how many subscriptions they subscribed to;
     \item the payment reminders: which are the next two subscriptions that need to be renewed and payed and in how many days.
 \end{itemize}
 
 \vspace{0.5cm}
-\noindent{\scshape{Subscription List Page}}
+\noindent{\scshape{Subscription List Screen}}
 \vspace{0.2cm}
 
-\noindent The Subscription List Page shows two separate lists of plans: \begin{itemize}
+\noindent The Subscription List Screen shows two separate lists of plans: \begin{itemize}
     \item `My Subscriptions': are all of the offers that the users activated on their own behalf and, optionally, for other friends. They are the owners of the subscription and the only ones who can edit it.
     \item `Shared with me': vice versa, these are the plans that a friend activated and shared with the user. In this case, the only possible action is to delete the plan and to rescind the offer.
 \end{itemize}
@@ -238,10 +238,10 @@ Clicking on the subscription item opens a Detail Page, where the user can review
 At the bottom of the Subscription List Page there is a button `Add New'. This is for inserting in the database a new membership, and the form requires many fields to fill in all the data that can be useful to the user.
 
 \vspace{0.5cm}
-\noindent{\scshape{Statistics Page}}
+\noindent{\scshape{Statistics Screen}}
 \vspace{0.2cm}
 
-\noindent The Statistics Page renders some graphs, in order to visualize the aggregated data about the memberships. The plans can be flagged with only one of the following categories:
+\noindent The Statistics Screen renders some graphs, in order to visualize the aggregated data about the memberships. The plans can be flagged with only one of the following categories:
 \begin{itemize}
     \item[--] Movies \& TV,
     \item[--] Shopping,
@@ -291,29 +291,39 @@ The authentication per se is handled with Google Firebase, which has a simple in
 In order to improve the user's experience, the logged user will keep access in the future, with no need of further authentication every time he opens the application. Only in case of manual logout, the user needs to access again through the login page.
 
 \subsection{Cloud Functions}
+The Cloud Functions use node.js as language to express the backend logic.
+They integrate flawlessly with the other services of the Firebase ecosystem. For instance, they offer a complete SDK to interact with the authentication and database products. They abstract the whole server infrastructure; the setup time and costs are perfectly suited for an application of this size, but they can also be easily scaled to handle a heavier workload.
 
+Together with the authentication, they are the endpoints of the backend accessible by the application. They implement the logic of the application, and can be divided in two types of functions: \begin{itemize}
+    \item onCall functions: triggered by events in the frontend.They encapsulate the authentication information of the user and possible input data. These ones are clearly the only Cloud functions accessible from the `outside', and thus happen through an HTTPS connection.
+    \item trigger functions: functions that respond to precise events of the Firestore database and/or of the authentication services (e.g. creation of a user, deletion of a subscription). They are used to keep the backend data consistent at all times.
+\end{itemize}
 
-cloud functions = node.js backend logic ci sono librerie di firebase che ti permettono di accedere a firestore db dalle cloud functions
-https requests, firebase verifica che siano davvero generate da application
-controllano che chi chiama funz abbia permessi necessari
-solo owner puo modificare subs
-possibile implementare trigger per db per mantenere stato consistente
-messaggi di errore specifici come risposte
-utili per debug e per visualizzazione frontend
+In our implementation, we exploit the authentication information included with each call, to manage and control accesses to the data only if the user is actually authorized to do so. For example, only the owner of a subscription can modify its data. Maliciously crafted requests would fail these checks and consequently would be rejected.
+
+Furthermore, each response is in a JSON format, including message about the success of the requests and the required data. Specific error messages are associated to specific points of failure, in order to keep the user informed of the nature of the error, while also guiding the developers in solving any bug.
+
+\subsubsection{Backend API}
 
 \subsection{Firestore database}
-collection of documents
-dati sono semplici nop complex structure, this solution allows for a more agile solution
+Cloud Firestore is a NoSQL database hosted on cloud, in particular Firebase's newest database for mobile app development. Compared to the old Realtime Database, it provides faster queries and better scaling. Even if both databases have client-first SDKs (no servers to deploy and maintain) and realtime updates, Cloud Firestore manages the data as a collection of documents, which are very similar to JSON files. Since \textit{SubscribeME} data have a pretty simple structure, this solution allows for a more agile and dynamic option.
 
-firestore db settato per essere inaccessibile da esterno
-solo admin puo effettuare modifiche - protezione db da richieste esterne
-tutte funz di manipolaz dati salvaraggio e data retrieval tramite cloud functions
+Firestore is set to be inaccessible from the `outside', by protecting the database from unauthorized requests: only the database admin is allowed to edit any data. It is possible to see that in Figure \ref{fig:rule}: this is the only rule present in the Firestore database and it states that the only acceptable requests are from the admins. This way, this becomes a single point of failure when considering unwanted access and simplifies the rule definition. Every function of manipulation of the saved data or retrieval of information must be from the `inside', through a Cloud Function.
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/firestoreRule.jpg}
+    \end{center}
+    \caption{Firestore rule for accepting requests.}
+    \label{fig:rule}
+\end{figure}
+
+
 
 \subsection{Redux Toolkit}
-redux toolkit latest version of redux
-managed workflow (vedi sito)
-redux has state aggiornato ogni cambio pagina in background, cosi user experience ottimale
-centralizzata, permette di avere stato coerente in varie schermate di application
+Redux Toolkit is the latest version of the Redux library. It has now become the standard way to write Redux logic and it overall simplifies the writing of Redux code, it speeds up development and provides good error catching, by managing the whole workflow.
+
+More in detail, it keeps the application state updated, as a single point of truth for the whole application. Every page change updates in background the state, so that the user can get the correct data and enjoy an optimal experience at the same time. The strength of this library is represented by a centralized state: this is able to keep the data coherent throughout the different screens and pages.
 
 
 \newpage
