@@ -253,6 +253,7 @@ Other diagrams are not shown, due to their trivial structure and linear flow (e.
     \caption{General component diagram for the mobile application.}
     \label{fig:componentGen}
 \end{figure}
+\vspace{0.5cm}
 
 \subsection{Firebase}
 The application requires authentication to be used, so that the application can properly store each individual's memberships and details. There is also some sensible data, such as the card's last four digits, so it is recommended to register with a strong password. Indeed, there is a `Password Strength Bar' that helps the user realize whether the typed password is good enough for them.
@@ -414,26 +415,244 @@ These two cases are taken into consideration because they involve the most compl
 \subsection{Screenshots}
 The application design has been enhanced by customizing the interface specifically for smartphone and for tablet. The two devices typical characteristics have been considered during the design phase and this allowed a better implementation, acknowledging pros and cons of the portrait and landscape modes.
 
-In particular, for what concerns the tablet implementation, the components sizes are enhanced, as well as the layout is changed in order to allow the maximum number of components to be shown at all times. This is why the main pages show a two-column layout, instead of a single column (portrait mode and smartphone design).
+In particular, for what concerns the tablet implementation, the components sizes are enhanced, the font sizes are increased as well as the layout is changed in order to allow the maximum number of components to be shown at all times. This is why the main pages show a two-column layout, instead of a single column (portrait mode and smartphone design). A part from this, the design remains consistent, in order not to puzzle the user when changing from one device to another.
 
 \subsubsection{Smartphone Application}
 
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/login.PNG}
+        \caption{Login page}
+        \label{fig:login}
+    \end{minipage}\hspace{1cm}%
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/reg.PNG}
+        \caption{Registration page}
+        \label{fig:reg}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/regFill.PNG}
+        \caption{Input checks for e-mail format and password}
+        \label{fig:rfill}
+    \end{minipage}\hspace{1cm}%
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/regName.PNG}
+        \caption{Input checks for the name}
+        \label{fig:rname}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/weak.PNG}
+        \caption{Weak password sign}
+        \label{fig:weak}
+    \end{minipage}\hspace{1cm}%
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/forgot.PNG}
+        \caption{Password reset page}
+        \label{fig:forgot}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/home.PNG}
+        \caption{Home screen}
+        \label{fig:home}
+    \end{minipage}\hspace{1cm}%
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/subsList.PNG}
+        \caption{List of subscriptions}
+        \label{fig:subsList}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/subsList2.PNG}
+        \caption{Both `my subscriptions' and `shared with me'}
+        \label{fig:subsList2}
+    \end{minipage}\hspace{1cm}%
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/detail.PNG}
+        \caption{Subscription detail card}
+        \label{fig:detail}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/edit.PNG}
+        \caption{Edit page: already filled form}
+        \label{fig:edit}
+    \end{minipage}\hspace{1cm}%
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/add.PNG}
+        \caption{Input fields for add form}
+        \label{fig:add}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/add2.PNG}
+        \caption{Final fields in add form}
+        \label{fig:add2}
+    \end{minipage}\hspace{1cm}%
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/addDrop.PNG}
+        \caption{Multi-choice drop down menu}
+        \label{fig:addDrop}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/calendar.PNG}
+        \caption{Calendar page to set subscribed on date}
+        \label{fig:calendar}
+    \end{minipage}\hspace{1cm}%
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/stat.PNG}
+        \caption{Statistics: pie chart}
+        \label{fig:stat}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/stat2.PNG}
+        \caption{Statistics: bar chart}
+        \label{fig:stat2}
+    \end{minipage}\hspace{1cm}%
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/profile.PNG}
+        \caption{Profile page: manage friends and settings}
+        \label{fig:profile}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/profileAdd.PNG}
+        \caption{Add friend input field}
+        \label{fig:profileAdd}
+    \end{minipage}\hspace{1cm}%
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/profileAddEmail.PNG}
+        \caption{When the inserted e-mail has a valid format, the button is enabled}
+        \label{fig:profileAddEmail}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/profileNewName.PNG}
+        \caption{Update name}
+        \label{fig:profileNewName}
+    \end{minipage}\hspace{1cm}%
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/profileNewMail.PNG}
+        \caption{Update e-mail, upon password insertion}
+        \label{fig:profileNewMail}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/profileNewPwd.PNG}
+        \caption{Update password, upon old password insertion}
+        \label{fig:profileNewPwd}
+    \end{minipage}\hspace{1cm}%
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/pending.PNG}
+        \caption{No pending friends requests}
+        \label{fig:pending}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/pendingIn.PNG}
+        \caption{Pending request in inbox: can be accepted or deleted}
+        \label{fig:pendingIn}
+    \end{minipage}\hspace{1cm}%
+    \begin{minipage}[c]{0.45\textwidth}
+        \centering
+        \includegraphics[width=0.6\textwidth, clip]{../../assets/smartphone/listFriends.PNG}
+        \caption{List of friends: they can be deleted}
+        \label{fig:listFriends}
+    \end{minipage}
+\end{figure}
+
+\clearpage
 \subsubsection{Tablet Application}
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth, clip]{../../assets/tablet/login.png}
+    \end{center}
+    \caption{Login}
+    \label{fig:tlogin}
+\end{figure}
 
 \newpage
 \section{Implementation, Integration and Test Plan}\label{sec:test}
 \subsection{Implementation Order}
 
+
 \subsection{Integration and Test Plan}
+
 
 \newpage
 \section{Future Development}\label{sec:dev}
 Some possible improvements and further implementations could be:
 \begin{itemize}
-    \item notifications?
-    \item automatic recognition of subscriptions
-    \item payment system integrated
-    \item chat between friends
+    \item a system of push notifications to alert the user even if the app is in background;
+    \item automatic recognition of subscriptions from confirmation e-mails;
+    \item integrated payment system;
+    \item chat between friends.
 \end{itemize}
 
 \section{References}\label{sec:ref}
@@ -441,7 +660,6 @@ The tools that we used are:
 \begin{itemize}
     \item \LaTeX\ for the document editing;
     \item \textit{starUML} for the use case diagram;
-    \item \textit{draw.io} for the navigation tree diagram;
-    \item libraries.
+    \item \textit{draw.io} for the navigation tree diagram, the flow diagrams and the architecture diagram.
 \end{itemize}
 \end{document}
