@@ -42,6 +42,7 @@ function nextDeadline(
 }
 
 function findNextDate(now, renewal, period, each) {
+  if (!now || !renewal || !period || !each) return;
   let difference = 0;
   if (period === "month") {
     difference = Math.min(0, differenceInMonths(now, renewal) - 2);
@@ -85,6 +86,7 @@ function findNextDate(now, renewal, period, each) {
 }
 
 function wordDeclination(numberOfDays) {
+  if (!numberOfDays) return;
   let negative = numberOfDays < 0;
   numberOfDays = Math.abs(numberOfDays);
   let result = numberOfDays === 1 ? "day" : "days";
@@ -92,6 +94,7 @@ function wordDeclination(numberOfDays) {
 }
 
 function daysName(numberOfDays) {
+  if (!numberOfDays) return;
   let printNumber = numberOfDays;
   if (numberOfDays < 0) printNumber = Math.abs(numberOfDays);
   switch (numberOfDays) {
@@ -115,13 +118,20 @@ function formatDate(newDate) {
   );
 }
 
+/**
+ * Sort array of dicts containing {renewalDate, renewalPeriod, renewalEach}
+ * by next deadline (ascending), while adding next deadline to the dict.
+ * Undefined elements are ignored.
+ */
 function sortSubsArrayByDate(subs) {
+  if (!subs) return [];
   let newSubs = [];
   for (const sub of subs) {
-    newSubs.push({
-      ...sub,
-      ...nextDeadline(sub.renewalDate, sub.renewalPeriod, sub.renewalEach),
-    });
+    if (sub)
+      newSubs.push({
+        ...sub,
+        ...nextDeadline(sub.renewalDate, sub.renewalPeriod, sub.renewalEach),
+      });
   }
   newSubs.sort((e1, e2) => e1.days - e2.days);
   return newSubs;
