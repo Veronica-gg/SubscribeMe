@@ -352,6 +352,32 @@ Firestore is set to be inaccessible from the `outside', by protecting the databa
     \label{fig:rule}
 \end{figure}
 
+\subsubsection{Database Structure}
+Given the Cloud Firestore structure as a collection of documents, we decided to store the data in two different collections: \begin{itemize}
+    \item \texttt{subscriptions}: each documents, characterized by a unique identifier, contains: \begin{itemize}
+              \item \texttt{autoRenewal:} if the payment automatically generates at the end of the renewal period;
+              \item \texttt{card:} last four digits of the card used to pay;
+              \item \texttt{category:} category of the subscription (used to render the background color as well);
+              \item \texttt{currency:} payment currency;
+              \item \texttt{customName:} manually inserted name of the subscription;
+              \item \texttt{customType:} manually inserted type of the subscription;
+              \item \texttt{members:} list of friends with whom the user is sharing the subscription;
+              \item \texttt{name:} name of the subscription, chosen from a fixed list;
+              \item \texttt{owner:} user who created the subscription;
+              \item \texttt{price:} money due for the activation of the subscription;
+              \item \texttt{renewalDate:} date when the user activated the subscription;
+              \item \texttt{renewalPeriod:} length of repetition for the payment (e.g. week or month);
+              \item \texttt{type:} type of the subscription, chosen from a fixed list (e.g. student plan or family plan).
+          \end{itemize}
+    \item \texttt{users}:  \begin{itemize}
+              \item \texttt{friends:} list of friends added;
+              \item \texttt{pendingFriendsRecv:} list of pending friend requests received;
+              \item \texttt{pendingFriendsSent:} list of pending friend requests sent out;
+              \item \texttt{subscriptions:} list of subscriptions activated for a user.
+          \end{itemize}
+\end{itemize}
+
+This way, there can be repeated data (so the consistency in the database is harder to maintain), but it allows the management of faster and more complex queries.
 
 
 \subsection{Redux Toolkit}
@@ -363,7 +389,33 @@ More in detail, it keeps the application state updated, as a single point of tru
 \newpage
 \section{User Interface Design}\label{sec:ui}
 
+\subsection{User Interface Flow Diagrams}
+In this section, two flow diagrams are presented (Figure \ref{fig:loginflow} and \ref{fig:editflow}). They illustrate the action flow, from the User Interface point of view, to authenticate a user and to edit a subscription.
+
+These two cases are taken into consideration because they involve the most complex interaction for the user. All the other cases (see the first deadlines, see the statistics, add a subscription) are trivial and linear, thus not explained with a graph.
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.8\textwidth, clip]{../../assets/loginFlow.png}
+    \end{center}
+    \caption{Login flow diagram.}
+    \label{fig:loginflow}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=\textwidth, clip]{../../assets/editflow.png}
+    \end{center}
+    \caption{Login flow diagram.}
+    \label{fig:editflow}
+\end{figure}
+
+
 \subsection{Screenshots}
+The application design has been enhanced by customizing the interface specifically for smartphone and for tablet. The two devices typical characteristics have been considered during the design phase and this allowed a better implementation, acknowledging pros and cons of the portrait and landscape modes.
+
+In particular, for what concerns the tablet implementation, the components sizes are enhanced, as well as the layout is changed in order to allow the maximum number of components to be shown at all times. This is why the main pages show a two-column layout, instead of a single column (portrait mode and smartphone design).
+
 \subsubsection{Smartphone Application}
 
 \subsubsection{Tablet Application}
