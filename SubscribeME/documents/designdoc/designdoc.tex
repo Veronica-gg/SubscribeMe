@@ -9,6 +9,8 @@
 \usepackage{hyperref}
 \usepackage[font=footnotesize,labelfont=bf]{caption}
 \usepackage{amsmath}
+\usepackage{fancyvrb}
+\usepackage{moreverb}
 
 \pagestyle{fancy} 
 \fancyhf{} 
@@ -21,43 +23,6 @@
 \author{Veronica Grosso \and Andrea Giarduz}
 
 \begin{document}
-% \begin{titlepage}
-%     \begin{center}
-%         \vspace*{2.0cm}
-
-%         \huge{\textbf{Design Document}}
-
-%         \vspace{0.4cm}
-
-%         \huge{SubscribeME Application}
-
-%         \vspace{0.8cm}
-
-
-%         \LARGE{Design and Implementation of Mobile Applications}
-
-%         \vspace{0.8cm}
-
-%         \LARGE{Politecnico di Milano}
-%         \\
-%         \LARGE{2021/2022}
-
-%         % \vspace{1.5cm}
-
-
-%         \vfill
-
-%         \Large{Giarduz Andrea\\
-%             Grosso Veronica
-%         }
-
-%         \vspace{0.8cm}
-
-%         \Large
-%         Prof. Luciano Baresi
-%     \end{center}
-% \end{titlepage}
-
 
 \begin{titlepage}
     \begin{center}
@@ -316,11 +281,63 @@ Furthermore, each response is in a JSON format, including message about the succ
 
 \subsubsection{\textit{SubscribeME} APIs}
 The application APIs can be divided into four different categories: \begin{enumerate}
-    \item manageSubscription
-    \item manageUser
-    \item subscriptionMgmtTriggers
-    \item userMgmtTriggers
+    \item manageSubscription (Figure \ref{fig:manageSub}): here there are all the functions which goal is to handle the subscriptions, such as retrieving all the subscriptions for a user, adding a plan, edit it or remove a subscription from a member who rescinded the offer.
+
+    \item manageUser (Figure \ref{fig:manageUs}): the functions to handle the profile requests, for example to set a name, to send a friends request or to reply to a request.
+    \item subscriptionMgmtTriggers (Figure \ref{fig:subtrigger}): trigger functions to keep the database updated (on deletion or edit of a subscription).
+    \item userMgmtTriggers (Figure \ref{fig:usertrigger}): trigger function to allow the insertion of a new user into the database in a consistent manner.
 \end{enumerate}
+
+\begin{figure}[h!]
+    \centering
+    \begin{SaveVerbatim}{VerbCode}
+        + getUserSubscription()
+        + setNewSubscription(subscriptionInfo: Object{})
+        + editSubscription(subscriptionInfo: Object{})
+        + removeMember(subscription: String, userToRemove: String)
+        + deleteSubscription(subscription: String)
+    \end{SaveVerbatim}
+    \setlength{\fboxsep}{5mm}
+    \fbox{\BUseVerbatim{VerbCode}}
+    \caption{manageSubscription functions}~\label{fig:manageSub}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{SaveVerbatim}{VerbCode}
+        + setName(name: String)
+        + addFriendRequest(email: String)
+        + answerFriendRequest(friendUid: String, accepted: Boolean)
+        + removeFriend(friendUid: String)
+        + getFriendsData()
+        + getCurrentUserInfo()
+    \end{SaveVerbatim}
+    \setlength{\fboxsep}{5mm}
+    \fbox{\BUseVerbatim{VerbCode}}
+    \caption{manageUser functions}~\label{fig:manageUs}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{SaveVerbatim}{VerbCode}
+        + onSubDelete()
+        + onSubEdited()
+    \end{SaveVerbatim}
+    \setlength{\fboxsep}{5mm}
+    \fbox{\BUseVerbatim{VerbCode}}
+    \caption{subscriptionMgmtTriggers functions}~\label{fig:subtrigger}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \begin{SaveVerbatim}{VerbCode}
+        + onUserCreation()
+    \end{SaveVerbatim}
+    \setlength{\fboxsep}{5mm}
+    \fbox{\BUseVerbatim{VerbCode}}
+    \caption{userMgmtTriggers function}~\label{fig:usertrigger}
+\end{figure}
+
 
 \subsection{Firestore database}
 Cloud Firestore is a NoSQL database hosted on cloud, in particular Firebase's newest database for mobile app development. Compared to the old Realtime Database, it provides faster queries and better scaling. Even if both databases have client-first SDKs (no servers to deploy and maintain) and realtime updates, Cloud Firestore manages the data as a collection of documents, which are very similar to JSON files. Since \textit{SubscribeME} data have a pretty simple structure, this solution allows for a more agile and dynamic option.
