@@ -6,6 +6,7 @@ import {
   SectionList,
   RefreshControl,
   Alert,
+  Platform,
 } from "react-native";
 import TextInput from "../../../components/StyledTextInput";
 import { Text } from "react-native-paper";
@@ -94,13 +95,14 @@ export default function PendingRequests() {
     answerFriendRequest(friendUid, true);
   }
 
-  function renderItem({ item }) {
+  function renderItem(item, section) {
     return (
       <View style={styles.inputView}>
         <TextInput
           disabled={true}
           value={item.name + " - " + item.email}
           isPending
+          sent={section.title === "Sent"}
           onDeleteFriend={() => onDeleteFriend(item.id)}
           onAcceptFriend={() => onAcceptFriend(item.id)}
           style={{ textAlign: "center", width: "90%" }}
@@ -132,7 +134,7 @@ export default function PendingRequests() {
           alignContent: "center",
         }}
         sections={requests}
-        renderItem={renderItem}
+        renderItem={({ item, section }) => renderItem(item, section)}
         keyExtractor={(item, index) => item + index}
         renderSectionHeader={({ section: { title } }) => (
           <Text style={styles.header}>{title}</Text>
@@ -149,7 +151,12 @@ export default function PendingRequests() {
                   alignSelf: "center",
                 }}
               >
-                <Text style={{ marginHorizontal: 10 }}>
+                <Text
+                  style={{
+                    fontSize: Platform.isPad ? 20 : 16,
+                    marginHorizontal: 10,
+                  }}
+                >
                   No {section.title} requests :{"("}
                 </Text>
               </View>
@@ -188,7 +195,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   header: {
-    fontSize: 20,
+    fontSize: Platform.isPad ? 30 : 20,
     fontWeight: "bold",
     padding: 20,
   },

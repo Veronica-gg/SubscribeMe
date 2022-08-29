@@ -92,13 +92,15 @@ function wordDeclination(numberOfDays) {
 }
 
 function daysName(numberOfDays) {
+  let printNumber = numberOfDays;
+  if (numberOfDays < 0) printNumber = Math.abs(numberOfDays);
   switch (numberOfDays) {
     case 0:
       return "Today";
     case 1:
       return "Tomorrow";
     default:
-      return numberOfDays + " " + wordDeclination(numberOfDays);
+      return printNumber + " " + wordDeclination(numberOfDays);
   }
 }
 

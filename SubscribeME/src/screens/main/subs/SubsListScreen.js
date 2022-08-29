@@ -8,6 +8,7 @@ import {
   SectionList,
   View,
   FlatList,
+  Platform,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { updateState } from "../../../redux/stateUpdater";
@@ -24,6 +25,7 @@ export default function SubsListScreen() {
   const { colors } = useTheme();
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false);
+  const [refreshingPrime, setRefreshingPrime] = useState(false);
   const isFocused = useIsFocused();
   const [subs, setSubs] = useState([
     { title: "My subscriptions", data: [] },
@@ -50,6 +52,18 @@ export default function SubsListScreen() {
       })
       .catch(() => {
         setRefreshing(false);
+      });
+  }, []);
+
+  const onRefreshPrime = useCallback(() => {
+    // Manages pull to refresh
+    setRefreshingPrime(true);
+    updateState(dispatch, true, false, false)
+      .subs.then((promise) => {
+        setRefreshingPrime(false);
+      })
+      .catch(() => {
+        setRefreshingPrime(false);
       });
   }, []);
 
@@ -102,7 +116,7 @@ export default function SubsListScreen() {
         <Text
           style={{
             textAlign: "left",
-            fontSize: 30,
+            fontSize: Platform.isPad ? 50 : 30,
             margin: 20,
             marginBottom: 0,
           }}
@@ -116,7 +130,6 @@ export default function SubsListScreen() {
           flexDirection: orientation.isPortrait ? "column" : "row",
           flexWrap: orientation.isPortrait ? "nowrap" : "wrap",
           width: "100%",
-          borderWidth: 3,
         }}
       >
         <View style={{ width: orientation.isPortrait ? "100%" : "50%" }}>
@@ -136,10 +149,10 @@ export default function SubsListScreen() {
               <Text
                 style={{
                   width: "100%",
-                  fontSize: 20,
+                  fontSize: Platform.isPad ? 30 : 20,
                   fontWeight: "bold",
                   padding: 20,
-                  backgroundColor: "transparent",
+                  backgroundColor: colors.background,
                 }}
               >
                 {title}
@@ -159,7 +172,12 @@ export default function SubsListScreen() {
                       marginBottom: addHeight * 1.2,
                     }}
                   >
-                    <Text style={{ marginHorizontal: 10 }}>
+                    <Text
+                      style={{
+                        marginHorizontal: 10,
+                        fontSize: Platform.isPad ? 20 : 16,
+                      }}
+                    >
                       Nothing here :{"("}{" "}
                       {section.title == "My subscriptions"
                         ? "Why don't you add a new subscription?"
@@ -200,10 +218,10 @@ export default function SubsListScreen() {
                 <Text
                   style={{
                     width: "100%",
-                    fontSize: 20,
+                    fontSize: Platform.isPad ? 30 : 20,
                     fontWeight: "bold",
                     padding: 20,
-                    backgroundColor: "transparent",
+                    backgroundColor: colors.background,
                   }}
                 >
                   {title}
@@ -211,7 +229,10 @@ export default function SubsListScreen() {
               )}
               renderItem={renderItem}
               refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                <RefreshControl
+                  refreshing={refreshingPrime}
+                  onRefresh={onRefreshPrime}
+                />
               }
               renderSectionFooter={({ section }) => {
                 if (section.data.length == 0) {
@@ -223,7 +244,12 @@ export default function SubsListScreen() {
                         marginBottom: addHeight * 1.2,
                       }}
                     >
-                      <Text style={{ marginHorizontal: 10 }}>
+                      <Text
+                        style={{
+                          marginHorizontal: 10,
+                          fontSize: Platform.isPad ? 20 : 16,
+                        }}
+                      >
                         Nothing here :{"("}{" "}
                         {section.title == "My subscriptions"
                           ? "Why don't you add a new subscription?"

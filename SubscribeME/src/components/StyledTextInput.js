@@ -3,6 +3,7 @@ import { Alert, StyleSheet } from "react-native";
 import { TextInput as PaperTextInput, View, Switch } from "react-native-paper";
 
 const TextInput = (props) => {
+  const sent = props.sent === true;
   const isPassword = props.isPassword === true;
   const isAuto = props.isAuto === true;
   const isFriend = props.isFriend === true;
@@ -24,7 +25,7 @@ const TextInput = (props) => {
           : props.keyboardType
       }
       left={
-        isPending ? (
+        isPending && !sent ? (
           <PaperTextInput.Icon icon="account-check" onPress={onAcceptFriend} />
         ) : null
       }
@@ -48,7 +49,7 @@ const TextInput = (props) => {
           />
         ) : isFriend ? (
           <PaperTextInput.Icon icon="delete" onPress={onDeleteFriend} />
-        ) : isPending ? (
+        ) : isPending && !sent ? (
           <PaperTextInput.Icon icon="delete" onPress={onDeleteFriend} />
         ) : null
       }
