@@ -276,7 +276,18 @@ At the bottom of the Subscription List Page there is a button `Add New'. This is
 
 A `Logout' button brings the user back to the authentication page.
 
-\subsubsection{Component Diagrams}
+\subsubsection{Component Diagram}
+The \textit{SubscribeME} application component diagram is pictured in Figure \ref{fig:componentGen}. It illustrates the `Root' components, alias the main application screens and how the Root communicates with Redux Toolkit and with the Cloud Functions. To avoid confusion, internal links from the single components to the Root interfaces are omitted.
+
+Other diagrams are not shown, due to their trivial structure and linear flow (e.g. login and registration pages).
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.65\textwidth, clip]{../../assets/generalComponent.drawio.png}
+    \end{center}
+    \caption{General component diagram for the mobile application.}
+    \label{fig:componentGen}
+\end{figure}
 
 \subsection{Firebase}
 The application requires authentication to be used, so that the application can properly store each individual's memberships and details. There is also some sensible data, such as the card's last four digits, so it is recommended to register with a strong password. Indeed, there is a `Password Strength Bar' that helps the user realize whether the typed password is good enough for them.
@@ -303,7 +314,13 @@ In our implementation, we exploit the authentication information included with e
 
 Furthermore, each response is in a JSON format, including message about the success of the requests and the required data. Specific error messages are associated to specific points of failure, in order to keep the user informed of the nature of the error, while also guiding the developers in solving any bug.
 
-\subsubsection{Backend API}
+\subsubsection{\textit{SubscribeME} APIs}
+The application APIs can be divided into four different categories: \begin{enumerate}
+    \item manageSubscription
+    \item manageUser
+    \item subscriptionMgmtTriggers
+    \item userMgmtTriggers
+\end{enumerate}
 
 \subsection{Firestore database}
 Cloud Firestore is a NoSQL database hosted on cloud, in particular Firebase's newest database for mobile app development. Compared to the old Realtime Database, it provides faster queries and better scaling. Even if both databases have client-first SDKs (no servers to deploy and maintain) and realtime updates, Cloud Firestore manages the data as a collection of documents, which are very similar to JSON files. Since \textit{SubscribeME} data have a pretty simple structure, this solution allows for a more agile and dynamic option.

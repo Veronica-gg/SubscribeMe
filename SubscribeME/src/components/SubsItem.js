@@ -54,4 +54,11 @@ const styles = StyleSheet.create({
     margin: 0,
     padding: 0,
   },
+  date: {
+    textAlign: "right",
+    marginRight: 10,
+    // marginVertical: 0,
+    justifyContent: "center",
+    fontWeight: "500",
+  },
 });

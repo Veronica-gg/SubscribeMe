@@ -112,8 +112,12 @@ export default function FriendsListPage() {
           <View
             style={{
               width: "95%",
-              alignSelf: "center",
+              // alignSelf: "center",
+              justifyContent: "center",
+              alignItems: "center",
               margin: 10,
+              position: "absolute",
+              bottom: "50%",
             }}
           >
             <Text style={{ marginHorizontal: 10 }}>
