@@ -2,9 +2,11 @@ import React, { useMemo } from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { PieChart } from "react-native-chart-kit";
+import useOrientation from "./Orientation";
 
 const PieCategory = ({ data, accessor, absolute }) => {
   // Order by accessor value
+  const orientation = useOrientation();
 
   const sortedData = useMemo(() => {
     return data.sort((a, b) => b[accessor] - a[accessor]);
@@ -42,7 +44,11 @@ const PieCategory = ({ data, accessor, absolute }) => {
         hasLegend={false}
         paddingLeft={Dimensions.get("window").width / 4}
       />
-      <View style={styles.legend}>
+      <View
+        style={
+          orientation.isPortrait ? styles.legend : { alignItems: "center" }
+        }
+      >
         {sortedData.map((dataItem) => (
           <View style={styles.legendItem} key={dataItem.name}>
             <FontAwesome name="circle" size={24} color={dataItem.color} />

@@ -1,7 +1,14 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import SubmitButton from "../../../components/SubmitButton";
 import { useEffect, useState } from "react";
-import { StyleSheet, View, ScrollView, Alert, Keyboard } from "react-native";
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Alert,
+  Keyboard,
+  Platform,
+} from "react-native";
 import { auth, functions } from "../../../utils/firebase";
 import { httpsCallable } from "firebase/functions";
 import { List, Surface, Text, useTheme, HelperText } from "react-native-paper";
@@ -25,8 +32,10 @@ import {
   updatePassword,
 } from "firebase/auth";
 import LoadingIndicator from "../../../components/LoadingIndicator";
+import useOrientation from "../../../components/Orientation";
 
 export default function ProfileScreen() {
+  const orientation = useOrientation();
   const { colors } = useTheme();
   const navigation = useNavigation();
   const dispatch = useDispatch();
@@ -192,7 +201,6 @@ export default function ProfileScreen() {
   const [expandedPwd, setExpandedPwd] = useState(false);
   const handlePwdPress = () => setExpandedPwd(!expandedPwd);
 
-  const oldEmail = "PLACEHOLDER";
   const [newEmail, setNewEmail] = useState("");
   const [isEmailWrong, setIsEmailWrong] = useState(false);
   const [isFriendEmailWrong, setIsFriendEmailWrong] = useState(false);
@@ -229,460 +237,526 @@ export default function ProfileScreen() {
         style={{
           width: "100%",
         }}
-        contentContainerStyle={styles.contentContainer}
+        contentContainerStyle={{
+          ...styles.contentContainer,
+        }}
         automaticallyAdjustKeyboardInsets
         keyboardShouldPersistTaps="handled"
       >
-        <Surface style={[styles.surf, { backgroundColor: colors.profileCard }]}>
-          <Text style={[styles.title, { marginBottom: 10 }]}>
-            Manage Friends
-          </Text>
-
-          <List.Section
-            style={{
-              width: "100%",
-              backgroundColor: colors.profileCard,
-              borderRadius: 0,
-            }}
-            titleStyle={{
-              backgroundColor: colors.profileCard,
-              borderRadius: 0,
-            }}
-          >
-            <List.Accordion
-              title="Add a friend"
-              style={[
-                styles.accordion,
-                { backgroundColor: colors.profileCard },
-              ]}
-              left={(p) => <List.Icon {...p} icon="account-multiple-plus" />}
-              expanded={expandedAdd}
-              onPress={handleAddPress}
-            >
-              <Surface
-                style={[
-                  styles.surf,
-                  {
-                    width: "100%",
-                    margin: 0,
-                    padding: 0,
-                    justifyContent: "center",
-                    alignItems: "left",
-                    backgroundColor: colors.profileCard,
-                  },
-                ]}
-              >
-                <Text style={styles.title}>Insert Friend's E-mail</Text>
-                <View style={[styles.inputView, { marginBottom: 0 }]}>
-                  <PaperTextInput
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    autoComplete="email"
-                    keyboardType="email-address"
-                    originalPlaceholder="Your friend's E-mail"
-                    value={friendEmail}
-                    error={isFriendEmailWrong}
-                    onChangeText={(text) => {
-                      setFriendEmail(text);
-                      if (isFriendEmailWrong) {
-                        setIsFriendEmailWrong(!validateEmail(text));
-                      }
-                    }}
-                    onBlur={() => {
-                      friendEmail.length > 0
-                        ? setIsFriendEmailWrong(!validateEmail(friendEmail))
-                        : setIsFriendEmailWrong(false);
-                    }}
-                    theme={{
-                      colors: {
-                        background: colors.profileCard,
-                      },
-                    }}
-                  />
-                </View>
-                <HelperText type="error" visible={isFriendEmailWrong}>
-                  Wrong e-mail format
-                </HelperText>
-                <SubmitButton
-                  onPressID={() => {
-                    addFriend(friendEmail);
-                    Keyboard.dismiss();
-                  }}
-                  textID="ADD FRIEND"
-                  iconID="account-multiple-plus"
-                  style={styles.submit}
-                  disabled={isFriendEmailWrong || friendEmail.length == 0}
-                />
-              </Surface>
-            </List.Accordion>
-          </List.Section>
-          <List.Item
-            title="Pending Requests"
-            style={styles.container}
-            left={(p) => <List.Icon {...p} icon="account-clock" />}
-            onPress={() => {
-              navigation.navigate("PendingReq");
-            }}
-          />
-          <List.Item
-            title="List of Friends"
-            style={styles.container}
-            left={(p) => <List.Icon {...p} icon="format-list-bulleted" />}
-            onPress={() => {
-              navigation.navigate("FriendsList");
-            }}
-          />
-        </Surface>
-        <Surface
-          style={{
-            ...styles.surf,
-            backgroundColor: colors.profileCard,
-            marginBottom: logoutHeight * 1.2,
-          }}
+        <View
+          style={
+            orientation.isPortrait
+              ? { width: "100%", alignItems: "center" }
+              : {
+                  width: "100%",
+                  flex: 1,
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  justifyContent: "space-around",
+                  alignItems: "baseline",
+                }
+          }
         >
-          <Text style={[styles.title, { marginBottom: 10 }]}>
-            Profile Settings
-          </Text>
-          <List.Section
+          <Surface
             style={{
-              width: "100%",
+              ...styles.surf,
               backgroundColor: colors.profileCard,
-              borderRadius: 0,
-            }}
-            titleStyle={{
-              backgroundColor: colors.profileCard,
-              borderRadius: 0,
+              width: orientation.isPortrait ? "95%" : "42%",
             }}
           >
-            <List.Accordion
-              title="Name"
-              description="Change and update name"
-              style={[
-                styles.accordion,
-                { backgroundColor: colors.profileCard },
-              ]}
-              left={(p) => <List.Icon {...p} icon="account-details" />}
-              expanded={expandedName}
-              onPress={handleNamePress}
+            <Text style={[styles.title, { marginBottom: 10 }]}>
+              Manage Friends
+            </Text>
+
+            <List.Section
+              style={{
+                width: "100%",
+                backgroundColor: colors.profileCard,
+                borderRadius: 0,
+              }}
+              titleStyle={{
+                backgroundColor: colors.profileCard,
+                borderRadius: 0,
+              }}
             >
-              <Surface
+              <List.Accordion
+                title="Add a friend"
+                titleStyle={{ fontSize: Platform.isPad ? 22 : 16 }}
                 style={[
-                  styles.surf,
-                  {
-                    width: "100%",
-                    margin: 0,
-                    padding: 0,
-                    justifyContent: "center",
-                    alignItems: "left",
-                    backgroundColor: colors.profileCard,
-                  },
+                  styles.accordion,
+                  { backgroundColor: colors.profileCard },
                 ]}
+                left={(p) => <List.Icon {...p} icon="account-multiple-plus" />}
+                expanded={expandedAdd}
+                onPress={handleAddPress}
               >
-                <Text style={styles.title}>Insert updated name</Text>
-                <View style={[styles.inputView, { marginBottom: 0 }]}>
-                  <PaperTextInput
-                    originalPlaceholder="Updated Name"
-                    value={newName}
-                    onChangeText={(text) => {
-                      setNewName(text);
-                      setIsNameWrong(!validateName(text));
-                    }}
-                    error={newName.length > maxLength || isNameWrong}
-                    onBlur={() => {
-                      newName.length > 0
-                        ? setIsNameWrong(!validateName(newName))
-                        : setIsNameWrong(false);
-                    }}
-                    theme={{
-                      colors: {
-                        background: colors.profileCard,
-                      },
-                    }}
-                  />
-                </View>
-                <HelperText
-                  type="error"
-                  visible={newName.length > maxLength || isNameWrong}
-                >
-                  Name must be {"<"} 10 char and alphanumeric
-                </HelperText>
-                <SubmitButton
-                  onPressID={() => {
-                    setRemoteName(newName);
-                    setNewName("");
-                    Keyboard.dismiss();
-                  }}
-                  textID="SAVE NEW NAME"
-                  iconID="account-check"
-                  style={styles.submit}
-                  disabled={
-                    newName.length == 0 ||
-                    newName.length > maxLength ||
-                    isNameWrong
-                  }
-                />
-              </Surface>
-            </List.Accordion>
-          </List.Section>
-          <List.Section
-            style={{
-              width: "100%",
-              backgroundColor: colors.profileCard,
-              borderRadius: 0,
-            }}
-            titleStyle={{
-              backgroundColor: colors.profileCard,
-              borderRadius: 0,
-            }}
-          >
-            <List.Accordion
-              title="E-mail"
-              description="Change and update e-mail"
-              style={[
-                styles.accordion,
-                { backgroundColor: colors.profileCard },
-              ]}
-              descriptionStyle={styles.container}
-              left={(p) => <List.Icon {...p} icon="email" />}
-              expanded={expandedEmail}
-              onPress={handleEmailPress}
-            >
-              <Surface
-                style={[
-                  styles.surf,
-                  {
-                    width: "100%",
-                    margin: 0,
-                    padding: 0,
-                    justifyContent: "center",
-                    alignItems: "left",
-                    backgroundColor: colors.profileCard,
-                  },
-                ]}
-              >
-                <Text style={styles.title}>This is your current e-mail</Text>
-                <View style={styles.inputView}>
-                  <PaperTextInput
-                    value={myEmail}
-                    disabled={true}
-                    theme={{
-                      colors: {
-                        background: colors.profileCard,
-                      },
-                    }}
-                  />
-                </View>
-                <Text style={styles.title}>Insert updated e-mail</Text>
-                <View style={[styles.inputView, { marginBottom: 0 }]}>
-                  <PaperTextInput
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    autoComplete="email"
-                    keyboardType="email-address"
-                    originalPlaceholder="Updated E-mail"
-                    value={newEmail}
-                    error={isEmailWrong}
-                    onChangeText={(text) => {
-                      setNewEmail(text);
-                      if (isEmailWrong) {
-                        setIsEmailWrong(!validateEmail(text));
-                      }
-                    }}
-                    onBlur={() => {
-                      newEmail.length > 0
-                        ? setIsEmailWrong(!validateEmail(newEmail))
-                        : setIsEmailWrong(false);
-                    }}
-                    theme={{
-                      colors: {
-                        background: colors.profileCard,
-                      },
-                    }}
-                  />
-                </View>
-                <HelperText type="error" visible={isEmailWrong}>
-                  Wrong e-mail format
-                </HelperText>
-                <Text style={styles.title}>Insert password</Text>
-                <View style={styles.inputView}>
-                  <PaperTextInput
-                    // autoCapitalize="none"
-                    autoCorrect={false}
-                    originalPlaceholder="Password"
-                    // backgroundColor="transparent"
-                    value={pwd}
-                    isPassword
-                    onChangeText={(text) => setPwd(text)}
-                    theme={{
-                      colors: {
-                        background: colors.profileCard,
-                      },
-                    }}
-                  />
-                </View>
-                <SubmitButton
-                  onPressID={() => {
-                    changeEmailOrPassword(pwd, newEmail, false);
-                    setNewEmail("");
-                    setPwd("");
-                    Keyboard.dismiss();
-                  }}
-                  textID="SAVE NEW E-MAIL"
-                  iconID="email-check"
-                  style={styles.submit}
-                  disabled={
-                    isEmailWrong ||
-                    newEmail.length == 0 ||
-                    pwd.length < minLength
-                  }
-                />
-              </Surface>
-            </List.Accordion>
-          </List.Section>
-          <List.Section
-            style={{
-              width: "100%",
-              backgroundColor: colors.profileCard,
-              borderRadius: 0,
-            }}
-            titleStyle={{
-              backgroundColor: colors.profileCard,
-              borderRadius: 0,
-            }}
-          >
-            <List.Accordion
-              title="Password"
-              description="Change and update password"
-              style={[
-                styles.accordion,
-                { backgroundColor: colors.profileCard },
-              ]}
-              left={(p) => <List.Icon {...p} icon="key-variant" />}
-              expanded={expandedPwd}
-              onPress={handlePwdPress}
-            >
-              <Surface
-                style={[
-                  styles.surf,
-                  {
-                    width: "100%",
-                    margin: 0,
-                    padding: 0,
-                    justifyContent: "center",
-                    alignItems: "left",
-                    backgroundColor: colors.profileCard,
-                  },
-                ]}
-              >
-                <Text style={styles.title}>Insert old password</Text>
-                <View style={styles.inputView}>
-                  <PaperTextInput
-                    // autoCapitalize="none"
-                    autoCorrect={false}
-                    originalPlaceholder="Old Password"
-                    // backgroundColor="transparent"
-                    value={oldPwd}
-                    isPassword
-                    onChangeText={(text) => setOldPwd(text)}
-                    theme={{
-                      colors: {
-                        background: colors.profileCard,
-                      },
-                    }}
-                  />
-                </View>
-                <Text style={styles.title}>Insert updated password</Text>
-                <View style={styles.inputView}>
-                  <PaperTextInput
-                    // autoCapitalize="none"
-                    autoCorrect={false}
-                    originalPlaceholder="Updated Password"
-                    // backgroundColor="transparent"
-                    value={newPwd}
-                    error={passwordTooShort}
-                    isPassword
-                    onChangeText={(text) => {
-                      setNewPwd(text);
-                      if (!showPasswordStrength) {
-                        setShowPasswordStrength(text.length > 0);
-                      }
-                      if (passwordTooShort || newPwd.length > text.length) {
-                        setPasswordTooShort(
-                          text.length < minLength && text.length > 0
-                        );
-                      }
-                    }}
-                    onBlur={() => {
-                      setPasswordTooShort(
-                        newPwd.length < minLength && newPwd.length > 0
-                      );
-                      setShowPasswordStrength(newPwd.length > 0);
-                    }}
-                    theme={{
-                      colors: {
-                        background: colors.profileCard,
-                      },
-                    }}
-                  />
-                </View>
-                <View
+                <Surface
                   style={[
-                    showPasswordStrength ? { height: "7%" } : { height: 0 },
-                    styles.PasswordStrengthBar,
+                    styles.surf,
+                    {
+                      width: "100%",
+                      margin: 0,
+                      padding: 0,
+                      justifyContent: "center",
+                      alignItems: "left",
+                      backgroundColor: colors.profileCard,
+                    },
                   ]}
                 >
-                  <PasswordStrengthBar
-                    password={newPwd}
-                    error={passwordTooShort}
-                    show={showPasswordStrength}
+                  <Text style={styles.title}>Insert Friend's E-mail</Text>
+                  <View style={[styles.inputView, { marginBottom: 0 }]}>
+                    <PaperTextInput
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      autoComplete="email"
+                      keyboardType="email-address"
+                      originalPlaceholder="Your friend's E-mail"
+                      value={friendEmail}
+                      error={isFriendEmailWrong}
+                      onChangeText={(text) => {
+                        setFriendEmail(text);
+                        if (isFriendEmailWrong) {
+                          setIsFriendEmailWrong(!validateEmail(text));
+                        }
+                      }}
+                      onBlur={() => {
+                        friendEmail.length > 0
+                          ? setIsFriendEmailWrong(!validateEmail(friendEmail))
+                          : setIsFriendEmailWrong(false);
+                      }}
+                      theme={{
+                        colors: {
+                          background: colors.profileCard,
+                        },
+                      }}
+                    />
+                  </View>
+                  <HelperText type="error" visible={isFriendEmailWrong}>
+                    Wrong e-mail format
+                  </HelperText>
+                  <SubmitButton
+                    onPressID={() => {
+                      addFriend(friendEmail);
+                      Keyboard.dismiss();
+                    }}
+                    textID="ADD FRIEND"
+                    iconID="account-multiple-plus"
+                    style={styles.submit}
+                    disabled={isFriendEmailWrong || friendEmail.length == 0}
                   />
-                </View>
-                <SubmitButton
-                  onPressID={() => {
-                    changeEmailOrPassword(oldPwd, newPwd, true);
-                    setOldPwd("");
-                    setNewPwd("");
-                    Keyboard.dismiss();
-                  }}
-                  textID="SAVE NEW PWD"
-                  iconID="lock-check"
-                  style={styles.submit}
-                  disabled={newPwd.length < minLength}
-                />
-              </Surface>
-            </List.Accordion>
-          </List.Section>
-        </Surface>
+                </Surface>
+              </List.Accordion>
+            </List.Section>
+            <List.Item
+              title="Pending Requests"
+              titleStyle={{ fontSize: Platform.isPad ? 22 : 16 }}
+              style={styles.container}
+              left={(p) => <List.Icon {...p} icon="account-clock" />}
+              onPress={() => {
+                navigation.navigate("PendingReq");
+              }}
+            />
+            <List.Item
+              title="List of Friends"
+              titleStyle={{ fontSize: Platform.isPad ? 22 : 16 }}
+              style={styles.container}
+              left={(p) => <List.Icon {...p} icon="format-list-bulleted" />}
+              onPress={() => {
+                navigation.navigate("FriendsList");
+              }}
+            />
+          </Surface>
+          <Surface
+            style={{
+              ...styles.surf,
+              backgroundColor: colors.profileCard,
+              width: orientation.isPortrait ? "95%" : "42%",
+              marginBottom: orientation.isPortrait ? logoutHeight * 1.2 : 0,
+            }}
+          >
+            <Text style={[styles.title, { marginBottom: 10 }]}>
+              Profile Settings
+            </Text>
+            <List.Section
+              style={{
+                width: "100%",
+                backgroundColor: colors.profileCard,
+                borderRadius: 0,
+              }}
+              titleStyle={{
+                backgroundColor: colors.profileCard,
+                borderRadius: 0,
+              }}
+            >
+              <List.Accordion
+                title="Name"
+                titleStyle={{ fontSize: Platform.isPad ? 22 : 16 }}
+                descriptionStyle={{ fontSize: Platform.isPad ? 16 : 14 }}
+                description="Change and update name"
+                style={[
+                  styles.accordion,
+                  { backgroundColor: colors.profileCard },
+                ]}
+                left={(p) => <List.Icon {...p} icon="account-details" />}
+                expanded={expandedName}
+                onPress={handleNamePress}
+              >
+                <Surface
+                  style={[
+                    styles.surf,
+                    {
+                      width: "100%",
+                      margin: 0,
+                      padding: 0,
+                      justifyContent: "center",
+                      alignItems: "left",
+                      backgroundColor: colors.profileCard,
+                    },
+                  ]}
+                >
+                  <Text style={styles.title}>Insert updated name</Text>
+                  <View style={[styles.inputView, { marginBottom: 0 }]}>
+                    <PaperTextInput
+                      originalPlaceholder="Updated Name"
+                      value={newName}
+                      onChangeText={(text) => {
+                        setNewName(text);
+                        setIsNameWrong(!validateName(text));
+                      }}
+                      error={newName.length > maxLength || isNameWrong}
+                      onBlur={() => {
+                        newName.length > 0
+                          ? setIsNameWrong(!validateName(newName))
+                          : setIsNameWrong(false);
+                      }}
+                      theme={{
+                        colors: {
+                          background: colors.profileCard,
+                        },
+                      }}
+                    />
+                  </View>
+                  <HelperText
+                    type="error"
+                    visible={newName.length > maxLength || isNameWrong}
+                  >
+                    Name must be {"<"} 10 char and alphanumeric
+                  </HelperText>
+                  <SubmitButton
+                    onPressID={() => {
+                      setRemoteName(newName);
+                      setNewName("");
+                      Keyboard.dismiss();
+                    }}
+                    textID="SAVE NEW NAME"
+                    iconID="account-check"
+                    style={styles.submit}
+                    disabled={
+                      newName.length == 0 ||
+                      newName.length > maxLength ||
+                      isNameWrong
+                    }
+                  />
+                </Surface>
+              </List.Accordion>
+            </List.Section>
+            <List.Section
+              style={{
+                width: "100%",
+                backgroundColor: colors.profileCard,
+                borderRadius: 0,
+              }}
+              titleStyle={{
+                backgroundColor: colors.profileCard,
+                borderRadius: 0,
+              }}
+            >
+              <List.Accordion
+                title="E-mail"
+                titleStyle={{ fontSize: Platform.isPad ? 22 : 16 }}
+                descriptionStyle={{ fontSize: Platform.isPad ? 16 : 14 }}
+                description="Change and update e-mail"
+                style={[
+                  styles.accordion,
+                  { backgroundColor: colors.profileCard },
+                ]}
+                left={(p) => <List.Icon {...p} icon="email" />}
+                expanded={expandedEmail}
+                onPress={handleEmailPress}
+              >
+                <Surface
+                  style={[
+                    styles.surf,
+                    {
+                      width: "100%",
+                      margin: 0,
+                      padding: 0,
+                      justifyContent: "center",
+                      alignItems: "left",
+                      backgroundColor: colors.profileCard,
+                    },
+                  ]}
+                >
+                  <Text style={styles.title}>This is your current e-mail</Text>
+                  <View style={styles.inputView}>
+                    <PaperTextInput
+                      value={myEmail}
+                      disabled={true}
+                      theme={{
+                        colors: {
+                          background: colors.profileCard,
+                        },
+                      }}
+                    />
+                  </View>
+                  <Text style={styles.title}>Insert updated e-mail</Text>
+                  <View style={[styles.inputView, { marginBottom: 0 }]}>
+                    <PaperTextInput
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      autoComplete="email"
+                      keyboardType="email-address"
+                      originalPlaceholder="Updated E-mail"
+                      value={newEmail}
+                      error={isEmailWrong}
+                      onChangeText={(text) => {
+                        setNewEmail(text);
+                        if (isEmailWrong) {
+                          setIsEmailWrong(!validateEmail(text));
+                        }
+                      }}
+                      onBlur={() => {
+                        newEmail.length > 0
+                          ? setIsEmailWrong(!validateEmail(newEmail))
+                          : setIsEmailWrong(false);
+                      }}
+                      theme={{
+                        colors: {
+                          background: colors.profileCard,
+                        },
+                      }}
+                    />
+                  </View>
+                  <HelperText type="error" visible={isEmailWrong}>
+                    Wrong e-mail format
+                  </HelperText>
+                  <Text style={styles.title}>Insert password</Text>
+                  <View style={styles.inputView}>
+                    <PaperTextInput
+                      // autoCapitalize="none"
+                      autoCorrect={false}
+                      originalPlaceholder="Password"
+                      // backgroundColor="transparent"
+                      value={pwd}
+                      isPassword
+                      onChangeText={(text) => setPwd(text)}
+                      theme={{
+                        colors: {
+                          background: colors.profileCard,
+                        },
+                      }}
+                    />
+                  </View>
+                  <SubmitButton
+                    onPressID={() => {
+                      changeEmailOrPassword(pwd, newEmail, false);
+                      setNewEmail("");
+                      setPwd("");
+                      Keyboard.dismiss();
+                    }}
+                    textID="SAVE NEW E-MAIL"
+                    iconID="email-check"
+                    style={styles.submit}
+                    disabled={
+                      isEmailWrong ||
+                      newEmail.length == 0 ||
+                      pwd.length < minLength
+                    }
+                  />
+                </Surface>
+              </List.Accordion>
+            </List.Section>
+            <List.Section
+              style={{
+                width: "100%",
+                backgroundColor: colors.profileCard,
+                borderRadius: 0,
+              }}
+              titleStyle={{
+                backgroundColor: colors.profileCard,
+                borderRadius: 0,
+              }}
+            >
+              <List.Accordion
+                title="Password"
+                titleStyle={{ fontSize: Platform.isPad ? 22 : 16 }}
+                descriptionStyle={{ fontSize: Platform.isPad ? 16 : 14 }}
+                description="Change and update password"
+                style={[
+                  styles.accordion,
+                  { backgroundColor: colors.profileCard },
+                ]}
+                left={(p) => <List.Icon {...p} icon="key-variant" />}
+                expanded={expandedPwd}
+                onPress={handlePwdPress}
+              >
+                <Surface
+                  style={[
+                    styles.surf,
+                    {
+                      width: "100%",
+                      margin: 0,
+                      padding: 0,
+                      justifyContent: "center",
+                      alignItems: "left",
+                      backgroundColor: colors.profileCard,
+                    },
+                  ]}
+                >
+                  <Text style={styles.title}>Insert old password</Text>
+                  <View style={styles.inputView}>
+                    <PaperTextInput
+                      // autoCapitalize="none"
+                      autoCorrect={false}
+                      originalPlaceholder="Old Password"
+                      // backgroundColor="transparent"
+                      value={oldPwd}
+                      isPassword
+                      onChangeText={(text) => setOldPwd(text)}
+                      theme={{
+                        colors: {
+                          background: colors.profileCard,
+                        },
+                      }}
+                    />
+                  </View>
+                  <Text style={styles.title}>Insert updated password</Text>
+                  <View style={styles.inputView}>
+                    <PaperTextInput
+                      // autoCapitalize="none"
+                      autoCorrect={false}
+                      originalPlaceholder="Updated Password"
+                      // backgroundColor="transparent"
+                      value={newPwd}
+                      error={passwordTooShort}
+                      isPassword
+                      onChangeText={(text) => {
+                        setNewPwd(text);
+                        if (!showPasswordStrength) {
+                          setShowPasswordStrength(text.length > 0);
+                        }
+                        if (passwordTooShort || newPwd.length > text.length) {
+                          setPasswordTooShort(
+                            text.length < minLength && text.length > 0
+                          );
+                        }
+                      }}
+                      onBlur={() => {
+                        setPasswordTooShort(
+                          newPwd.length < minLength && newPwd.length > 0
+                        );
+                        setShowPasswordStrength(newPwd.length > 0);
+                      }}
+                      theme={{
+                        colors: {
+                          background: colors.profileCard,
+                        },
+                      }}
+                    />
+                  </View>
+                  <View
+                    style={[
+                      showPasswordStrength ? { height: "7%" } : { height: 0 },
+                      styles.PasswordStrengthBar,
+                    ]}
+                  >
+                    <PasswordStrengthBar
+                      password={newPwd}
+                      error={passwordTooShort}
+                      show={showPasswordStrength}
+                    />
+                  </View>
+                  <SubmitButton
+                    onPressID={() => {
+                      changeEmailOrPassword(oldPwd, newPwd, true);
+                      setOldPwd("");
+                      setNewPwd("");
+                      Keyboard.dismiss();
+                    }}
+                    textID="SAVE NEW PWD"
+                    iconID="lock-check"
+                    style={styles.submit}
+                    disabled={newPwd.length < minLength}
+                  />
+                </Surface>
+              </List.Accordion>
+            </List.Section>
+          </Surface>
+        </View>
+        {!orientation.isPortrait && (
+          <View
+            style={{
+              marginTop: 20,
+              width: "100%",
+              alignItems: "center",
+              backgroundColor: "transparent",
+            }}
+            onLayout={(e) => {
+              setLogoutHeight(e.nativeEvent.layout.height);
+            }}
+          >
+            <SubmitButton
+              onPressID={logout}
+              textID="LOG OUT"
+              iconID="logout"
+              style={{
+                // flex: 1,
+                justifyContent: "flex-end",
+                backgroundColor: colors.secondary,
+                marginTop: 0,
+              }}
+            />
+          </View>
+        )}
       </ScrollView>
-      <LinearGradient
-        style={{ position: "absolute", bottom: 0, width: "100%", height: 100 }}
-        colors={[colors.background + "00", colors.background]}
-        pointerEvents={"none"}
-      />
-      <View
-        style={{
-          position: "absolute",
-          bottom: 0,
-          width: "100%",
-          alignItems: "center",
-          backgroundColor: "transparent",
-        }}
-        onLayout={(e) => {
-          setLogoutHeight(e.nativeEvent.layout.height);
-        }}
-      >
-        <SubmitButton
-          onPressID={logout}
-          textID="LOG OUT"
-          iconID="logout"
+      {orientation.isPortrait && (
+        <LinearGradient
           style={{
-            // flex: 1,
-            justifyContent: "flex-end",
-            backgroundColor: colors.secondary,
-            marginTop: 0,
+            position: "absolute",
+            bottom: 0,
+            width: "100%",
+            height: 100,
           }}
+          colors={[colors.background + "00", colors.background]}
+          pointerEvents={"none"}
         />
-      </View>
+      )}
+      {orientation.isPortrait && (
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            width: "100%",
+            alignItems: "center",
+            backgroundColor: "transparent",
+          }}
+          onLayout={(e) => {
+            setLogoutHeight(e.nativeEvent.layout.height);
+          }}
+        >
+          <SubmitButton
+            onPressID={logout}
+            textID="LOG OUT"
+            iconID="logout"
+            style={{
+              // flex: 1,
+              justifyContent: "flex-end",
+              backgroundColor: colors.secondary,
+              marginTop: 0,
+            }}
+          />
+        </View>
+      )}
       {disablePage && (
         <LoadingIndicator
           size="large"
@@ -695,11 +769,9 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   contentContainer: {
-    justifyContent: "top",
     flexGrow: 1,
     // backgroundColor: "#FFF9F3",
-    alignItems: "center",
-    justifyContent: "top",
+    justifyContent: "center",
     flexDirection: "column",
   },
   inputView: {
@@ -710,11 +782,12 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 20,
+    fontSize: Platform.isPad ? 20 : 14,
     fontWeight: "bold",
   },
   mainTitle: {
     textAlign: "left",
-    fontSize: 30,
+    fontSize: Platform.isPad ? 50 : 30,
     margin: 20,
     marginBottom: 0,
   },

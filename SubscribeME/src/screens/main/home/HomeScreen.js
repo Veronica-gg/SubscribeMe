@@ -9,6 +9,7 @@ import { auth } from "../../../utils/firebase";
 import { computeStatsCategories } from "../../../utils/statsCalculator";
 import { daysName } from "../../../utils/dateUtils";
 import useOrientation from "../../../components/Orientation";
+import { Platform } from "react-native";
 
 export default function HomeScreen() {
   const orientation = useOrientation();
@@ -68,6 +69,8 @@ export default function HomeScreen() {
           style={
             orientation.isPortrait
               ? styles.title
+              : Platform.isPad
+              ? { ...styles.title }
               : { ...styles.title, marginBottom: 0 }
           }
         >
@@ -89,7 +92,12 @@ export default function HomeScreen() {
           style={
             orientation.isPortrait
               ? styles.view
-              : { ...styles.view, flexDirection: "row", flexWrap: "wrap" }
+              : {
+                  ...styles.view,
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  alignContent: "center",
+                }
           }
         >
           <Surface
@@ -119,7 +127,13 @@ export default function HomeScreen() {
             }}
           >
             <Text style={styles.textReminder}>REMINDER</Text>
-            <Text style={{ color: "#FFF9F3", marginBottom: 15 }}>
+            <Text
+              style={{
+                color: "#FFF9F3",
+                marginBottom: 15,
+                fontSize: Platform.isPad ? 16 : 14,
+              }}
+            >
               These are your next payments due:
             </Text>
             {previewSubs && previewSubs.length === 0 && (
@@ -187,18 +201,21 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     color: "#FFF9F3",
+
+    fontSize: Platform.isPad ? 16 : 14,
     paddingBottom: 5,
   },
   textReminder: {
     textAlign: "center",
     fontWeight: "bold",
+    fontSize: Platform.isPad ? 24 : 14,
     color: "#FFF9F3",
     marginVertical: 5,
   },
   num: {
     textAlign: "center",
     fontWeight: "bold",
-    fontSize: 30,
+    fontSize: Platform.isPad ? 50 : 30,
     padding: 10,
     paddingBottom: 0,
     color: "#FFF9F3",
@@ -215,7 +232,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "left",
-    fontSize: 55,
-    margin: 20,
+    fontSize: Platform.isPad ? 75 : 55,
+    margin: Platform.isPad ? 34 : 20,
   },
 });

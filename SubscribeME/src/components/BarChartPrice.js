@@ -1,14 +1,16 @@
 import React, { useMemo } from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { BarChart } from "react-native-chart-kit";
+import useOrientation from "./Orientation";
 
-const BarChartPrice = ({ data, accessor, absolute }) => {
+const BarChartPrice = ({ data, accessor, absolute, width }) => {
+  const orientation = useOrientation();
   return (
     <View>
       <BarChart
         style={styles.graphStyle}
         data={data}
-        width={Dimensions.get("window").width * 0.95}
+        width={width}
         height={280}
         fromZero={true}
         yAxisLabel="$"

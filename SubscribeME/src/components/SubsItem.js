@@ -1,16 +1,26 @@
 import * as React from "react";
 import { List, Paragraph, Surface, Text } from "react-native-paper";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 import { useTheme } from "react-native-paper";
-import { wordDeclination } from "../utils/dateUtils";
+import { daysName, wordDeclination } from "../utils/dateUtils";
 
 export default function SubsItem(props) {
   const { colors } = useTheme();
   return (
     <Surface style={styles.surface} elevation={1}>
       <List.Item
-        title={props.tit}
-        description={props.des}
+        title={
+          <Text style={{ fontSize: Platform.isPad ? 20 : 16 }}>
+            {props.tit}
+          </Text>
+        }
+        description={
+          <Text
+            style={{ fontSize: Platform.isPad ? 16 : 14, fontWeight: "300" }}
+          >
+            {props.des}
+          </Text>
+        }
         style={[
           styles.container,
           { backgroundColor: colors[props.category] || colors.background },
@@ -19,10 +29,8 @@ export default function SubsItem(props) {
         right={(p) => (
           <View>
             {/* <List.Icon {...p} icon={props.dateID} style={styles.icon} /> */}
-            <Paragraph style={styles.date}>{Math.abs(props.dateID)}</Paragraph>
-            <Paragraph style={styles.date}>
-              {wordDeclination(props.dateID)}
-            </Paragraph>
+            <Paragraph style={styles.date}></Paragraph>
+            <Paragraph style={styles.date}>{daysName(props.dateID)}</Paragraph>
           </View>
         )}
         onPress={props.onPressID}
@@ -37,6 +45,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "rgba(255, 148, 40, 0.7)",
     width: "100%",
     borderRadius: 15,
+    fontSize: Platform.isPad ? 30 : 10,
   },
   surface: {
     width: "95%",
@@ -60,5 +69,6 @@ const styles = StyleSheet.create({
     // marginVertical: 0,
     justifyContent: "center",
     fontWeight: "500",
+    fontSize: Platform.isPad ? 20 : 14,
   },
 });

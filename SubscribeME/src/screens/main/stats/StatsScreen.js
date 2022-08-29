@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   RefreshControl,
+  Platform,
 } from "react-native";
 import { Surface } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,8 +15,10 @@ import PieCategory from "../../../components/PieCategory";
 import { updateState } from "../../../redux/stateUpdater";
 import { computeStatsCategories } from "../../../utils/statsCalculator";
 import { categoryList } from "../subs/defaultSubValue";
+import useOrientation from "../../../components/Orientation";
 
 export default function StatsScreen() {
+  const orientation = useOrientation();
   const [refreshing, setRefreshing] = useState(false);
   const dispatch = useDispatch();
   const onRefresh = useCallback(() => {
@@ -96,6 +99,8 @@ export default function StatsScreen() {
     },
   ];
 
+  const [surfaceWidth, setSurfaceWidth] = useState(0);
+
   return (
     <SafeAreaView
       edges={["left", "right", "top"]}
@@ -127,14 +132,32 @@ export default function StatsScreen() {
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
       >
+        {!orientation.isPortrait && Platform.isPad && (
+          <View style={{ height: 75 }}></View>
+        )}
         <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-          }}
+          style={
+            orientation.isPortrait
+              ? {
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                }
+              : {
+                  width: "100%",
+                  justifyContent: "center",
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  alignContent: "center",
+                }
+          }
         >
-          <Surface style={styles.surf}>
+          <Surface
+            style={{
+              ...styles.surf,
+              width: orientation.isPortrait ? "95%" : "42%",
+            }}
+          >
             <Text style={styles.title}>Your Category Shares</Text>
             {subs.length > 0 && (
               <View>
@@ -151,17 +174,24 @@ export default function StatsScreen() {
               </View>
             )}
           </Surface>
-
+          {!orientation.isPortrait && Platform.isPad && (
+            <View style={{ width: "3%" }}></View>
+          )}
           <Surface
-            style={[
-              styles.surf,
-              { backgroundColor: "#CA4D57", paddingBottom: 0 },
-            ]}
+            style={{
+              ...styles.surf,
+              backgroundColor: "#CA4D57",
+              paddingBottom: 0,
+              width: orientation.isPortrait ? "95%" : "42%",
+            }}
+            onLayout={(e) => {
+              setSurfaceWidth(e.nativeEvent.layout.width);
+            }}
           >
             <Text style={[styles.title, { color: "#FFF9F3" }]}>
               Money spent a month for each category (approx)
             </Text>
-            <BarChartPrice data={data} />
+            <BarChartPrice data={data} width={surfaceWidth} />
           </Surface>
         </View>
       </ScrollView>
@@ -178,7 +208,7 @@ const styles = StyleSheet.create({
   },
   mainTitle: {
     textAlign: "left",
-    fontSize: 30,
+    fontSize: Platform.isPad ? 50 : 30,
     margin: 20,
   },
   surf: {

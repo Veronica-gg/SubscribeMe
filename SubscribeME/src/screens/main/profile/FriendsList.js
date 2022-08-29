@@ -6,6 +6,7 @@ import {
   View,
   RefreshControl,
   Alert,
+  Platform,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import TextInput from "../../../components/StyledTextInput";
@@ -120,7 +121,12 @@ export default function FriendsListPage() {
               bottom: "50%",
             }}
           >
-            <Text style={{ marginHorizontal: 10 }}>
+            <Text
+              style={{
+                fontSize: Platform.isPad ? 20 : 16,
+                marginHorizontal: 10,
+              }}
+            >
               No friends added yet :{"("}
             </Text>
           </View>

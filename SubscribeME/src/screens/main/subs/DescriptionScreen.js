@@ -114,6 +114,7 @@ export default function DescriptionScreen(props) {
         style={{ flexGrow: 1, width: "100%" }}
         contentContainerStyle={{
           justifyContent: "center",
+
           // alignItems: "center",
         }}
       >
@@ -129,8 +130,6 @@ export default function DescriptionScreen(props) {
           <View
             style={{
               flex: 1,
-              flexDirection: "column",
-              flexWrap: "wrap",
               justifyContent: "space-around",
               alignItems: "center",
               // marginBottom: logoutHeight * 0.8,
