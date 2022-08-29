@@ -8,7 +8,6 @@ import {
   differenceInCalendarWeeks,
   differenceInMonths,
   differenceInYears,
-  parseISO,
 } from "date-fns";
 
 function datePickInputFormatter(str) {
@@ -20,8 +19,14 @@ function datePickInputFormatter(str) {
   );
 }
 
-function nextDeadline(renewalDateString, renewalPeriod, renewalEach = 1) {
-  const nowLocal = new Date(Date.now());
+const now = new Date(Date.now());
+
+function nextDeadline(
+  renewalDateString,
+  renewalPeriod,
+  renewalEach = 1,
+  nowLocal = now
+) {
   nowLocal.setHours(0, 0, 0, 0);
   const renewalDate = new Date(renewalDateString);
   if (isAfter(renewalDate, nowLocal) || isSameDay(renewalDate, nowLocal)) {

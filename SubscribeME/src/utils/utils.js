@@ -6,6 +6,7 @@ function validateEmail(email) {
 
 //Only alpha numeric names
 function validateName(name) {
+  if (!name) return;
   var regex = /^\w+$/;
   return name.length > 0 && name.length <= maxLength && name.match(regex);
 }
@@ -14,6 +15,7 @@ const minLength = 6;
 const maxLength = 10;
 
 function correctRegistrationFields(name, email, password) {
+  if (!name || !email || !password) return false;
   return (
     name.length > 0 &&
     name.length <= maxLength &&
@@ -23,32 +25,21 @@ function correctRegistrationFields(name, email, password) {
 }
 
 function correctLoginFields(email, password) {
-  return email.length > 0 && password.length >= minLength;
+  return correctRegistrationFields("Name", email, password);
 }
 
 function addFieldsFilled(name, type, category, cost, currency, repeat) {
-  return (
-    name != null &&
-    name != "" &&
-    type != null &&
-    type != "" &&
-    category != null &&
-    category != "" &&
-    cost != null &&
-    cost != "" &&
-    currency != null &&
-    currency != "" &&
-    repeat != null &&
-    repeat != ""
-  );
+  return name && type && category && cost && currency && repeat;
 }
 
 function validateCost(cost) {
-  var regex = /^[1-9]\d{0,}(,|.\d{0,})?$/;
+  if (!cost) return false;
+  var regex = /^[1-9]\d{0,}((,|\.)\d{0,})?$/;
   return cost.match(regex);
 }
 
 function validateCard(card) {
+  if (!card) return false;
   var regex = /^\d{4}$/;
   return card.match(regex);
 }
