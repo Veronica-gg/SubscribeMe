@@ -1,7 +1,7 @@
-\documentclass[11pt]{article}
+\documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
-\usepackage[a4paper, portrait, margin=1in]{geometry}
+\usepackage[a4paper, portrait, margin=1.2in]{geometry}
 \usepackage{fancyhdr,lipsum}
 \usepackage{graphicx}
 \usepackage{xcolor}
@@ -91,7 +91,6 @@ The document is structured in eight sections:
     \item[\ref{sec:ref}.] \textbf{References}: includes the tools and the references used to define the document.
 \end{enumerate}
 
-\newpage
 \section{Application Features}\label{sec:features}
 There are five main features in the \textit{SubscribeME} app:
 \begin{itemize}
@@ -148,7 +147,7 @@ Amber and Luc are twins and they want to activate the Spotify family plan, to sp
 \newpage
 \section{Design Overview}\label{sec:design}
 \subsection{Architectural Design Overview}
-The \textit{SubscribeMe} application is based on the client-server paradigm. The user connects via the mobile app (the client) to the services provided in the server, such as the application logic (backend) and the database. Overall, the implementation structure can be described as a Model-View-Controller pattern. On one hand, the client contains the View and some input verification (part of the Controller); the server, on the other hand, has additional checks (the rest of the Controller) and the whole application Model.
+The \textit{SubscribeMe} application is based on the client-server paradigm. The user connects via the mobile app (the client) to the services provided in the server, such as the application logic (backend) and the database. Overall, the implementation structure can be described as a \textbf{Model-View-Controller} pattern. On one hand, the client contains the View and some input verification (part of the Controller); the server, on the other hand, has additional checks (the rest of the Controller) and the whole application Model.
 
 The platform employed to implement the server architecture is Google Firebase, an out-of-the-box solution to manage the backend, as well as all the authentication functions and the data storage (Firestore).
 
@@ -166,7 +165,7 @@ In Figure \ref{fig:highLevel}, it is possible to better understand the structure
 The application on the user's device interacts directly with Redux Toolkit and, through internet, with the application own APIs and the Firebase Authentication API. The former has access to the Cloud Functions stored in Firebase, while the latter uses the Authentication Functions from the Firebase own authentication provider. The Cloud Functions need access to the data stored in the Firestore database.
 
 \subsection{Client Application}
-The technology used to implement the application is React Native. This allowed a faster, cleaner and, most of all, single code base that can at the same time render an iOS and an Android app. The framework uses JavaScript as underlying programming language.
+The technology used to implement the application is \textbf{React Native}. This allowed a faster, cleaner and, most of all, single code base that can at the same time render an iOS and an Android app. The framework uses JavaScript as underlying programming language.
 
 The client side contains mainly the View of the MVC pattern. Its structure is presented in Figure \ref{fig:navigationTree} and in is divided in two main branches, in order to keep every domain separated from the others and allow the user to better navigate from one section to the other, both logically and physically in the frontend implementation.
 
@@ -185,8 +184,8 @@ In particular, the `main application', as stated in Figure \ref{fig:navigationTr
 \vspace{0.2cm}
 
 \noindent The Home Screen's function is to summarize the useful data that the user can later analyze more in detail in other sections. Specifically, there is a greeting message and two boxes that display: \begin{itemize}
-    \item the financial information: how much money the user is spending a year/a month and how many subscriptions they subscribed to;
-    \item the payment reminders: which are the next two subscriptions that need to be renewed and payed and in how many days.
+    \item the \textbf{financial} information: how much money the user is spending a year/a month and how many subscriptions they subscribed to;
+    \item the \textbf{payment reminders}: which are the next two subscriptions that need to be renewed and payed and in how many days.
 \end{itemize}
 
 \vspace{0.5cm}
@@ -256,9 +255,9 @@ Other diagrams are not shown, due to their trivial structure and linear flow (e.
 \vspace{0.5cm}
 
 \subsection{Firebase}
-The application requires authentication to be used, so that the application can properly store each individual's memberships and details. There is also some sensible data, such as the card's last four digits, so it is recommended to register with a strong password. Indeed, there is a `Password Strength Bar' that helps the user realize whether the typed password is good enough for them.
+The application requires \textbf{authentication} to be used, so that the application can properly store each individual's memberships and details. There is also some sensible data, such as the card's last four digits, so it is recommended to register with a strong password. Indeed, there is a `Password Strength Bar' that helps the user realize whether the typed password is good enough for them.
 
-The authentication per se is handled with Google Firebase, which has a simple interface that allows to automatically manage the registration (with the verification e-mail) and, if needed, the password retrieval e-mail (with the link for a safe reset of the password). The registration requires a chosen name, the e-mail and a password. Firebase already checks that the information provided is compatible with the wanted data. Nevertheless, we implemented some client-side input verifications as well, in order to allow only:
+The authentication per se is handled with Google Firebase, which has a simple interface that allows to automatically manage the registration (with the verification e-mail) and, if needed, the password retrieval e-mail (with the link for a safe reset of the password). The registration requires a chosen name, the e-mail and a password. Firebase already checks that the information provided is compatible with the wanted data. Nevertheless, we implemented some \textbf{client-side input verifications} as well, in order to allow only:
 \begin{enumerate}
     \item names with alpha-numeric values and less than ten characters. The name is not unique, but is used by friends to easily recognize each other when adding them to shared subscriptions. Since the same name can be used by different users, the e-mail is always shown as well, to avoid any ambiguity.
     \item e-mails correctly formatted;
@@ -269,16 +268,16 @@ In order to improve the user's experience, the logged user will keep access in t
 
 \subsection{Cloud Functions}
 The Cloud Functions use node.js as language to express the backend logic.
-They integrate flawlessly with the other services of the Firebase ecosystem. For instance, they offer a complete SDK to interact with the authentication and database products. They abstract the whole server infrastructure; the setup time and costs are perfectly suited for an application of this size, but they can also be easily scaled to handle a heavier workload.
+They integrate flawlessly with the other services of the Firebase ecosystem. For instance, they offer a complete SDK to interact with the authentication and database products. They \textbf{abstract} the whole server infrastructure; the setup time and costs are perfectly suited for an application of this size, but they can also be easily scaled to handle a heavier workload.
 
 Together with the authentication, they are the endpoints of the backend accessible by the application. They implement the logic of the application, and can be divided in two types of functions: \begin{itemize}
-    \item onCall functions: triggered by events in the frontend.They encapsulate the authentication information of the user and possible input data. These ones are clearly the only Cloud functions accessible from the `outside', and thus happen through an HTTPS connection.
-    \item trigger functions: functions that respond to precise events of the Firestore database and/or of the authentication services (e.g. creation of a user, deletion of a subscription). They are used to keep the backend data consistent at all times.
+    \item \textbf{onCall} functions: triggered by events in the frontend.They encapsulate the authentication information of the user and possible input data. These ones are clearly the only Cloud functions accessible from the `outside', and thus happen through an HTTPS connection.
+    \item \textbf{trigger} functions: functions that respond to precise events of the Firestore database and/or of the authentication services (e.g. creation of a user, deletion of a subscription). They are used to keep the backend data consistent at all times.
 \end{itemize}
 
 In our implementation, we exploit the authentication information included with each call, to manage and control accesses to the data only if the user is actually authorized to do so. For example, only the owner of a subscription can modify its data. Maliciously crafted requests would fail these checks and consequently would be rejected.
 
-Furthermore, each response is in a JSON format, including message about the success of the requests and the required data. Specific error messages are associated to specific points of failure, in order to keep the user informed of the nature of the error, while also guiding the developers in solving any bug.
+Furthermore, each response is in a JSON format, including message about the success of the requests and the required data. Specific \textbf{error messages} are associated to specific points of failure, in order to keep the user informed of the nature of the error, while also guiding the developers in solving any bug.
 
 \subsubsection{\textit{SubscribeME} APIs}
 The application APIs can be divided into four different categories: \begin{enumerate}
@@ -341,9 +340,9 @@ The application APIs can be divided into four different categories: \begin{enume
 
 
 \subsection{Firestore database}
-Cloud Firestore is a NoSQL database hosted on cloud, in particular Firebase's newest database for mobile app development. Compared to the old Realtime Database, it provides faster queries and better scaling. Even if both databases have client-first SDKs (no servers to deploy and maintain) and realtime updates, Cloud Firestore manages the data as a collection of documents, which are very similar to JSON files. Since \textit{SubscribeME} data have a pretty simple structure, this solution allows for a more agile and dynamic option.
+Cloud Firestore is a \textbf{NoSQL database} hosted on \textbf{cloud}, in particular Firebase's newest database for mobile app development. Compared to the old Realtime Database, it provides faster queries and better scaling. Even if both databases have client-first SDKs (no servers to deploy and maintain) and realtime updates, Cloud Firestore manages the data as a \textbf{collection of documents}, which are very similar to JSON files. Since \textit{SubscribeME} data have a pretty simple structure, this solution allows for a more agile and dynamic option.
 
-Firestore is set to be inaccessible from the `outside', by protecting the database from unauthorized requests: only the database admin is allowed to edit any data. It is possible to see that in Figure \ref{fig:rule}: this is the only rule present in the Firestore database and it states that the only acceptable requests are from the admins. This way, this becomes a single point of failure when considering unwanted access and simplifies the rule definition. Every function of manipulation of the saved data or retrieval of information must be from the `inside', through a Cloud Function.
+Firestore is set to be inaccessible from the `outside', by protecting the database from unauthorized requests: only the database admin is allowed to edit any data. It is possible to see that in Figure \ref{fig:rule}: this is the only rule present in the Firestore database and it states that the only acceptable requests are from the admins. This way, this becomes a \textbf{single point of failure} when considering unwanted access and simplifies the rule definition. Every function of manipulation of the saved data or retrieval of information must be from the `inside', through a Cloud Function.
 
 \begin{figure}[h!]
     \begin{center}
@@ -384,14 +383,14 @@ This way, there can be repeated data (so the consistency in the database is hard
 \subsection{Redux Toolkit}
 Redux Toolkit is the latest version of the Redux library. It has now become the standard way to write Redux logic and it overall simplifies the writing of Redux code, it speeds up development and provides good error catching, by managing the whole workflow.
 
-More in detail, it keeps the application state updated, as a single point of truth for the whole application. Every page change updates in background the state, so that the user can get the correct data and enjoy an optimal experience at the same time. The strength of this library is represented by a centralized state: this is able to keep the data coherent throughout the different screens and pages.
+More in detail, it keeps the \textbf{application state updated}, as a single point of truth for the whole application. Every page change updates in background the state, so that the user can get the correct data and enjoy an optimal experience at the same time. The strength of this library is represented by a \textbf{centralized} state: this is able to keep the data \textbf{coherent} throughout the different screens and pages.
 
 
 \newpage
 \section{User Interface Design}\label{sec:ui}
 
 \subsection{User Interface Flow Diagrams}
-In this section, two flow diagrams are presented (Figure \ref{fig:loginflow} and \ref{fig:editflow}). They illustrate the action flow, from the User Interface point of view, to authenticate a user and to edit a subscription.
+In this section, two flow diagrams are presented (Figure \ref{fig:loginflow} and \ref{fig:editflow}). They illustrate the action flow, from the User Interface point of view, to \textit{authenticate a user} and to \textit{edit a subscription}.
 
 These two cases are taken into consideration because they involve the most complex interaction for the user. All the other cases (see the first deadlines, see the statistics, add a subscription) are trivial and linear, thus not explained with a graph.
 
@@ -413,9 +412,9 @@ These two cases are taken into consideration because they involve the most compl
 
 
 \subsection{Screenshots}
-The application design has been enhanced by customizing the interface specifically for smartphone and for tablet. The two devices typical characteristics have been considered during the design phase and this allowed a better implementation, acknowledging pros and cons of the portrait and landscape modes.
+The application design has been enhanced by \textbf{customizing} the interface specifically for smartphone and for tablet. The two devices typical characteristics have been considered during the design phase and this allowed a better implementation, acknowledging pros and cons of the portrait and landscape modes.
 
-In particular, for what concerns the tablet implementation, the components sizes are enhanced, the font sizes are increased as well as the layout is changed in order to allow the maximum number of components to be shown at all times. This is why the main pages show a two-column layout, instead of a single column (portrait mode and smartphone design). A part from this, the design remains consistent, in order not to puzzle the user when changing from one device to another.
+In particular, for what concerns the tablet implementation, the \textbf{components sizes} are enhanced, the \textbf{font sizes} are increased as well as the \textbf{layout} is changed in order to allow the maximum number of components to be shown at all times. This is why the main pages show a two-column layout, instead of a single column (portrait mode and smartphone design). A part from this, the design remains consistent, in order not to puzzle the user when changing from one device to another.
 
 \subsubsection{Smartphone Application}
 
@@ -629,30 +628,146 @@ In particular, for what concerns the tablet implementation, the components sizes
 
 \clearpage
 \subsubsection{Tablet Application}
+
 \begin{figure}[h!]
     \begin{center}
         \includegraphics[width=0.7\textwidth, clip]{../../assets/tablet/login.png}
     \end{center}
-    \caption{Login}
+    \caption{Login page}
     \label{fig:tlogin}
 \end{figure}
 
-\newpage
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth, clip]{../../assets/tablet/loginActive.png}
+    \end{center}
+    \caption{Login page with button activated after insertion of fields}
+    \label{fig:tloginActive}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth, clip]{../../assets/tablet/reg.png}
+    \end{center}
+    \caption{Registration page with strong password indicator}
+    \label{fig:treg}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth, clip]{../../assets/tablet/home.png}
+    \end{center}
+    \caption{Home page, customized layout due to landscape mode and bigger screen}
+    \label{fig:thome}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth, clip]{../../assets/tablet/subsList.PNG}
+    \end{center}
+    \caption{List of subscriptions, divided into two columns}
+    \label{fig:tsubsList}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth, clip]{../../assets/tablet/detail.PNG}
+    \end{center}
+    \caption{Detail page: edit button disabled since the owner is `Andrea'}
+    \label{fig:tdetail}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth, clip]{../../assets/tablet/detailEd.PNG}
+    \end{center}
+    \caption{Detail page: edit button enabled, user is owner}
+    \label{fig:detailEd}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth, clip]{../../assets/tablet/add.PNG}
+    \end{center}
+    \caption{Add form}
+    \label{fig:tadd}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth, clip]{../../assets/tablet/addDrop.PNG}
+    \end{center}
+    \caption{Add form: drop-down menu}
+    \label{fig:taddDrop}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth, clip]{../../assets/tablet/stats.PNG}
+    \end{center}
+    \caption{Statistics: side-by-side graphs}
+    \label{fig:tstats}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth, clip]{../../assets/tablet/profile.PNG}
+    \end{center}
+    \caption{Profile: side-by-side components}
+    \label{fig:tprofile}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth, clip]{../../assets/tablet/profileOpen.PNG}
+    \end{center}
+    \caption{Profile: customizable fields shown}
+    \label{fig:tprofileOpen}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth, clip]{../../assets/tablet/inbox.PNG}
+    \end{center}
+    \caption{List of inbox and sent friends requests}
+    \label{fig:tinbox}
+\end{figure}
+
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[width=0.7\textwidth, clip]{../../assets/tablet/alert.PNG}
+    \end{center}
+    \caption{Alert that notifies the user of a successful action}
+    \label{fig:talert}
+\end{figure}
+
+\clearpage
 \section{Implementation, Integration and Test Plan}\label{sec:test}
 \subsection{Implementation Order}
+The suggested implementation order should start from the frontend development and gradually link and implement the backend functions. This choice is dictated by the wish of knowing which information is needed and which will be displayed to the user. After following the design process and sketching many possible designs, it is important to choose the final application layout.
 
+Once the design is decided, it is possible to code the frontend and then to finalize the implementation by understanding the kind and format of the information required by the frontend in order to work. Then the backend functions can be integrated smoothly into the design.
 
 \subsection{Integration and Test Plan}
+\subsubsection{Functions testing}
+The framework employed to run the testing of the application functions is \textbf{Jest}. In order to test their correctness, we simulated server replies, formatted as JSON files.
 
+\subsubsection{Expo testing: simulator testing}
+The application has been tested on \textbf{different operative systems} (both Android and iPhone) through the Expo Go application. The goal of the simulator testing is to find whether the code base responded in a proper manner to different renderings due to different operative systems.
+
+\subsubsection{On device testing}
+Different \textbf{real-life devices} have been used to test the application, providing useful information regarding the visualization of data in different screen sizes.
+
+Tablets and smartphones were used, both in portrait and in landscape mode. The different sizes were an issue at first, but finally the application was able to scale well.
 
 \newpage
 \section{Future Development}\label{sec:dev}
 Some possible improvements and further implementations could be:
 \begin{itemize}
-    \item a system of push notifications to alert the user even if the app is in background;
-    \item automatic recognition of subscriptions from confirmation e-mails;
-    \item integrated payment system;
-    \item chat between friends.
+    \item a system of push \textbf{notifications} to alert the user even if the app is in background;
+    \item \textbf{automatic recognition} of subscriptions from confirmation e-mails;
+    \item \textbf{integrated payment} system;
+    \item \textbf{chat} between friends.
 \end{itemize}
 
 \section{References}\label{sec:ref}
