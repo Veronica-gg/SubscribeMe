@@ -90,7 +90,7 @@ export default function AddScreen(props) {
       for (const el of props.route.params.members.users) {
         friendStringBuilder += el.id + ",";
       }
-
+      setIsSwitchOn(props.route.params.autoRenewal || false);
       setFriends(friendStringBuilder.slice(0, friendStringBuilder.length - 1));
       setIsEdit(true);
     }
@@ -290,6 +290,7 @@ export default function AddScreen(props) {
         >
           <View style={[styles.inputView, { marginBottom: 0 }]}>
             <TextInput
+              edit
               autoCapitalize="none"
               autoCorrect={false}
               autoComplete="number"

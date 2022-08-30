@@ -6,6 +6,7 @@ import AuthRoot from "./src/screens/navroots/AuthRoot";
 import { defaultTheme, darkTheme } from "./assets/theme";
 import { Provider } from "react-redux";
 import { store } from "./src/redux/store";
+import { LogBox } from "react-native";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
 }
 
 export default function AppWithProviders() {
+  LogBox.ignoreAllLogs();
   const theme =
     Appearance.getColorScheme() == "light" ? defaultTheme : darkTheme;
   return (

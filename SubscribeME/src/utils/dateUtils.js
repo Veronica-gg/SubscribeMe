@@ -86,7 +86,7 @@ function findNextDate(now, renewal, period, each) {
 }
 
 function wordDeclination(numberOfDays) {
-  if (!numberOfDays) return;
+  if (!(numberOfDays === 0) && !numberOfDays) return;
   let negative = numberOfDays < 0;
   numberOfDays = Math.abs(numberOfDays);
   let result = numberOfDays === 1 ? "day" : "days";
@@ -94,7 +94,7 @@ function wordDeclination(numberOfDays) {
 }
 
 function daysName(numberOfDays) {
-  if (!numberOfDays) return;
+  if (!(numberOfDays === 0) && !numberOfDays) return;
   let printNumber = numberOfDays;
   if (numberOfDays < 0) printNumber = Math.abs(numberOfDays);
   switch (numberOfDays) {

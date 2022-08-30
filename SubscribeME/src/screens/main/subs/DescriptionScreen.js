@@ -224,20 +224,22 @@ export default function DescriptionScreen(props) {
               // marginBottom: logoutHeight * 0.8,
             }}
           >
-            <Surface
-              style={[
-                styles.container,
-                {
-                  backgroundColor:
-                    colors[props.route.params.category] || colors.background,
-                },
-              ]}
-            >
-              <View style={styles.titleView}>
-                <Text style={styles.title}>Card</Text>
-              </View>
-              <Text style={styles.info}>{props.route.params.card}</Text>
-            </Surface>
+            {props.route.params.owner && (
+              <Surface
+                style={[
+                  styles.container,
+                  {
+                    backgroundColor:
+                      colors[props.route.params.category] || colors.background,
+                  },
+                ]}
+              >
+                <View style={styles.titleView}>
+                  <Text style={styles.title}>Card</Text>
+                </View>
+                <Text style={styles.info}>{props.route.params.card}</Text>
+              </Surface>
+            )}
             <Surface
               style={[
                 styles.container,

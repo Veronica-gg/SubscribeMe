@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -21,13 +21,23 @@ import { useDispatch } from "react-redux";
 import { updateState } from "../../redux/stateUpdater";
 import { updateProfile } from "../../redux/reducer";
 import { SafeAreaView } from "react-native-safe-area-context";
+import LoadingIndicator from "../../components/LoadingIndicator";
 
 export default function Login({ navigation }) {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [resetPassword, setResetPassword] = useState(true);
+
+  const [disablePage, setDisablePage] = useState(false);
+
+  useEffect(() => {
+    setDisablePage(false);
+    return () => {};
+  }, []);
+
   const handleLogin = () => {
+    setDisablePage(true);
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
@@ -37,28 +47,39 @@ export default function Login({ navigation }) {
             email: user.email,
           })
         );
+
         updateState(dispatch, true, true, false);
       })
-      .catch(() => Alert.alert("Error", "Invalid credentials"));
+      .catch(() => {
+        setDisablePage(false);
+        Keyboard.dismiss();
+        Alert.alert("Error", "Invalid credentials");
+      });
   };
 
   function handleRecovery(email) {
+    setDisablePage(true);
     sendPasswordResetEmail(auth, email)
       .then(() => {
+        setDisablePage(false);
         Alert.alert("E-mail sent", "Successfully sent a recovery e-mail!");
         setResetPassword(true);
       })
       .catch(() => {
+        setDisablePage(false);
         Alert.alert(
           "Error",
           "Could not send e-mail to this address. Try again!"
         );
-        setResetPassword(true);
       });
   }
 
   return (
-    <SafeAreaView edges={["left", "right", "bottom"]} style={styles.safe}>
+    <SafeAreaView
+      edges={["left", "right", "bottom"]}
+      style={styles.safe}
+      pointerEvents={disablePage ? "none" : "auto"}
+    >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView style={styles.container} behavior="padding">
           <View style={styles.container}>
@@ -105,6 +126,7 @@ export default function Login({ navigation }) {
               <SubmitButton
                 textID="SEND RECOVERY E-MAIL"
                 onPressID={() => {
+                  Keyboard.dismiss();
                   handleRecovery(email);
                 }}
                 iconID="email-send-outline"
@@ -120,6 +142,12 @@ export default function Login({ navigation }) {
               />
             )}
           </View>
+          {disablePage && (
+            <LoadingIndicator
+              size="large"
+              style={{ position: "absolute", bottom: "50%" }}
+            />
+          )}
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </SafeAreaView>

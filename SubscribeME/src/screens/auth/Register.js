@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
@@ -28,6 +28,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { updateProfile } from "../../redux/reducer";
 import { SafeAreaView } from "react-native-safe-area-context";
+import LoadingIndicator from "../../components/LoadingIndicator";
 
 export default function Register({ navigation }) {
   const dispatch = useDispatch();
@@ -38,6 +39,12 @@ export default function Register({ navigation }) {
   const [passwordTooShort, setPasswordTooShort] = useState(false);
   const [showPasswordStrength, setShowPasswordStrength] = useState(false);
   const [name, setName] = useState("");
+  const [disablePage, setDisablePage] = useState(false);
+
+  useEffect(() => {
+    setDisablePage(false);
+    return () => {};
+  }, []);
 
   function setRemoteName(userName, userEmail) {
     const fun = httpsCallable(functions, "manageUser-setName");
@@ -57,6 +64,7 @@ export default function Register({ navigation }) {
   }
 
   const handleSignup = () => {
+    setDisablePage(true);
     const userName = name;
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
@@ -68,10 +76,17 @@ export default function Register({ navigation }) {
             .catch((error) => console.log(error.message));
         }
       })
-      .catch((error) => console.log(error.message));
+      .catch((error) => {
+        setDisablePage(false);
+        console.log(error.message);
+      });
   };
   return (
-    <SafeAreaView edges={["left", "right", "bottom"]} style={styles.safe}>
+    <SafeAreaView
+      edges={["left", "right", "bottom"]}
+      style={styles.safe}
+      pointerEvents={disablePage ? "none" : "auto"}
+    >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView style={styles.container} behavior="padding">
           <Image
@@ -196,6 +211,12 @@ export default function Register({ navigation }) {
               navigation.navigate("Login");
             }}
           />
+          {disablePage && (
+            <LoadingIndicator
+              size="large"
+              style={{ position: "absolute", bottom: "50%" }}
+            />
+          )}
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </SafeAreaView>

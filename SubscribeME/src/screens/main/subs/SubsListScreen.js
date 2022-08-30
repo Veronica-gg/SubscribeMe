@@ -2,14 +2,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import SubsItem from "../../../components/SubsItem";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useEffect, useState, useCallback } from "react";
-import {
-  RefreshControl,
-  Alert,
-  SectionList,
-  View,
-  FlatList,
-  Platform,
-} from "react-native";
+import { RefreshControl, SectionList, View, Platform } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { updateState } from "../../../redux/stateUpdater";
 import { useTheme, Text } from "react-native-paper";
@@ -132,7 +125,9 @@ export default function SubsListScreen() {
           width: "100%",
         }}
       >
-        <View style={{ width: orientation.isPortrait ? "100%" : "50%" }}>
+        <View
+          style={{ flex: 1, width: orientation.isPortrait ? "100%" : "50%" }}
+        >
           <SectionList
             fadingEdgeLength={"5%"}
             contentContainerStyle={{
